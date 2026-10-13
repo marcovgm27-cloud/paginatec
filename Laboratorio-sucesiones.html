@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Laboratorio interactivo para explorar monotonía y convergencia de sucesiones: gráficas en vivo, definición ε–N, teorema del encaje y práctica con ejercicios aleatorios.">
+<title>Laboratorio de sucesiones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: banda verde de cabecera (misma identidad que la autoevaluación), pestañas, y en cada pestaña un área de trabajo + panel lateral de diagnóstico. */
+:root{
+  --bg:#edf3ef;--surface:#ffffff;--surface-2:#f5faf7;--ink:#17251f;--muted:#5b6b63;--line:#d6e0da;--grid:#e3eae6;
+  --brand:#0c382b;--on-brand:#ffffff;--on-brand-muted:#cfe6da;--brand-accent:#9ed7bd;
+  --accent:#1d7657;--accent-strong:#155a42;--accent-soft:#e2f2ea;--on-accent:#ffffff;
+  --blue:#28638e;--blue-soft:#e4f0f8;--amber:#9a600a;--amber-soft:#fff2d6;--red:#b0443d;--red-soft:#fbe6e4;
+  --even:#28638e;--odd:#c2621a;--band:#1d76571f;--focus:#6fa6cb;
+  --shadow:0 14px 40px #163b2d14;
+  --f-display:Georgia,"Times New Roman",serif;
+  --f-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1612;--surface:#14201b;--surface-2:#192822;--ink:#e2ece6;--muted:#9bb0a5;--line:#2a3c34;--grid:#22322b;
+  --brand:#0a2a20;--on-brand:#f2f8f5;--on-brand-muted:#b5d3c4;--brand-accent:#8fd0b2;
+  --accent:#4fbf8e;--accent-strong:#7fd6ae;--accent-soft:#1a3a2d;--on-accent:#06261a;
+  --blue:#82b8e0;--blue-soft:#18293a;--amber:#e3a94e;--amber-soft:#33270f;--red:#ec8a81;--red-soft:#3a1c1a;
+  --even:#82b8e0;--odd:#f0a268;--band:#4fbf8e29;--focus:#82b8e0;--shadow:0 14px 40px #0006;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1612;--surface:#14201b;--surface-2:#192822;--ink:#e2ece6;--muted:#9bb0a5;--line:#2a3c34;--grid:#22322b;
+  --brand:#0a2a20;--on-brand:#f2f8f5;--on-brand-muted:#b5d3c4;--brand-accent:#8fd0b2;
+  --accent:#4fbf8e;--accent-strong:#7fd6ae;--accent-soft:#1a3a2d;--on-accent:#06261a;
+  --blue:#82b8e0;--blue-soft:#18293a;--amber:#e3a94e;--amber-soft:#33270f;--red:#ec8a81;--red-soft:#3a1c1a;
+  --even:#82b8e0;--odd:#f0a268;--band:#4fbf8e29;--focus:#82b8e0;--shadow:0 14px 40px #0006;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+h1,h2,h3{text-wrap:balance}
+math{font-size:1.08em}
+.shell{width:100%;max-width:1160px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+
+/* Cabecera */
+.head{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;padding:26px 28px;border-radius:22px 22px 10px 10px;background:var(--brand);color:var(--on-brand);box-shadow:var(--shadow)}
+.head:after{content:"ε > 0  ∃N";position:absolute;right:20px;top:-30px;color:var(--on-brand);opacity:.05;font:7.5rem var(--f-display);transform:rotate(-5deg);pointer-events:none;white-space:nowrap}
+.eyebrow{margin:0 0 4px;color:var(--brand-accent);font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+h1{margin:0;font:650 clamp(1.9rem,4.3vw,3.2rem)/1.04 var(--f-display);letter-spacing:-.03em}
+.subtitle{margin:8px 0 0;max-width:58ch;color:var(--on-brand-muted)}
+.back{display:inline-block;margin-top:12px;color:var(--brand-accent);font-weight:750;text-decoration:none}
+.back:hover{text-decoration:underline}
+.active{position:relative;z-index:1;display:grid;gap:6px;justify-items:start;min-width:220px;max-width:340px;padding:12px 16px;border:1px solid #ffffff30;border-radius:14px;background:#ffffff10}
+.active .label{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand-accent)}
+.active #activeTex{max-width:100%;overflow-x:auto;font-size:1.05rem}
+
+/* Pestañas */
+.tabs{display:flex;gap:6px;margin:16px 0 14px;padding:5px;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow-x:auto}
+.tab{flex:1 0 auto;min-height:44px;padding:8px 16px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-weight:750;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink);background:var(--surface-2)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
+.tab small{display:block;font-weight:600;font-size:.72rem;opacity:.8}
+
+.panel{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.panel[hidden]{display:none!important}
+.card{min-width:0;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}
+.pad{padding:clamp(16px,3vw,26px)}
+.stack{display:grid;gap:16px;min-width:0}
+h2{margin:0 0 6px;font:650 clamp(1.25rem,2.4vw,1.6rem)/1.2 var(--f-display)}
+h3{margin:0 0 6px;font:650 1.05rem/1.3 var(--f-display)}
+.lead{margin:0 0 14px;color:var(--muted);max-width:68ch}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:grid;gap:12px}
+
+/* Formula */
+.formula{display:grid;gap:8px}
+.formula label{font-weight:750}
+.inrow{display:flex;gap:8px;flex-wrap:wrap}
+.inrow input{flex:1 1 220px;min-width:0;min-height:46px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-family:var(--f-mono);font-size:1rem}
+.inrow input[aria-invalid="true"]{border-color:var(--red)}
+.preview{min-height:46px;display:flex;align-items:center;gap:10px;padding:6px 12px;border-left:4px solid var(--accent);border-radius:0 10px 10px 0;background:var(--accent-soft);overflow-x:auto}
+.preview .an{color:var(--muted);font-family:var(--f-mono);font-size:.85rem;white-space:nowrap}
+.error{margin:0;color:var(--red);font-weight:650;font-size:.92rem}
+.help{margin:0;color:var(--muted);font-size:.84rem}
+.help code{font-family:var(--f-mono);font-size:.82rem;padding:1px 5px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font-size:.92rem}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chip .q{font:600 .7rem var(--f-mono);color:var(--muted);padding:1px 6px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
+
+/* Controles */
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.range{display:grid;grid-template-columns:auto minmax(120px,1fr) auto;gap:10px;align-items:center;flex:1 1 280px}
+.range label{font-weight:700;font-size:.92rem}
+.range output{min-width:4ch;font:600 .95rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;min-height:36px;accent-color:var(--accent)}
+.check{display:inline-flex;align-items:center;gap:7px;min-height:40px;font-size:.92rem;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+
+/* Gráfica */
+.plotbox{position:relative;margin-top:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.plotbox canvas{display:block;width:100%;height:330px;touch-action:pan-y;cursor:crosshair}
+.plotbox.small canvas{height:210px}
+.tip{position:absolute;z-index:2;pointer-events:none;padding:5px 9px;border-radius:8px;background:var(--ink);color:var(--surface);font:500 .8rem/1.35 var(--f-mono);white-space:nowrap;transform:translate(-50%,calc(-100% - 12px));font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 2px 0;color:var(--muted);font-size:.82rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%}
+.sw.line{width:18px;height:3px;border-radius:2px}
+.sw.band{width:18px;height:10px;border-radius:3px}
+
+/* Diagnóstico */
+.diag{padding:16px 18px}
+.diag .k{margin:0 0 6px;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.diag p{margin:6px 0 0;font-size:.93rem}
+.pill{display:inline-block;padding:3px 11px;border-radius:99px;font-weight:800;font-size:.84rem;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.pill.good{background:var(--accent-soft);color:var(--accent-strong);border-color:transparent}
+.pill.warn{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.pill.bad{background:var(--red-soft);color:var(--red);border-color:transparent}
+.pill.info{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.active .pill{background:#ffffff1c;color:var(--on-brand);border-color:#ffffff30}
+.alert{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--amber-soft);color:var(--ink);font-size:.88rem;border-left:4px solid var(--amber)}
+.note{margin:0;padding:12px 14px;border-radius:12px;background:var(--surface-2);color:var(--muted);font-size:.86rem;border:1px dashed var(--line)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* Tabla */
+details.terms{margin-top:14px}
+details.terms summary{cursor:pointer;font-weight:750;min-height:40px;display:flex;align-items:center}
+.tablewrap{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font:500 .86rem var(--f-mono);font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th{position:sticky;top:0;background:var(--surface-2);color:var(--muted);font:700 .78rem var(--f-body);text-transform:uppercase;letter-spacing:.06em}
+td:first-child,th:first-child{text-align:center}
+.s-pos{color:var(--accent-strong)}.s-neg{color:var(--red)}.s-zero{color:var(--amber)}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 16px;border:1px solid transparent;border-radius:10px;font-weight:800;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-strong)}
+.btn.secondary{border-color:var(--line);background:var(--surface);color:var(--accent-strong)}
+.btn.secondary:hover{border-color:var(--accent)}
+.btn.quiet{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ε–N */
+.bigN{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.bigN strong{font:700 2.4rem/1 var(--f-display);color:var(--accent-strong);font-variant-numeric:tabular-nums}
+.bigN.none strong{color:var(--red)}
+.fieldrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fieldrow label{font-weight:750}
+.fieldrow input{width:150px;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-family:var(--f-mono)}
+
+/* Encaje */
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.ro{min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.ro span{display:block;font-size:.74rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ro b{display:block;font:600 1rem var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ro.l b{color:var(--odd)}.ro.u b{color:var(--blue)}.ro.a b{color:var(--accent-strong)}
+.ineq{margin:12px 0 0;padding:12px;border-radius:12px;background:var(--surface-2);overflow-x:auto;text-align:center}
+
+/* Práctica */
+.exercise{display:grid;gap:16px}
+.ex-tex{padding:16px;border-radius:14px;background:var(--accent-soft);text-align:center;overflow-x:auto;font-size:1.25rem}
+fieldset{min-width:0;margin:0;padding:0;border:0}
+legend{margin-bottom:8px;font-weight:800}
+.radios{display:flex;flex-wrap:wrap;gap:6px}
+.radio{position:relative;display:inline-flex;align-items:center;min-height:42px;padding:7px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:.92rem}
+.radio input{position:absolute;opacity:0;pointer-events:none}
+.radio:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent-strong);font-weight:750}
+.radio:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.radio.right{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.radio.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.feedback{display:grid;gap:8px;padding:14px 16px;border-radius:12px;border-left:5px solid var(--accent);background:var(--accent-soft)}
+.feedback.miss{border-color:var(--amber);background:var(--amber-soft)}
+.feedback p{margin:0}
+.scoreboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.scoreboard div{padding:10px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);text-align:center}
+.scoreboard b{display:block;font:700 1.5rem var(--f-display);font-variant-numeric:tabular-nums}
+.scoreboard span{font-size:.75rem;color:var(--muted);font-weight:700}
+.history{display:flex;flex-wrap:wrap;gap:5px;min-height:14px}
+.history i{width:14px;height:14px;border-radius:4px;background:var(--line)}
+.history i.ok{background:var(--accent)}.history i.ko{background:var(--red)}
+.foot{margin-top:22px;color:var(--muted);font-size:.86rem;text-align:center}
+
+@media (max-width:900px){
+  .panel{grid-template-columns:1fr}
+  .side{position:static}
+}
+@media (max-width:640px){
+  .head{grid-template-columns:1fr;padding:22px 18px}
+  .active{max-width:100%;min-width:0;width:100%}
+  .plotbox canvas{height:260px}
+  .readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .range{grid-template-columns:1fr auto}
+  .range label{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="head">
+    <div>
+      <p class="eyebrow">MA-1103 · Laboratorio interactivo</p>
+      <h1>Laboratorio de sucesiones</h1>
+      <p class="subtitle">Escriba una sucesión, observe sus términos y ponga a prueba las ideas de la autoevaluación: monotonía, cotas, la definición ε–N y el teorema del encaje.</p>
+      <a class="back" href="Autosucesiones.html" data-repo-only>← Ir a la autoevaluación (15 preguntas)</a>
+    </div>
+    <div class="active" aria-live="polite">
+      <span class="label">Sucesión activa</span>
+      <div id="activeTex"></div>
+      <span id="activeVerdict" class="pill"></span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones del laboratorio">
+    <button class="tab" role="tab" id="t-explorar" aria-controls="explorar" data-tab="explorar" type="button">Explorador<small>gráfica y diagnóstico</small></button>
+    <button class="tab" role="tab" id="t-epsilon" aria-controls="epsilon" data-tab="epsilon" type="button">Definición ε–N<small>¿desde qué término?</small></button>
+    <button class="tab" role="tab" id="t-encaje" aria-controls="encaje" data-tab="encaje" type="button">Teorema del encaje<small>cotas en movimiento</small></button>
+    <button class="tab" role="tab" id="t-practica" aria-controls="practica" data-tab="practica" type="button">Práctica rápida<small>ejercicios aleatorios</small></button>
+  </nav>
+
+  <!-- EXPLORADOR -->
+  <section class="panel" id="explorar" role="tabpanel" aria-labelledby="t-explorar">
+    <div class="stack">
+      <div class="card pad">
+        <div class="formula">
+          <label for="formula">Término general \(a_n\)</label>
+          <div class="inrow">
+            <input id="formula" type="text" spellcheck="false" autocomplete="off" aria-describedby="formulaHelp formulaErr" value="n^3/e^(n/2)">
+          </div>
+          <div class="preview"><span class="an">vista previa</span><div id="formulaTex"></div></div>
+          <p class="error" id="formulaErr" role="alert"></p>
+          <p class="help" id="formulaHelp">Use <code>n</code>, <code>+ - * / ^</code>, <code>!</code>, <code>sin</code>, <code>cos</code>, <code>ln</code>, <code>sqrt</code>, <code>exp</code>, <code>abs</code>, <code>pi</code>, <code>e</code>. La multiplicación puede ser implícita: <code>3n^2</code>, <code>n sin(n)</code>.</p>
+        </div>
+        <h3 style="margin-top:16px">Sucesiones de la autoevaluación</h3>
+        <div class="chips" id="presets"></div>
+      </div>
+
+      <div class="card pad">
+        <div class="controls">
+          <div class="range"><label for="nTerms">Términos mostrados</label><input id="nTerms" type="range" min="5" max="150" value="40"><output id="nTermsOut" for="nTerms">40</output></div>
+          <label class="check"><input type="checkbox" id="optParity"> Pares e impares</label>
+          <label class="check"><input type="checkbox" id="optLimit" checked> Límite estimado</label>
+          <label class="check"><input type="checkbox" id="optStems" checked> Líneas al eje</label>
+        </div>
+        <div class="plotbox"><canvas id="plotMain" aria-label="Gráfica de los términos de la sucesión"></canvas><div class="tip" id="tipMain" hidden></div></div>
+        <div class="legend" id="legendMain"></div>
+        <details class="terms" open>
+          <summary>Tabla de términos, diferencias y cocientes</summary>
+          <div class="tablewrap"><table><thead><tr><th>n</th><th>aₙ</th><th>aₙ₊₁ − aₙ</th><th>aₙ₊₁ / aₙ</th></tr></thead><tbody id="termRows"></tbody></table></div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="card diag"><p class="k">Monotonía</p><span class="pill" id="monoPill"></span><p id="monoText"></p><div id="monoAlert"></div></div>
+      <div class="card diag"><p class="k">Comportamiento al infinito</p><span class="pill" id="limPill"></span><p id="limText"></p></div>
+      <div class="card diag"><p class="k">Cotas observadas</p><p id="boundText"></p></div>
+      <p class="note">Todo lo que aparece aquí es <strong>evidencia numérica</strong>. Una conclusión se demuestra con diferencias, cocientes, cotas o límites, como en la autoevaluación. Pruebe la pregunta 5: con \(40^n/n!\) y pocos términos, la sucesión parece creciente.</p>
+      <button class="btn secondary" type="button" id="toEpsilon">Medir la convergencia con ε →</button>
+    </aside>
+  </section>
+
+  <!-- EPSILON -->
+  <section class="panel" id="epsilon" role="tabpanel" aria-labelledby="t-epsilon" hidden>
+    <div class="stack">
+      <div class="card pad">
+        <h2>¿A partir de qué término se queda cerca?</h2>
+        <p class="lead">\(a_n\to L\) significa que para cada \(\varepsilon>0\) existe \(N\) tal que \(|a_n-L|<\varepsilon\) para todo \(n\ge N\). Mueva \(\varepsilon\): la franja se estrecha y el \(N\) necesario crece.</p>
+        <div class="controls">
+          <div class="range"><label for="epsRange">ε</label><input id="epsRange" type="range" min="0" max="1000" value="560"><output id="epsOut" for="epsRange"></output></div>
+          <button class="btn secondary" type="button" id="epsPlay">▶ Reducir ε</button>
+        </div>
+        <div class="plotbox"><canvas id="plotEps" aria-label="Términos de la sucesión y franja L ± ε"></canvas><div class="tip" id="tipEps" hidden></div></div>
+        <div class="legend"><span><i class="sw band" style="background:var(--band);border:1px solid var(--accent)"></i>franja L ± ε</span><span><i class="sw" style="background:var(--accent)"></i>dentro de la franja</span><span><i class="sw" style="background:var(--red)"></i>fuera de la franja</span><span><i class="sw line" style="background:var(--blue)"></i>primer índice N</span></div>
+      </div>
+      <div class="card pad">
+        <h3>Cómo crece N cuando ε disminuye</h3>
+        <p class="lead" style="margin-bottom:0">Cada punto es el menor \(N\) que funciona para ese \(\varepsilon\), calculado con los términos hasta \(n=2000\).</p>
+        <div class="plotbox small"><canvas id="plotNe" aria-label="N en función de épsilon"></canvas><div class="tip" id="tipNe" hidden></div></div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="card diag">
+        <p class="k">Sucesión</p>
+        <div id="epsSeqTex" style="overflow-x:auto"></div>
+        <div class="fieldrow" style="margin-top:12px"><label for="epsL">L =</label><input id="epsL" type="text" inputmode="decimal" spellcheck="false"><button class="btn quiet" id="epsUseEst" type="button">Usar estimación</button></div>
+        <p class="error" id="epsLErr"></p>
+      </div>
+      <div class="card diag" aria-live="polite">
+        <p class="k">Resultado</p>
+        <div class="bigN" id="epsBig"><span>N =</span><strong id="epsN">—</strong></div>
+        <p id="epsText"></p>
+      </div>
+      <p class="note">Si la sucesión diverge, ningún \(L\) funciona: con \(\varepsilon\) pequeño siempre quedan términos fuera de la franja. Pruebe \(3(-1)^n+1/n\) desde el explorador.</p>
+    </aside>
+  </section>
+
+  <!-- ENCAJE -->
+  <section class="panel" id="encaje" role="tabpanel" aria-labelledby="t-encaje" hidden>
+    <div class="stack">
+      <div class="card pad">
+        <h2>Atrapar la sucesión entre dos cotas</h2>
+        <p class="lead">Si \(l_n\le a_n\le u_n\) y ambas cotas tienden a \(L\), entonces \(a_n\to L\). Elija un ejemplo y avance \(n\): la distancia entre las cotas obliga a la sucesión a acercarse a \(L\).</p>
+        <div class="chips" id="sqChips"></div>
+        <div class="ineq" id="sqIneq"></div>
+        <div class="controls" style="margin-top:12px">
+          <div class="range"><label for="sqRange">n hasta</label><input id="sqRange" type="range" min="3" max="120" value="40"><output id="sqOut" for="sqRange">40</output></div>
+          <button class="btn secondary" type="button" id="sqPlay">▶ Reproducir</button>
+        </div>
+        <div class="plotbox"><canvas id="plotSq" aria-label="Sucesión entre dos cotas"></canvas><div class="tip" id="tipSq" hidden></div></div>
+        <div class="legend"><span><i class="sw line" style="background:var(--blue)"></i>cota superior \(u_n\)</span><span><i class="sw" style="background:var(--accent)"></i>\(a_n\)</span><span><i class="sw line" style="background:var(--odd)"></i>cota inferior \(l_n\)</span><span><i class="sw line" style="background:var(--muted)"></i>límite L</span></div>
+        <div class="readouts" aria-live="polite">
+          <div class="ro l"><span>l<sub>n</sub></span><b id="roL">—</b></div>
+          <div class="ro a"><span>a<sub>n</sub></span><b id="roA">—</b></div>
+          <div class="ro u"><span>u<sub>n</sub></span><b id="roU">—</b></div>
+          <div class="ro"><span>u<sub>n</sub> − l<sub>n</sub></span><b id="roG">—</b></div>
+        </div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="card diag"><p class="k">Por qué valen las cotas</p><p id="sqWhy"></p></div>
+      <div class="card diag"><p class="k">Error de la cota</p><p id="sqErr"></p></div>
+      <p class="note">Las cotas \(-1\le a_n\le 1\) son verdaderas para el primer ejemplo, pero no sirven: no tienden al mismo valor. Ese es el distractor de la pregunta 6.</p>
+    </aside>
+  </section>
+
+  <!-- PRACTICA -->
+  <section class="panel" id="practica" role="tabpanel" aria-labelledby="t-practica" hidden>
+    <div class="stack">
+      <div class="card pad exercise" id="exercise">
+        <div>
+          <p class="eyebrow" style="color:var(--accent)" id="exNum">Ejercicio 1</p>
+          <h2>Clasifique la sucesión</h2>
+        </div>
+        <div class="ex-tex" id="exTex"></div>
+        <fieldset id="fsMono"><legend>Monotonía para \(n\ge1\)</legend><div class="radios" id="rMono"></div></fieldset>
+        <fieldset id="fsLim"><legend>Comportamiento cuando \(n\to\infty\)</legend><div class="radios" id="rLim"></div></fieldset>
+        <div class="fieldrow" id="limRow" hidden><label for="exL">Límite L =</label><input id="exL" type="text" spellcheck="false" placeholder="1/2, 0.5, e^2"></div>
+        <div class="actions"><button class="btn primary" type="button" id="exCheck">Comprobar</button><button class="btn secondary" type="button" id="exNew">Nuevo ejercicio</button><button class="btn quiet" type="button" id="exExplore" hidden>Abrir en el explorador</button></div>
+        <div class="feedback" id="exFb" hidden aria-live="polite"></div>
+        <div class="plotbox small" id="exPlotBox" hidden><canvas id="plotEx" aria-label="Gráfica del ejercicio"></canvas><div class="tip" id="tipEx" hidden></div></div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="card diag">
+        <p class="k">Su marcador</p>
+        <div class="scoreboard"><div><b id="scOk">0</b><span>aciertos</span></div><div><b id="scStreak">0</b><span>racha</span></div><div><b id="scBest">0</b><span>mejor racha</span></div></div>
+        <p class="k" style="margin-top:14px">Últimos 20 intentos</p>
+        <div class="history" id="scHist"></div>
+        <button class="btn quiet" type="button" id="scReset" style="margin-top:12px;width:100%">Reiniciar marcador</button>
+      </div>
+      <p class="note">Cada ejercicio sale de una familia vista en el curso: racionales, factoriales, potencias, alternantes y logaritmos. Un acierto exige las dos clasificaciones y, si converge, el valor del límite.</p>
+    </aside>
+  </section>
+
+  <p class="foot">Laboratorio complementario a la autoevaluación de MA-1103. Las gráficas usan los términos hasta \(n=2000\) o hasta donde la aritmética de punto flotante lo permite.</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cssVar=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+
+/* ---------- Matemática tipográfica ---------- */
+function tex(el,src,display=false){if(!el)return;if(window.katex){try{katex.render(src,el,{output:"mathml",displayMode:display,throwOnError:false});return}catch{}}el.textContent=src}
+function mixed(el,str){el.innerHTML="";str.split(/(\\\(.*?\\\)|\\\[.*?\\\])/s).forEach(part=>{if(!part)return;const m=part.match(/^\\([\(\[])(.*)\\[\)\]]$/s);if(m){const s=document.createElement("span");tex(s,m[2],m[1]==="[");el.appendChild(s)}else el.appendChild(document.createTextNode(part))})}
+function renderStatic(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest("script,style,code")?NodeFilter.FILTER_REJECT:n.nodeValue.includes("\\(")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP}),nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  nodes.forEach(t=>{const span=document.createElement("span");mixed(span,t.nodeValue);t.replaceWith(...span.childNodes)})}
+
+/* ---------- Analizador de expresiones ---------- */
+const FUNCS={sin:Math.sin,cos:Math.cos,tan:Math.tan,atan:Math.atan,ln:Math.log,log:Math.log10,sqrt:Math.sqrt,exp:Math.exp,abs:Math.abs,floor:Math.floor};
+const NAMES=[...Object.keys(FUNCS),"pi","e","n"].sort((a,b)=>b.length-a.length);
+class ParseError extends Error{}
+function tokenize(src){
+  const s=src.replace(/\*\*/g,"^").replace(/[·×]/g,"*").replace(/[−–]/g,"-").replace(/π/g,"pi").replace(/√/g,"sqrt");
+  const out=[];let i=0,m;
+  while(i<s.length){
+    const c=s[i],rest=s.slice(i);
+    if(/\s/.test(c)){i++;continue}
+    if((m=/^(\d+(?:\.\d*)?|\.\d+)/.exec(rest))){out.push({k:"num",v:parseFloat(m[1]),raw:m[1]});i+=m[1].length;continue}
+    if((m=/^[a-zA-Z]+/.exec(rest))){let w=m[0];i+=w.length;while(w){const name=NAMES.find(x=>w.startsWith(x));if(!name)throw new ParseError(`No reconozco «${w}». Use n, sin, cos, ln, sqrt, exp, abs, pi o e.`);out.push({k:"id",v:name});w=w.slice(name.length)}continue}
+    if("+-*/^()!".includes(c)){out.push({k:c});i++;continue}
+    throw new ParseError(`El carácter «${c}» no está permitido.`);
+  }
+  return out;
+}
+function parse(src,{allowN=true}={}){
+  const t=tokenize(src);let p=0;
+  if(!t.length)throw new ParseError("Escriba una expresión.");
+  const peek=()=>t[p],eat=k=>t[p]?.k===k?t[p++]:null;
+  const need=k=>{if(!eat(k))throw new ParseError(k===")"?"Falta cerrar un paréntesis.":`Se esperaba «${k}».`)};
+  function expr(){let a=term();for(;;){if(eat("+"))a={t:"bin",op:"+",a,b:term()};else if(eat("-"))a={t:"bin",op:"-",a,b:term()};else return a}}
+  function term(){let a=unary();for(;;){if(eat("*"))a={t:"bin",op:"*",a,b:unary()};else if(eat("/"))a={t:"bin",op:"/",a,b:unary()};else{const q=peek();if(q&&(q.k==="num"||q.k==="id"||q.k==="("))a={t:"bin",op:"*",a,b:power()};else return a}}}
+  function unary(){if(eat("-"))return{t:"neg",a:unary()};if(eat("+"))return unary();return power()}
+  function power(){const b=postfix();if(eat("^"))return{t:"bin",op:"^",a:b,b:unary()};return b}
+  function postfix(){let a=primary();while(eat("!"))a={t:"fact",a};return a}
+  function primary(){
+    const q=t[p];if(!q)throw new ParseError("La expresión está incompleta.");
+    if(q.k==="num"){p++;return{t:"num",v:q.v,raw:q.raw}}
+    if(q.k==="("){p++;const e=expr();need(")");return e}
+    if(q.k==="id"){p++;
+      if(q.v==="n"){if(!allowN)throw new ParseError("El límite no puede depender de n.");return{t:"n"}}
+      if(q.v==="pi"||q.v==="e")return{t:"const",name:q.v};
+      if(eat("(")){const e=expr();need(")");return{t:"fn",name:q.v,a:e}}
+      throw new ParseError(`Escriba ${q.v}( … ) con paréntesis.`)}
+    throw new ParseError(q.k===")"?"Sobra un paréntesis de cierre.":`Falta un término antes de «${q.k}».`)}
+  const ast=expr();
+  if(p<t.length)throw new ParseError(t[p].k===")"?"Sobra un paréntesis de cierre.":"Revise la expresión cerca del final.");
+  return ast;
+}
+const FACT=[1];for(let i=1;i<=170;i++)FACT[i]=FACT[i-1]*i;
+const fact=x=>x<0||!Number.isInteger(x)?NaN:x>170?Infinity:FACT[x];
+function evaluate(x,n){switch(x.t){
+  case"num":return x.v;case"n":return n;case"const":return x.name==="pi"?Math.PI:Math.E;
+  case"neg":return-evaluate(x.a,n);case"fact":return fact(evaluate(x.a,n));case"fn":return FUNCS[x.name](evaluate(x.a,n));
+  case"bin":{const a=evaluate(x.a,n),b=evaluate(x.b,n);return x.op==="+"?a+b:x.op==="-"?a-b:x.op==="*"?a*b:x.op==="/"?a/b:Math.pow(a,b)}}}
+const PREC={num:4,n:4,const:4,fn:4,fact:4,neg:2.5};
+const prec=x=>x.t==="bin"?{"+":1,"-":1,"*":2,"/":3.5,"^":3}[x.op]:PREC[x.t];
+const paren=s=>`\\left(${s}\\right)`;
+const wrap=(x,min)=>prec(x)<min?paren(toTex(x)):toTex(x);
+const leftNum=x=>x.t==="num"||(x.t==="bin"&&x.op!=="/"&&leftNum(x.a))||(x.t==="fact"&&leftNum(x.a));
+function toTex(x){switch(x.t){
+  case"num":return x.raw;case"n":return"n";case"const":return x.name==="pi"?"\\pi":"e";
+  case"neg":return"-"+wrap(x.a,2);case"fact":return wrap(x.a,4)+"!";
+  case"fn":{const a=toTex(x.a);if(x.name==="sqrt")return`\\sqrt{${a}}`;if(x.name==="abs")return`\\left|${a}\\right|`;if(x.name==="exp")return`e^{${a}}`;if(x.name==="floor")return`\\left\\lfloor ${a}\\right\\rfloor`;
+    return{ln:"\\ln",log:"\\log",sin:"\\sin",cos:"\\cos",tan:"\\tan",atan:"\\arctan"}[x.name]+paren(a)}
+  case"bin":{const{op,a,b}=x;
+    if(op==="+")return toTex(a)+"+"+(b.t==="neg"?paren(toTex(b)):toTex(b));
+    if(op==="-")return toTex(a)+"-"+(b.t==="neg"?paren(toTex(b)):wrap(b,2));
+    if(op==="*"){const R=b.t==="neg"?paren(toTex(b)):wrap(b,2);return wrap(a,2)+(leftNum(b)?" \\cdot ":"\\,")+R}
+    if(op==="/")return`\\frac{${toTex(a)}}{${toTex(b)}}`;
+    const base=(a.t==="fn"&&!["sqrt","abs"].includes(a.name))||prec(a)<4?paren(toTex(a)):toTex(a);return`{${base}}^{${toTex(b)}}`}}}
+function compile(src){const ast=parse(src);return{src,ast,tex:toTex(ast),f:n=>evaluate(ast,n)}}
+
+/* ---------- Diagnóstico numérico ---------- */
+const MAXN=2000;
+function values(f,M=MAXN){const a=new Array(M+1);a[0]=NaN;for(let n=1;n<=M;n++){let v;try{v=f(n)}catch{v=NaN}a[n]=v}return a}
+function analyzeMono(a,N){
+  const L=Math.min(N,a.length-1),sg=[];
+  for(let k=1;k<L;k++){const x=a[k],y=a[k+1];if(!isFinite(x)||!isFinite(y))return{kind:"undef",at:isFinite(x)?k+1:k,N:L};const d=y-x;sg[k]=Math.abs(d)<=1e-12*Math.max(Math.abs(x),Math.abs(y))?0:Math.sign(d)}
+  const m=L-1;if(m<2)return{kind:"few",N:L};
+  const tailStart=s=>{let k=m;while(k>=1&&sg[k]*s>=0)k--;return k+1};
+  const ki=tailStart(1),kd=tailStart(-1);
+  if(ki===1&&kd===1)return{kind:"const",N:L};
+  const r=ki<=kd?{kind:"inc",from:ki}:{kind:"dec",from:kd};
+  if(r.from>1&&m-r.from+1<Math.max(3,Math.ceil(m*.35)))return{kind:"none",N:L};
+  r.strict=sg.slice(r.from).every(s=>s!==0);r.ev=r.from>1;r.N=L;return r;
+}
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+function recognize(x,tol){
+  if(Math.abs(x)<tol)return"0";let best=null,bd=tol;
+  for(let q=1;q<=12;q++){const p=Math.round(x*q),d=Math.abs(x-p/q);if(p!==0&&d<bd&&gcd(Math.abs(p),q)===1){bd=d;best=q===1?`${p}`:`${p<0?"-":""}\\frac{${Math.abs(p)}}{${q}}`}}
+  for(const[t,v]of[["e",Math.E],["\\pi",Math.PI],["\\sqrt{2}",Math.SQRT2],["e^{2}",Math.E**2],["e^{3}",Math.E**3],["\\frac{1}{e}",1/Math.E],["\\ln 2",Math.LN2],["\\sqrt{e}",Math.sqrt(Math.E)]]){const d=Math.abs(x-v);if(d<bd*.999){bd=d;best=t}}
+  return best;
+}
+function analyzeLimit(a){
+  const M=a.length-1;let last=0;for(let n=1;n<=M;n++){if(isFinite(a[n]))last=n;else break}
+  if(last<M&&Math.abs(a[last+1])===Infinity)return{kind:a[last+1]>0?"plus":"minus",upTo:last};
+  if(last<40)return{kind:"unknown",upTo:last};
+  const lo=Math.floor(last*.75),tail=a.slice(lo,last+1),span=r=>Math.max(...r)-Math.min(...r);
+  const v=a[last];
+  if(span(tail)<2e-3*(1+Math.abs(v))){const L=(a[last]+a[last-1])/2,err=span(tail);return{kind:"finite",L,err,exact:recognize(L,Math.max(4*err,1e-7)),upTo:last}}
+  const ev=[],od=[];for(let n=lo;n<=last;n++)(n%2?od:ev).push(a[n]);
+  const me=ev.at(-1),mo=od.at(-1);
+  if(span(ev)<2e-3*(1+Math.abs(me))&&span(od)<2e-3*(1+Math.abs(mo)))return{kind:"osc",vals:[me,mo],upTo:last};
+  let up=true,down=true;for(let n=lo;n<last;n++){if(a[n+1]<a[n])up=false;if(a[n+1]>a[n])down=false}
+  if(up||down){const w=last-lo,i1=Math.abs(a[lo]-a[lo-w]),i2=Math.abs(a[last]-a[lo]);
+    if(i2>=.65*i1)return{kind:up?"plus":"minus",upTo:last,slow:Math.abs(v)<1e4};
+    return{kind:"finite",L:v,err:i2,slow:true,exact:null,upTo:last}}
+  return{kind:"irregular",upTo:last};
+}
+
+/* ---------- Formato ---------- */
+const SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹","-":"⁻"};
+function fmt(v,digits=6){
+  if(Number.isNaN(v))return"no definido";if(v===Infinity)return"+∞";if(v===-Infinity)return"−∞";if(v===0)return"0";
+  const a=Math.abs(v);
+  if(a>=1e6||a<1e-4){const[m,e]=v.toExponential(Math.min(digits-1,3)).split("e");return`${m.replace("-","−")}×10${[...String(+e)].map(c=>SUP[c]).join("")}`}
+  return String(parseFloat(v.toPrecision(digits))).replace("-","−");
+}
+const fmtTick=v=>fmt(v,3);
+const UNSUP=Object.fromEntries(Object.entries(SUP).map(([k,v])=>[v,k]));
+const fmtTex=(v,d)=>fmt(v,d).replace(/−/g,"-").replace(/×10([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+)/,(_,e)=>"\\times10^{"+[...e].map(c=>UNSUP[c]).join("")+"}").replace("+∞","+\\infty");
+
+/* ---------- Gráficas en canvas ---------- */
+const plots=[];
+function niceTicks(lo,hi,count){const raw=(hi-lo)/count,mag=10**Math.floor(Math.log10(raw)),r=raw/mag,step=(r<1.5?1:r<3?2:r<7?5:10)*mag;const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+step*1e-9;v+=step)out.push(Math.abs(v)<step*1e-9?0:v);return out}
+function makePlot(canvas,tip){
+  const ctx=canvas.getContext("2d"),st={o:null,prog:1,hover:null,geo:null,raf:0};
+  const col=c=>c&&c.startsWith("--")?cssVar(c):c;
+  function draw(){
+    const o=st.o;if(!o)return;const r=canvas.getBoundingClientRect();if(!r.width)return;
+    const d=devicePixelRatio||1;canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);
+    const W=r.width,H=r.height,m={l:W<480?50:62,r:14,t:14,b:28},pw=W-m.l-m.r,ph=H-m.t-m.b;
+    let ys=[];o.series.forEach(s=>s.pts.forEach(p=>{if(isFinite(p[1]))ys.push(p[1])}));(o.fit||[]).forEach(y=>isFinite(y)&&ys.push(y));
+    let lo=o.yr?o.yr[0]:Math.min(...ys),hi=o.yr?o.yr[1]:Math.max(...ys);
+    if(!ys.length&&!o.yr){lo=-1;hi=1}
+    if(!(hi>lo)){const c=isFinite(lo)?lo:0;lo=c-1;hi=c+1}
+    if(!o.yr){const pad=(hi-lo)*.08;lo-=pad;hi+=pad}
+    const x0=o.x0,x1=o.x1,X=x=>m.l+(x-x0)/((x1-x0)||1)*pw,Y=y=>m.t+(hi-y)/(hi-lo)*ph;
+    st.geo={m,pw,ph,x0,x1,X,Y,W,H};
+    ctx.clearRect(0,0,W,H);
+    ctx.font=`11px ${cssVar("--f-mono")}`;ctx.textBaseline="middle";
+    const grid=col("--grid"),muted=col("--muted"),ink=col("--ink");
+    niceTicks(lo,hi,W<480?4:6).forEach(v=>{const y=Y(v);ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(m.l,y);ctx.lineTo(W-m.r,y);ctx.stroke();ctx.fillStyle=muted;ctx.textAlign="right";ctx.fillText(fmtTick(v),m.l-7,y)});
+    const xt=o.xTicks||niceTicks(x0,x1,W<480?4:8).filter(v=>Number.isInteger(v)&&v>=x0).map(v=>({v,label:String(v)}));
+    ctx.textBaseline="top";xt.forEach(t=>{const x=X(t.v),hw=ctx.measureText(t.label).width/2;ctx.fillStyle=muted;ctx.textAlign="center";ctx.fillText(t.label,Math.min(W-hw-2,x),H-m.b+8)});
+    const y0=lo<=0&&hi>=0?Y(0):H-m.b;
+    ctx.strokeStyle=muted;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(m.l,y0);ctx.lineTo(W-m.r,y0);ctx.moveTo(m.l,m.t);ctx.lineTo(m.l,H-m.b);ctx.stroke();
+    ctx.save();ctx.beginPath();ctx.rect(m.l,m.t-6,pw+6,ph+12);ctx.clip();
+    if(o.band){ctx.fillStyle=col(o.band.color);const a=Y(o.band.y1),b=Y(o.band.y0);ctx.fillRect(m.l,a,pw,b-a);ctx.strokeStyle=col("--accent");ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(m.l,a);ctx.lineTo(W-m.r,a);ctx.moveTo(m.l,b);ctx.lineTo(W-m.r,b);ctx.stroke();ctx.setLineDash([])}
+    (o.hlines||[]).forEach(h=>{if(!isFinite(h.y))return;const y=Y(h.y);ctx.strokeStyle=col(h.color);ctx.lineWidth=1.4;ctx.setLineDash([7,5]);ctx.beginPath();ctx.moveTo(m.l,y);ctx.lineTo(W-m.r,y);ctx.stroke();ctx.setLineDash([]);if(h.label){ctx.fillStyle=col(h.color);ctx.textAlign="right";ctx.textBaseline="bottom";ctx.fillText(h.label,W-m.r-4,y-3)}});
+    (o.vlines||[]).forEach(v=>{const x=X(v.x);ctx.strokeStyle=col(v.color);ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(x,m.t);ctx.lineTo(x,H-m.b);ctx.stroke();if(v.label){ctx.fillStyle=col(v.color);ctx.textAlign=x>W-80?"right":"left";ctx.textBaseline="top";ctx.fillText(v.label,x+(x>W-80?-5:5),m.t+2)}});
+    const limitX=x0+st.prog*(x1-x0);
+    o.series.forEach(s=>{
+      const pts=s.pts.filter(p=>p[0]<=limitX+1e-9);
+      if(s.kind==="line"||s.kind==="step"){ctx.strokeStyle=col(s.color);ctx.lineWidth=s.width||2;if(s.dash)ctx.setLineDash(s.dash);ctx.beginPath();let pen=false,prev=null;
+        pts.forEach(p=>{if(!isFinite(p[1])){pen=false;return}const x=X(p[0]),y=Y(Math.max(lo-(hi-lo),Math.min(hi+(hi-lo),p[1])));if(!pen){ctx.moveTo(x,y);pen=true}else if(s.kind==="step"){ctx.lineTo(x,Y(prev[1]));ctx.lineTo(x,y)}else ctx.lineTo(x,y);prev=p});ctx.stroke();ctx.setLineDash([])}
+      if(s.kind==="dots"||s.dots){const rad=s.r||(pts.length>90?2.6:pts.length>45?3.4:4.4);
+        pts.forEach(p=>{if(!isFinite(p[1])||p[1]<lo-(hi-lo)||p[1]>hi+(hi-lo))return;const x=X(p[0]),y=Y(p[1]),c=col(s.colorFn?s.colorFn(p):s.color);
+          if(o.stems&&s.kind==="dots"){ctx.strokeStyle=c;ctx.globalAlpha=.22;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y0);ctx.lineTo(x,y);ctx.stroke();ctx.globalAlpha=1}
+          ctx.fillStyle=c;ctx.strokeStyle=col("--surface-2");ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x,y,rad,0,7);ctx.fill();ctx.stroke()})}
+    });
+    ctx.restore();
+    if(st.hover!=null&&o.hover){const s=o.series[o.hover.series],p=s.pts[st.hover];
+      if(p&&isFinite(p[1])){const x=X(p[0]),y=Y(p[1]);ctx.strokeStyle=ink;ctx.globalAlpha=.35;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(x,m.t);ctx.lineTo(x,H-m.b);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;ctx.strokeStyle=ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,Math.max(m.t,Math.min(H-m.b,y)),7,0,7);ctx.stroke();
+        tip.hidden=false;tip.innerHTML=o.hover.fmt(p);tip.style.left=Math.max(70,Math.min(W-70,x))+"px";tip.style.top=Math.max(m.t+44,Math.min(H-m.b,y))+"px"}else tip.hidden=true}
+    else tip.hidden=true;
+  }
+  function pick(e){const g=st.geo,o=st.o;if(!g||!o?.hover)return;const r=canvas.getBoundingClientRect(),xv=g.x0+(e.clientX-r.left-g.m.l)/g.pw*(g.x1-g.x0);const pts=o.series[o.hover.series].pts;let bi=null,bd=Infinity;pts.forEach((p,i)=>{const d=Math.abs(p[0]-xv);if(d<bd){bd=d;bi=i}});st.hover=bi;draw()}
+  canvas.addEventListener("pointermove",pick);canvas.addEventListener("pointerdown",pick);
+  canvas.addEventListener("pointerleave",()=>{st.hover=null;draw()});
+  new ResizeObserver(()=>draw()).observe(canvas);
+  const api={set(o,{animate=false}={}){st.o=o;cancelAnimationFrame(st.raf);if(st.hover!=null&&!o.series[o.hover?.series]?.pts[st.hover])st.hover=null;
+      if(animate&&!reduceMotion){const t0=performance.now();const step=t=>{const k=Math.min(1,(t-t0)/650);st.prog=1-(1-k)**3;draw();if(k<1)st.raf=requestAnimationFrame(step)};st.prog=0;st.raf=requestAnimationFrame(step)}else{st.prog=1;draw()}},draw};
+  plots.push(api);return api;
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>plots.forEach(p=>p.draw()));
+new MutationObserver(()=>plots.forEach(p=>p.draw())).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme","class","style"]});
+
+/* ---------- Estado compartido ---------- */
+const PRESETS=[
+  {src:"5-3/(n+1)",q:1},{src:"(n+1)/(2n+3)",q:2},{src:"(-1)^n",q:2},{src:"8/(n^2+4)",q:3},{src:"4^n/(2*4^n+3n^2)",q:4},
+  {src:"40^n/n!",q:5},{src:"n sin(n^2)/(n^2+5)",q:6},{src:"(3n+2)/(n+4)",q:7},{src:"ln(5^n/(n^3+1))",q:8},{src:"n^3/e^(n/2)",q:9},
+  {src:"7+(-1)^n/(n+2)",q:10},{src:"(5n^2+4n(-1)^n)/(2n^2+7)",q:12},{src:"n!/9^n",q:13},{src:"3(-1)^n+1/n",q:14},{src:"2+(-1)^n/n",q:15},{src:"(1+1/n)^n",q:null}
+];
+const S={seq:null,a:null,lim:null,N:40};
+const pMain=makePlot($("#plotMain"),$("#tipMain")),pEps=makePlot($("#plotEps"),$("#tipEps")),pNe=makePlot($("#plotNe"),$("#tipNe")),pSq=makePlot($("#plotSq"),$("#tipSq")),pEx=makePlot($("#plotEx"),$("#tipEx"));
+
+function monoLabel(r){
+  switch(r.kind){
+    case"const":return{pill:"Constante",cls:"info",text:"Todos los términos observados son iguales."};
+    case"inc":case"dec":{const w=r.kind==="inc"?"creciente":"decreciente",W=w[0].toUpperCase()+w.slice(1);
+      if(!r.ev)return{pill:W+(r.strict?"":" (no estricta)"),cls:"good",text:`El signo de \\(a_{n+1}-a_n\\) es ${r.kind==="inc"?"positivo":"negativo"}${r.strict?"":" o cero"} en los ${r.N} términos observados.`};
+      return{pill:"Eventualmente "+w,cls:"warn",text:`${r.strict?"Estrictamente ":"Monótona "}${w} a partir de \\(n=${r.from}\\); antes de ese índice ${r.kind==="inc"?"decrece":"crece"} en algún paso.`}}
+    case"none":return{pill:"No monótona",cls:"bad",text:"El signo de \\(a_{n+1}-a_n\\) sigue cambiando hasta el último término observado."};
+    case"undef":return{pill:"Términos no definidos",cls:"bad",text:`El término \\(a_{${r.at}}\\) no es un número real finito.`};
+    default:return{pill:"Pocos términos",cls:"",text:"Muestre más términos para opinar."};
+  }
+}
+function limLabel(L){
+  switch(L.kind){
+    case"finite":return{pill:"Converge",cls:"good",short:L.exact?`→ ${L.exact}`:`→ ≈ ${fmt(L.L,5)}`,text:`Los términos se estabilizan cerca de \\(L\\approx ${fmtTex(L.L,7)}\\)${L.exact?`, compatible con \\(L=${L.exact}\\)`:""}.${L.slow?" La convergencia es lenta: la estimación es aproximada.":""}`};
+    case"plus":return{pill:"Diverge a +∞",cls:"bad",short:"→ +∞",text:L.upTo<MAXN?`Los términos superan la capacidad numérica en \\(n=${L.upTo+1}\\).`:"Los términos crecen sin cota en el rango calculado."};
+    case"minus":return{pill:"Diverge a −∞",cls:"bad",short:"→ −∞",text:L.upTo<MAXN?`Los términos superan la capacidad numérica en \\(n=${L.upTo+1}\\).`:"Los términos decrecen sin cota en el rango calculado."};
+    case"osc":return{pill:"Diverge por oscilación",cls:"bad",short:"oscila",text:`Los términos pares se acercan a ${fmt(L.vals[0],5)} y los impares a ${fmt(L.vals[1],5)}: dos límites distintos.`};
+    case"irregular":return{pill:"Sin límite aparente",cls:"warn",short:"sin límite",text:"Los términos no se estabilizan ni crecen de forma sostenida en el rango calculado."};
+    default:return{pill:"Indeterminado",cls:"",short:"?",text:"Hay muy pocos términos finitos para estimar el comportamiento."};
+  }
+}
+
+function setSequence(src,{animate=true,fromPreset=false}={}){
+  let seq;
+  try{seq=compile(src)}catch(e){$("#formulaErr").textContent=e instanceof ParseError?e.message:"La expresión no es válida.";$("#formula").setAttribute("aria-invalid","true");return false}
+  $("#formulaErr").textContent="";$("#formula").removeAttribute("aria-invalid");
+  if(fromPreset)$("#formula").value=src;
+  S.seq=seq;S.a=values(seq.f);S.lim=analyzeLimit(S.a);
+  tex($("#formulaTex"),"a_n="+seq.tex);tex($("#activeTex"),"a_n="+seq.tex);
+  const ll=limLabel(S.lim);$("#activeVerdict").textContent=ll.pill;
+  $$("#presets .chip").forEach(c=>c.setAttribute("aria-pressed",String(c.dataset.src===src)));
+  renderExplorer(animate);
+  resetEpsilonL();renderEpsilon();
+  return true;
+}
+
+/* ---------- Explorador ---------- */
+function renderExplorer(animate=false){
+  const N=S.N,a=S.a,pts=[];for(let n=1;n<=N;n++)pts.push([n,a[n]]);
+  const parity=$("#optParity").checked,showL=$("#optLimit").checked;
+  const series=[{pts,kind:"dots",color:"--accent",colorFn:parity?p=>p[0]%2?"--odd":"--even":null}];
+  const hl=[];
+  if(showL&&S.lim.kind==="finite")hl.push({y:S.lim.L,color:"--blue",label:"L ≈ "+fmt(S.lim.L,5)});
+  if(showL&&S.lim.kind==="osc")S.lim.vals.forEach((v,i)=>hl.push({y:v,color:i?"--odd":"--even",label:(i?"impares → ":"pares → ")+fmt(v,4)}));
+  pMain.set({x0:1,x1:N,series,hlines:hl,stems:$("#optStems").checked,hover:{series:0,fmt:p=>`n = ${p[0]}<br>a<sub>${p[0]}</sub> = ${fmt(p[1],8)}`}},{animate});
+  $("#legendMain").innerHTML=(parity?`<span><i class="sw" style="background:var(--even)"></i>n par</span><span><i class="sw" style="background:var(--odd)"></i>n impar</span>`:`<span><i class="sw" style="background:var(--accent)"></i>términos aₙ</span>`)+(hl.length?`<span><i class="sw line" style="background:var(--blue)"></i>valor límite estimado</span>`:"")+`<span>Pase el cursor o toque la gráfica para leer cada término.</span>`;
+  // Monotonía con N términos vs. con muchos
+  const r=analyzeMono(a,N),ml=monoLabel(r);
+  $("#monoPill").className="pill "+ml.cls;$("#monoPill").textContent=ml.pill;mixed($("#monoText"),ml.text);
+  let far=0;while(far<MAXN&&isFinite(a[far+1]))far++;far=Math.min(far,400);
+  const r2=analyzeMono(a,far);
+  const differs=far>N&&r2.kind!=="few"&&(r2.kind!==r.kind||(r2.from||1)!==(r.from||1));
+  const box=$("#monoAlert");box.innerHTML="";
+  if(differs){const d=document.createElement("div");d.className="alert";mixed(d,`Con ${far} términos la conclusión cambia: ${monoLabel(r2).pill.toLowerCase()}${r2.ev?` desde \\(n=${r2.from}\\)`:""}. Unos pocos términos no prueban una propiedad para todo \\(n\\).`);box.appendChild(d)}
+  const ll=limLabel(S.lim);$("#limPill").className="pill "+ll.cls;$("#limPill").textContent=ll.pill;mixed($("#limText"),ll.text);
+  // Cotas
+  let mn=Infinity,mx=-Infinity,imn=0,imx=0;for(let n=1;n<=far;n++){const v=a[n];if(!isFinite(v))continue;if(v<mn){mn=v;imn=n}if(v>mx){mx=v;imx=n}}
+  let bt=`En \\(1\\le n\\le ${far}\\): mínimo ${fmt(mn)} en \\(n=${imn}\\), máximo ${fmt(mx)} en \\(n=${imx}\\).`;
+  if(S.lim.kind==="plus")bt+=" No está acotada superiormente.";else if(S.lim.kind==="minus")bt+=" No está acotada inferiormente.";else if(S.lim.kind==="finite"||S.lim.kind==="osc")bt+=" Los datos son compatibles con una sucesión acotada.";
+  mixed($("#boundText"),bt);
+  // Tabla
+  let rows="";for(let n=1;n<=N;n++){const v=a[n],w=a[n+1],d=w-v,q=w/v,sg=!isFinite(d)?"":Math.abs(d)<=1e-12*Math.max(Math.abs(v),Math.abs(w))?"s-zero":d>0?"s-pos":"s-neg";
+    rows+=`<tr><td>${n}</td><td>${fmt(v,8)}</td><td class="${sg}">${isFinite(d)?(d>0?"+":"")+fmt(d,5):"—"}</td><td>${v!==0&&isFinite(q)?fmt(q,5):"—"}</td></tr>`}
+  $("#termRows").innerHTML=rows;
+}
+
+/* ---------- ε–N ---------- */
+const epsFromSlider=v=>10**(-3+3*v/1000);
+let epsL=0,epsCurve=[];
+function resetEpsilonL(){const L=S.lim;epsL=L.kind==="finite"?L.L:L.kind==="osc"?(L.vals[0]+L.vals[1])/2:0;$("#epsL").value=L.kind==="finite"&&L.exact&&/^-?\d+$/.test(L.exact)?L.exact:String(+epsL.toPrecision(8));$("#epsLErr").textContent="";computeEpsCurve()}
+function upTo(){let u=0;while(u<MAXN&&isFinite(S.a[u+1]))u++;return u}
+function findN(L,eps,u){let lastOut=0;for(let n=1;n<=u;n++)if(!(Math.abs(S.a[n]-L)<eps))lastOut=n;return lastOut>=u*.9?null:lastOut+1}
+function computeEpsCurve(){const u=upTo();epsCurve=[];for(let i=0;i<=90;i++){const t=i/90*3,e=10**(-t);epsCurve.push([t,findN(epsL,e,u),e])}}
+function renderEpsilon(){
+  if(!S.a)return;
+  tex($("#epsSeqTex"),"a_n="+S.seq.tex,true);
+  const eps=epsFromSlider(+$("#epsRange").value),u=upTo(),N=findN(epsL,eps,u);
+  $("#epsOut").textContent=fmt(eps,3);
+  const xmax=N?Math.min(u,Math.max(30,Math.ceil(N*1.5)+5)):Math.min(u,120),pts=[];for(let n=1;n<=xmax;n++)pts.push([n,S.a[n]]);
+  const inside=p=>Math.abs(p[1]-epsL)<eps;
+  const near=pts.filter(p=>p[0]>=Math.max(1,xmax*.3)).map(p=>p[1]);
+  pEps.set({x0:1,x1:xmax,series:[{pts,kind:"dots",color:"--accent",colorFn:p=>inside(p)?"--accent":"--red"}],band:{y0:epsL-eps,y1:epsL+eps,color:"--band"},hlines:[{y:epsL,color:"--muted",label:"L"}],vlines:N?[{x:N,color:"--blue",label:"N = "+N}]:[],stems:false,fit:[epsL-eps,epsL+eps,...near],
+    yr:(()=>{const all=[...pts.map(p=>p[1]).filter(isFinite)];const lo=Math.min(...all,epsL-eps),hi=Math.max(...all,epsL+eps);const sp=hi-lo;return sp>0?[lo-sp*.06,hi+sp*.06]:null})(),
+    hover:{series:0,fmt:p=>`n = ${p[0]} · a<sub>n</sub> = ${fmt(p[1],7)}<br>|a<sub>n</sub> − L| = ${fmt(Math.abs(p[1]-epsL),4)} ${inside(p)?"&lt;":"≥"} ε`}});
+  const big=$("#epsBig");big.classList.toggle("none",!N);$("#epsN").textContent=N??"no existe";
+  if(N)mixed($("#epsText"),`Para todo \\(n\\ge ${N}\\) se cumple \\(|a_n-L|<${fmt(eps,3)}\\).${N>1?` El último término fuera de la franja es \\(a_{${N-1}}=${fmtTex(S.a[N-1],6)}\\).`:" Todos los términos están dentro."}`);
+  else mixed($("#epsText"),`Hasta \\(n=${u}\\) siguen apareciendo términos fuera de la franja. Con este \\(L\\) no se encuentra un \\(N\\): ${S.lim.kind==="finite"?"pruebe otro valor de L o un ε mayor.":"la sucesión no converge a este valor."}`);
+  const cur=-Math.log10(eps);
+  const curvePts=epsCurve.map(p=>[p[0],p[1]??NaN,p[2]]);
+  const ys=curvePts.map(p=>p[1]).filter(isFinite);
+  pNe.set({x0:0,x1:3,xTicks:[0,1,2,3].map(v=>({v,label:["1","0.1","0.01","0.001"][v]})),series:[{pts:curvePts,kind:"step",color:"--accent",width:2.2},{pts:N?[[cur,N]]:[],kind:"dots",color:"--blue",r:6}],yr:ys.length?[0,Math.max(...ys)*1.12+1]:[0,10],
+    hover:{series:0,fmt:p=>`ε = ${fmt(p[2],3)}<br>N = ${isFinite(p[1])?p[1]:"no existe"}`}});
+}
+let epsAnim=0;
+function playEps(){const btn=$("#epsPlay");if(epsAnim){cancelAnimationFrame(epsAnim);epsAnim=0;btn.textContent="▶ Reducir ε";return}
+  const r=$("#epsRange");let v=+r.value<=5?1000:+r.value;btn.textContent="❚❚ Pausar";
+  const step=()=>{v-=reduceMotion?60:6;r.value=Math.max(0,v);renderEpsilon();if(v>0)epsAnim=requestAnimationFrame(step);else{epsAnim=0;btn.textContent="▶ Reducir ε"}};epsAnim=requestAnimationFrame(step)}
+
+/* ---------- Encaje ---------- */
+const SQUEEZE=[
+  {name:"Seno acotado",a:"n sin(n^2)/(n^2+5)",l:"-n/(n^2+5)",u:"n/(n^2+5)",L:0,Ltex:"0",why:"Parta de \\(-1\\le\\sin(n^2)\\le1\\) y multiplique por \\(\\frac{n}{n^2+5}>0\\). Ambas cotas se comportan como \\(\\pm\\frac1n\\)."},
+  {name:"Alternante racional",a:"(5n^2+4n(-1)^n)/(2n^2+7)",l:"(5n^2-4n)/(2n^2+7)",u:"(5n^2+4n)/(2n^2+7)",L:2.5,Ltex:"\\frac52",why:"Use \\(-1\\le(-1)^n\\le1\\) en el numerador; el denominador es positivo. Al dividir entre \\(n^2\\), ambas cotas tienden a \\(\\frac52\\)."},
+  {name:"Factorial contra potencia",a:"n!/n^n",l:"0",u:"1/n",L:0,Ltex:"0",why:"\\(\\frac{n!}{n^n}=\\frac1n\\cdot\\frac2n\\cdots\\frac nn\\). Cada factor después del primero es a lo sumo 1, así que el producto es a lo sumo \\(\\frac1n\\)."},
+  {name:"Coseno en el numerador",a:"(2n+cos(n))/(n+1)",l:"(2n-1)/(n+1)",u:"(2n+1)/(n+1)",L:2,Ltex:"2",why:"Como \\(-1\\le\\cos n\\le1\\), el numerador queda entre \\(2n-1\\) y \\(2n+1\\). Las dos cotas tienden a 2."}
+];
+let sqI=0;const sqC=SQUEEZE.map(s=>({a:compile(s.a),l:compile(s.l),u:compile(s.u)}));
+function renderSqueeze(animate=false){
+  const s=SQUEEZE[sqI],c=sqC[sqI],n=+$("#sqRange").value;$("#sqOut").textContent=n;
+  tex($("#sqIneq"),`${c.l.tex}\\;\\le\\;${c.a.tex}\\;\\le\\;${c.u.tex}\\qquad\\Longrightarrow\\qquad \\lim_{n\\to\\infty}a_n=${s.Ltex}`,true);
+  mixed($("#sqWhy"),s.why);
+  const A=[],Lo=[],U=[];for(let k=1;k<=n;k++){A.push([k,c.a.f(k)]);Lo.push([k,c.l.f(k)]);U.push([k,c.u.f(k)])}
+  const fitAll=[];for(let k=1;k<=120;k++){fitAll.push(c.l.f(k),c.u.f(k))}
+  const yr=[Math.min(...fitAll.filter(isFinite)),Math.max(...fitAll.filter(isFinite))],sp=yr[1]-yr[0];
+  pSq.set({x0:1,x1:Math.max(n,10),yr:[yr[0]-sp*.06,yr[1]+sp*.06],series:[{pts:U,kind:"line",color:"--blue",width:2,dots:true,r:2.2},{pts:Lo,kind:"line",color:"--odd",width:2,dots:true,r:2.2},{pts:A,kind:"dots",color:"--accent"}],hlines:[{y:s.L,color:"--muted",label:"L = "+(s.L===2.5?"5/2":s.L)}],
+    hover:{series:2,fmt:p=>`n = ${p[0]}<br>l = ${fmt(c.l.f(p[0]),5)}<br>a = ${fmt(p[1],5)}<br>u = ${fmt(c.u.f(p[0]),5)}`}},{animate});
+  const l=c.l.f(n),a=c.a.f(n),u=c.u.f(n);
+  $("#roL").textContent=fmt(l,6);$("#roA").textContent=fmt(a,6);$("#roU").textContent=fmt(u,6);$("#roG").textContent=fmt(u-l,4);
+  mixed($("#sqErr"),`En \\(n=${n}\\), la sucesión está a lo sumo a ${fmt(Math.max(Math.abs(u-s.L),Math.abs(l-s.L)),4)} de \\(L\\). Ese número es la peor distancia permitida por las cotas, y tiende a 0.`);
+}
+let sqAnim=0;
+function playSq(){const btn=$("#sqPlay");if(sqAnim){clearInterval(sqAnim);sqAnim=0;btn.textContent="▶ Reproducir";return}
+  const r=$("#sqRange");if(+r.value>=120)r.value=3;btn.textContent="❚❚ Pausar";
+  sqAnim=setInterval(()=>{r.value=+r.value+1;renderSqueeze();if(+r.value>=120){clearInterval(sqAnim);sqAnim=0;btn.textContent="▶ Reproducir"}},reduceMotion?200:70)}
+
+/* ---------- Práctica ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),co=a=>a===1?"":String(a);
+const TEMPLATES=[
+  ()=>{let a,b,c,d;do{a=R(1,6);b=R(1,9);c=R(1,6);d=R(1,9)}while(a*d===b*c);return{src:`(${co(a)}n+${b})/(${co(c)}n+${d})`,kind:"finite",L:a/c,Ltex:recognize(a/c,1e-9),why:`Al dividir entre \\(n\\), el límite es el cociente de coeficientes principales. La diferencia \\(a_{n+1}-a_n\\) tiene el signo de \\(${a}\\cdot${d}-${b}\\cdot${c}=${a*d-b*c}\\).`}},
+  ()=>{const k=R(3,9);return{src:`${k}^n/n!`,kind:"finite",L:0,Ltex:"0",why:`El cociente \\(\\frac{a_{n+1}}{a_n}=\\frac{${k}}{n+1}\\) es mayor que 1 al inicio y menor que 1 desde \\(n=${k}\\). El factorial domina a la potencia.`}},
+  ()=>{const c=R(1,9),p=R(1,2);return{src:`${c}+(-1)^n/n${p===2?"^2":""}`,kind:"finite",L:c,Ltex:String(c),why:`El término alternante cambia de signo en cada paso, así que no es monótona. Su valor absoluto \\(\\frac{1}{n${p===2?"^2":""}}\\) tiende a 0.`}},
+  ()=>{const c=R(2,5);return{src:`${c}(-1)^n+1/n`,kind:"osc",why:`Los términos pares tienden a ${c} y los impares a \\(-${c}\\): dos subsucesiones con límites distintos.`}},
+  ()=>{const[p,q]=[[1,2],[2,3],[3,4],[3,2],[5,4],[4,3]][R(0,5)];return p<q?{src:`(${p}/${q})^n`,kind:"finite",L:0,Ltex:"0",why:`Es geométrica con razón \\(\\frac{${p}}{${q}}\\in(0,1)\\): cada término es el anterior multiplicado por un número menor que 1.`}:{src:`(${p}/${q})^n`,kind:"plus",why:`Es geométrica con razón \\(\\frac{${p}}{${q}}>1\\): crece y no está acotada.`}},
+  ()=>{const k=R(2,4),b=R(2,3);return{src:`n^${k}/${b}^n`,kind:"finite",L:0,Ltex:"0",why:`La función asociada \\(x^{${k}}${b}^{-x}\\) crece hasta \\(x=${k}/\\ln ${b}\\approx${(k/Math.log(b)).toFixed(2)}\\) y luego decrece. La exponencial domina.`}},
+  ()=>{const b=R(4,9);return{src:`${b}n-n^2`,kind:"minus",why:`Es una parábola que abre hacia abajo con vértice en \\(n=${b/2}\\): sube hasta ahí y después baja sin cota.`}},
+  ()=>{const b=R(1,9);return{src:`ln(n+${b})`,kind:"plus",why:"El logaritmo es creciente y no acotado, aunque crece muy despacio."}},
+  ()=>({src:"n sin(1/n)",kind:"finite",L:1,Ltex:"1",why:"Con \\(x=1/n\\to0^+\\), \\(\\frac{\\sin x}{x}\\to1\\). Como \\(\\frac{\\sin x}{x}\\) decrece en \\((0,1]\\), la sucesión crece."}),
+  ()=>{const a=R(1,3);return{src:`(1+${a}/n)^n`,kind:"finite",L:Math.E**a,Ltex:a===1?"e":`e^{${a}}`,why:`Es el límite notable \\(\\left(1+\\frac{${a}}{n}\\right)^n\\to e^{${a}}\\), y la sucesión es creciente.`}},
+  ()=>{const c=R(1,9);return{src:`${c}-sqrt(n)`,kind:"minus",why:"\\(\\sqrt n\\) crece sin cota, así que \\(a_n\\) decrece y no está acotada inferiormente."}},
+];
+const MONO_OPTS=[["inc","Creciente"],["dec","Decreciente"],["einc","Creciente solo a partir de cierto n"],["edec","Decreciente solo a partir de cierto n"],["none","No monótona"]];
+const LIM_OPTS=[["finite","Converge a un número real"],["plus","Diverge a +∞"],["minus","Diverge a −∞"],["osc","Diverge por oscilación"]];
+let EX=null,exCount=0;
+const SC=Object.assign({ok:0,total:0,streak:0,best:0,hist:[]},store.get("labsuc.practica",{}));
+function monoKey(r){return r.kind==="none"?"none":r.ev?(r.kind==="inc"?"einc":"edec"):r.kind==="inc"?"inc":"dec"}
+function radios(id,name,opts){$(id).innerHTML=opts.map(([v,t])=>`<label class="radio"><input type="radio" name="${name}" value="${v}" id="${name}-${v}">${t}</label>`).join("")}
+function newExercise(){
+  let t;do{t=TEMPLATES[R(0,TEMPLATES.length-1)]()}while(EX&&t.src===EX.src);
+  const seq=compile(t.src);EX={...t,seq,mono:monoKey(analyzeMono(values(seq.f,200),200)),done:false};exCount++;
+  $("#exNum").textContent=`Ejercicio ${exCount}`;tex($("#exTex"),"a_n="+seq.tex,true);
+  radios("#rMono","mono",MONO_OPTS);radios("#rLim","lim",LIM_OPTS);
+  $("#limRow").hidden=true;$("#exL").value="";$("#exFb").hidden=true;$("#exPlotBox").hidden=true;$("#exExplore").hidden=true;$("#exCheck").disabled=false;
+}
+function checkExercise(){
+  if(!EX||EX.done)return;
+  const m=$('input[name="mono"]:checked')?.value,l=$('input[name="lim"]:checked')?.value,fb=$("#exFb");
+  if(!m||!l){fb.hidden=false;fb.className="feedback miss";fb.innerHTML="<p><strong>Falta una respuesta.</strong> Elija una opción de monotonía y una de comportamiento.</p>";return}
+  let lOk=true,lMsg="";
+  if(l==="finite"&&EX.kind==="finite"){const raw=$("#exL").value.trim().replace(/(\d),(\d)/g,"$1.$2");
+    if(!raw){fb.hidden=false;fb.className="feedback miss";fb.innerHTML="<p><strong>Falta el límite.</strong> Escriba el valor de L, por ejemplo 1/2 o e^2.</p>";return}
+    try{const v=evaluate(parse(raw,{allowN:false}),0);lOk=Math.abs(v-EX.L)<=1e-3*Math.max(1,Math.abs(EX.L))}catch(e){fb.hidden=false;fb.className="feedback miss";fb.textContent=e.message;return}
+    lMsg=lOk?"":` El valor de L no coincide.`}
+  const mOk=m===EX.mono,kOk=l===EX.kind&&lOk,ok=mOk&&kOk;
+  EX.done=true;$("#exCheck").disabled=true;
+  $$("#rMono .radio").forEach(r=>{const v=r.querySelector("input").value;r.classList.toggle("right",v===EX.mono);r.classList.toggle("wrong",v===m&&!mOk)});
+  $$("#rLim .radio").forEach(r=>{const v=r.querySelector("input").value;r.classList.toggle("right",v===EX.kind);r.classList.toggle("wrong",v===l&&l!==EX.kind)});
+  const monoTxt=MONO_OPTS.find(o=>o[0]===EX.mono)[1],limTxt=EX.kind==="finite"?`converge a \\(${EX.Ltex}\\)`:LIM_OPTS.find(o=>o[0]===EX.kind)[1].toLowerCase();
+  fb.hidden=false;fb.className="feedback"+(ok?"":" miss");fb.innerHTML="";
+  const p1=document.createElement("p");p1.innerHTML=`<strong>${ok?"Correcto.":"Revise el análisis."}</strong> `;
+  const s1=document.createElement("span");mixed(s1,`Monotonía: ${mOk?"✓":"✗"} ${monoTxt.toLowerCase()}. Comportamiento: ${kOk?"✓":"✗"} ${limTxt}.${lMsg}`);p1.appendChild(s1);
+  const p2=document.createElement("p");mixed(p2,"Clave: "+EX.why);fb.append(p1,p2);
+  SC.total++;if(ok){SC.ok++;SC.streak++;SC.best=Math.max(SC.best,SC.streak)}else SC.streak=0;SC.hist=[...SC.hist,ok?1:0].slice(-20);store.set("labsuc.practica",SC);renderScore();
+  $("#exPlotBox").hidden=false;$("#exExplore").hidden=false;
+  const a=values(EX.seq.f,40),pts=a.slice(1).map((v,i)=>[i+1,v]);
+  pEx.set({x0:1,x1:40,series:[{pts,kind:"dots",color:"--accent"}],stems:true,hlines:EX.kind==="finite"?[{y:EX.L,color:"--blue",label:"L"}]:[],hover:{series:0,fmt:p=>`n = ${p[0]} · a<sub>n</sub> = ${fmt(p[1],7)}`}},{animate:true});
+}
+function renderScore(){$("#scOk").textContent=`${SC.ok}/${SC.total}`;$("#scStreak").textContent=SC.streak;$("#scBest").textContent=SC.best;$("#scHist").innerHTML=SC.hist.map(h=>`<i class="${h?"ok":"ko"}" title="${h?"acierto":"fallo"}"></i>`).join("")||`<span class="help">Aún no hay intentos.</span>`}
+
+/* ---------- Pestañas ---------- */
+const TABS=["explorar","epsilon","encaje","practica"];
+function showTab(id,focus=false){if(!TABS.includes(id))id="explorar";
+  TABS.forEach(t=>{const on=t===id;$("#"+t).hidden=!on;const b=$(`[data-tab="${t}"]`);b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus()});
+  try{history.replaceState(null,"","#"+id)}catch{}store.set("labsuc.tab",id);
+  requestAnimationFrame(()=>plots.forEach(p=>p.draw()));
+}
+$$(".tab").forEach(b=>{b.onclick=()=>showTab(b.dataset.tab);b.onkeydown=e=>{const i=TABS.indexOf(b.dataset.tab);if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();showTab(TABS[(i+(e.key==="ArrowRight"?1:3))%4],true)}}});
+
+/* ---------- Conexiones ---------- */
+$("#presets").innerHTML=PRESETS.map(p=>`<button class="chip" type="button" data-src="${p.src}" aria-pressed="false"><span class="m"></span>${p.q?`<span class="q">P${p.q}</span>`:`<span class="q">extra</span>`}</button>`).join("");
+$$("#presets .chip").forEach((c,i)=>{tex(c.querySelector(".m"),compile(PRESETS[i].src).tex);c.setAttribute("aria-label",`Cargar ${PRESETS[i].src}`);c.onclick=()=>setSequence(PRESETS[i].src,{fromPreset:true})});
+let typingT=0;$("#formula").addEventListener("input",e=>{clearTimeout(typingT);typingT=setTimeout(()=>setSequence(e.target.value,{animate:false}),220)});
+$("#nTerms").addEventListener("input",e=>{S.N=+e.target.value;$("#nTermsOut").textContent=S.N;renderExplorer()});
+["#optParity","#optLimit","#optStems"].forEach(s=>$(s).addEventListener("change",()=>renderExplorer()));
+$("#toEpsilon").onclick=()=>{showTab("epsilon");scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"})};
+$("#epsRange").addEventListener("input",renderEpsilon);$("#epsPlay").onclick=playEps;
+$("#epsL").addEventListener("input",e=>{try{epsL=evaluate(parse(e.target.value.replace(/(\d),(\d)/g,"$1.$2"),{allowN:false}),0);if(!isFinite(epsL))throw new ParseError("L debe ser un número real.");$("#epsLErr").textContent="";computeEpsCurve();renderEpsilon()}catch(err){$("#epsLErr").textContent=err.message}});
+$("#epsUseEst").onclick=()=>{resetEpsilonL();renderEpsilon()};
+$("#sqChips").innerHTML=SQUEEZE.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===0}">${s.name}</button>`).join("");
+$$("#sqChips .chip").forEach(c=>c.onclick=()=>{sqI=+c.dataset.i;$$("#sqChips .chip").forEach(x=>x.setAttribute("aria-pressed",String(x===c)));renderSqueeze(true)});
+$("#sqRange").addEventListener("input",()=>renderSqueeze());$("#sqPlay").onclick=playSq;
+$("#rLim").addEventListener("change",()=>{$("#limRow").hidden=$('input[name="lim"]:checked')?.value!=="finite"});
+$("#exCheck").onclick=checkExercise;$("#exNew").onclick=newExercise;
+$("#exExplore").onclick=()=>{setSequence(EX.src,{fromPreset:true});showTab("explorar");scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"})};
+let resetArmed=0;$("#scReset").onclick=e=>{const b=e.currentTarget;if(!resetArmed){b.textContent="Toque otra vez para confirmar";resetArmed=setTimeout(()=>{resetArmed=0;b.textContent="Reiniciar marcador"},3000);return}clearTimeout(resetArmed);resetArmed=0;b.textContent="Reiniciar marcador";Object.assign(SC,{ok:0,total:0,streak:0,best:0,hist:[]});store.set("labsuc.practica",SC);renderScore()};
+
+/* ---------- Arranque ---------- */
+renderStatic();
+setSequence($("#formula").value,{animate:true});
+renderSqueeze();newExercise();renderScore();
+showTab((location.hash||"").slice(1)||store.get("labsuc.tab","explorar"));
+</script>
+</body>
+</html>
