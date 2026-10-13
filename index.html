@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Índice de recursos interactivos del curso MA-1103 Cálculo y Álgebra Lineal, organizados según las unidades del programa del II Semestre 2026.">
+<title>MA-1103 · Recursos del curso</title>
+<style>
+/* Layout: banda verde de cabecera (misma identidad que los recursos), franja con las 5 unidades proporcional a sus horas, filtros y luego una sección por unidad con sus recursos. */
+:root{
+  --bg:#edf3ef;--surface:#ffffff;--surface-2:#f5faf7;--ink:#17251f;--muted:#5b6b63;--line:#d6e0da;
+  --brand:#0c382b;--on-brand:#ffffff;--on-brand-muted:#cfe6da;--brand-accent:#9ed7bd;
+  --accent:#1d7657;--accent-strong:#155a42;--accent-soft:#e2f2ea;--on-accent:#ffffff;
+  --u1:#7a5aa6;--u2:#1d7657;--u3:#28638e;--u4:#b2541f;--u5:#8a6d12;
+  --focus:#6fa6cb;--shadow:0 14px 40px #163b2d14;
+  --f-display:Georgia,"Times New Roman",serif;
+  --f-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1612;--surface:#14201b;--surface-2:#192822;--ink:#e2ece6;--muted:#9bb0a5;--line:#2a3c34;
+  --brand:#0a2a20;--on-brand:#f2f8f5;--on-brand-muted:#b5d3c4;--brand-accent:#8fd0b2;
+  --accent:#4fbf8e;--accent-strong:#7fd6ae;--accent-soft:#1a3a2d;--on-accent:#06261a;
+  --u1:#b89ae0;--u2:#4fbf8e;--u3:#82b8e0;--u4:#ee9a62;--u5:#d9b85a;--focus:#82b8e0;--shadow:0 14px 40px #0006;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1612;--surface:#14201b;--surface-2:#192822;--ink:#e2ece6;--muted:#9bb0a5;--line:#2a3c34;
+  --brand:#0a2a20;--on-brand:#f2f8f5;--on-brand-muted:#b5d3c4;--brand-accent:#8fd0b2;
+  --accent:#4fbf8e;--accent-strong:#7fd6ae;--accent-soft:#1a3a2d;--on-accent:#06261a;
+  --u1:#b89ae0;--u2:#4fbf8e;--u3:#82b8e0;--u4:#ee9a62;--u5:#d9b85a;--focus:#82b8e0;--shadow:0 14px 40px #0006;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+h1,h2,h3{text-wrap:balance}
+.shell{width:100%;max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+
+.head{position:relative;overflow:hidden;padding:28px;border-radius:22px 22px 10px 10px;background:var(--brand);color:var(--on-brand);box-shadow:var(--shadow)}
+.head:after{content:"Σ  A⁻¹  z̄";position:absolute;right:18px;top:-28px;color:var(--on-brand);opacity:.05;font:7rem var(--f-display);pointer-events:none;white-space:nowrap}
+.eyebrow{margin:0 0 4px;color:var(--brand-accent);font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+h1{position:relative;margin:0;font:650 clamp(1.9rem,4.3vw,3.1rem)/1.05 var(--f-display);letter-spacing:-.03em}
+.subtitle{position:relative;margin:8px 0 0;max-width:62ch;color:var(--on-brand-muted)}
+.facts{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.facts span{padding:5px 11px;border:1px solid #ffffff30;border-radius:99px;background:#ffffff12;font-size:.84rem;font-weight:650}
+
+/* Mapa de unidades: el ancho de cada tramo es proporcional a sus horas */
+.map{margin-top:16px;padding:18px 20px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}
+.map h2{margin:0 0 4px;font:650 1.15rem var(--f-display)}
+.map p{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.strip{display:flex;gap:4px;min-height:74px}
+.seg{display:flex;flex-direction:column;justify-content:space-between;min-width:118px;padding:9px 10px;border:0;border-radius:10px;background:var(--surface-2);border-top:5px solid var(--c);text-align:left;cursor:pointer}
+.seg:hover{background:var(--accent-soft)}
+.seg[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--c)}
+.seg b{display:block;font-size:.86rem;line-height:1.2;overflow:hidden;text-overflow:ellipsis}
+.seg small{color:var(--muted);font:600 .76rem var(--f-mono);font-variant-numeric:tabular-nums}
+.seg .cnt{color:var(--c);font-weight:800}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
+.search{flex:1 1 260px;min-width:0;min-height:46px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-height:42px;padding:6px 13px;border:1px solid var(--line);border-radius:99px;background:var(--surface);cursor:pointer;font-size:.9rem;font-weight:650}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.status{margin:0 0 4px;color:var(--muted);font-size:.88rem}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}
+.units{display:grid;gap:16px;min-width:0}
+.unit{min-width:0;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden}
+.unit-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);border-left:6px solid var(--c)}
+.unit-num{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--c);color:var(--surface);font:700 1.2rem var(--f-display)}
+.unit h2{margin:0;font:650 clamp(1.1rem,2.2vw,1.35rem)/1.2 var(--f-display)}
+.unit-meta{color:var(--muted);font-size:.84rem}
+.hours{font:600 .8rem var(--f-mono);color:var(--muted);white-space:nowrap}
+.unit-body{display:grid;gap:12px;padding:16px 20px 18px}
+details.syl summary{cursor:pointer;color:var(--muted);font-size:.88rem;font-weight:700;min-height:32px;display:flex;align-items:center}
+details.syl ol{margin:6px 0 0;padding-left:0;list-style:none;columns:2 260px;column-gap:24px;font-size:.88rem}
+details.syl li{break-inside:avoid;padding:2px 0}
+details.syl li span{display:inline-block;min-width:3.2em;color:var(--muted);font-family:var(--f-mono);font-size:.8rem}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.res{display:flex;flex-direction:column;gap:8px;min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:inherit;text-decoration:none;transition:border-color .15s,transform .15s}
+.res:hover{border-color:var(--c);transform:translateY(-2px)}
+.res-top{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.type{padding:2px 9px;border-radius:99px;background:var(--surface);border:1px solid var(--line);font-size:.74rem;font-weight:800;color:var(--muted)}
+.new{padding:2px 9px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-size:.72rem;font-weight:800}
+.res h3{margin:0;font:650 1.08rem/1.25 var(--f-display)}
+.res p{margin:0;color:var(--muted);font-size:.9rem}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tags span{padding:1px 7px;border-radius:6px;background:var(--surface);border:1px solid var(--line);font:600 .74rem var(--f-mono);color:var(--muted)}
+.open{margin-top:auto;color:var(--c);font-weight:800;font-size:.9rem}
+.empty{margin:0;padding:14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.9rem}
+
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:grid;gap:12px}
+.box{padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow)}
+.box .k{margin:0 0 8px;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.eval{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.eval li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;font-size:.9rem}
+.eval b{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eval i{grid-column:1/-1;display:block;height:6px;border-radius:99px;background:var(--line);overflow:hidden;font-style:normal}
+.eval i::after{content:"";display:block;height:100%;width:var(--w);background:var(--accent);border-radius:inherit}
+.box p{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
+.box ol{margin:0;padding-left:20px;font-size:.88rem;color:var(--muted)}
+.foot{margin-top:24px;color:var(--muted);font-size:.84rem;text-align:center}
+
+@media (max-width:900px){.layout{grid-template-columns:1fr}.side{position:static}}
+@media (max-width:640px){
+  .head{padding:22px 18px}
+  .strip{flex-direction:column;min-height:0}
+  .seg{flex:none!important;flex-direction:row;align-items:center;gap:10px;border-top:0;border-left:5px solid var(--c)}
+  .unit-head{grid-template-columns:auto minmax(0,1fr);padding:14px 16px}
+  .hours{grid-column:2}
+  .unit-body{padding:14px 16px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="head">
+    <p class="eyebrow">Escuela de Matemática · TEC · II Semestre 2026</p>
+    <h1>MA-1103 Cálculo y Álgebra Lineal</h1>
+    <p class="subtitle">Autoevaluaciones, laboratorios y prácticas interactivas del curso, ordenados según las cinco unidades del programa.</p>
+    <div class="facts"><span>4 créditos</span><span>4 h de clase + 8 h extraclase por semana</span><span>Requisito: MA-1102</span><span>Se aprueba con 70</span></div>
+  </header>
+
+  <section class="map" aria-labelledby="mapTitle">
+    <h2 id="mapTitle">Unidades del programa</h2>
+    <p>El ancho de cada unidad es proporcional a sus horas de clase (64 h en total). Toque una unidad para ver solo sus recursos.</p>
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <div class="toolbar">
+    <input class="search" id="q" type="search" placeholder="Buscar: convergencia, Taylor, matrices, De Moivre…" aria-label="Buscar recursos" autocomplete="off">
+    <div class="chips" id="types" aria-label="Filtrar por tipo de recurso"></div>
+  </div>
+  <p class="status" id="status" aria-live="polite"></p>
+
+  <div class="layout">
+    <div class="units" id="units"></div>
+    <aside class="side">
+      <div class="box">
+        <p class="k">Evaluación</p>
+        <ul class="eval">
+          <li>I examen parcial <b>25 %</b><i style="--w:25%"></i></li>
+          <li>II examen parcial <b>22 %</b><i style="--w:22%"></i></li>
+          <li>III examen parcial <b>23 %</b><i style="--w:23%"></i></li>
+          <li>Otras evaluaciones (al menos 6) <b>30 %</b><i style="--w:30%"></i></li>
+        </ul>
+        <p>Parciales tentativos en las semanas 7, 12 y 18. Con nota final de 60 o 65 hay derecho a examen de reposición.</p>
+      </div>
+      <div class="box">
+        <p class="k">Cómo estudiar con estos recursos</p>
+        <ol>
+          <li>Lea el tema en el folleto de la cátedra antes de la clase.</li>
+          <li>Use el laboratorio para explorar los ejemplos.</li>
+          <li>Haga la autoevaluación sin ver las soluciones.</li>
+          <li>Lleve sus dudas a la hora de consulta.</li>
+        </ol>
+      </div>
+    </aside>
+  </div>
+
+  <p class="foot">Material complementario de práctica. La información oficial del curso se publica en la Comunidad de la Cátedra de Cálculo y Álgebra Lineal en tecDigital.</p>
+</main>
+
+<script>
+"use strict";
+/* =====================================================================
+   CÓMO AGREGAR UN HTML NUEVO
+   1. Suba el archivo .html a esta misma carpeta.
+   2. Agregue un objeto a la lista RECURSOS, por ejemplo:
+      { archivo:"Series-geometricas.html", titulo:"Series geométricas",
+        unidad:2, tipo:"Laboratorio", fecha:"2026-10-20",
+        descripcion:"Sumas parciales animadas y razón r.",
+        temas:["2.5","2.7"] },
+   - unidad: 1 a 5 (ver UNIDADES abajo).
+   - tipo: "Autoevaluación", "Laboratorio", "Práctica", "Resumen" u otro texto.
+   - fecha (AAAA-MM-DD): los recursos de las últimas 3 semanas se marcan como «Nuevo».
+   - temas: números de contenido del programa (opcional).
+   ===================================================================== */
+const RECURSOS=[
+  {archivo:"Autosucesiones.html",titulo:"Autoevaluación: monotonía y convergencia de sucesiones",unidad:2,tipo:"Autoevaluación",fecha:"2026-10-13",
+   descripcion:"15 preguntas con pistas, soluciones desarrolladas, gráficas y un resumen de desempeño por tema y dificultad.",temas:["2.1","2.2","2.3"]},
+  {archivo:"Laboratorio-sucesiones.html",titulo:"Laboratorio de sucesiones",unidad:2,tipo:"Laboratorio",fecha:"2026-10-13",
+   descripcion:"Explorador con gráfica en vivo, definición ε–N, teorema del encaje animado y ejercicios aleatorios con marcador.",temas:["2.1","2.2","2.3"]},
+];
+
+const UNIDADES=[
+  {n:1,titulo:"Inducción y recursividad",horas:4,c:"--u1",objetivo:"Comprender y aplicar el principio de inducción matemática y la recursividad.",
+   contenidos:[["1.1","Postulados de Peano"],["1.2","Primer principio de inducción"],["1.3","Segundo principio de inducción"],["1.4","Conjuntos definidos inductivamente"],["1.5","Recursividad"],["1.6","La sucesión de Fibonacci"]]},
+  {n:2,titulo:"Sucesiones y series",horas:16,c:"--u2",objetivo:"Determinar la convergencia de sucesiones y series, y trabajar con series de potencias y de Taylor.",
+   contenidos:[["2.1","Sucesión de números reales"],["2.2","Convergencia de sucesiones"],["2.3","Teoremas sobre convergencia"],["2.4","Serie infinita"],["2.5","Sumas parciales"],["2.6","Convergencia y divergencia de series"],["2.7","Serie geométrica"],["2.8","Serie armónica"],["2.9","Serie telescópica"],["2.10","Condición necesaria de convergencia"],["2.11","Criterios para series de términos positivos"],["2.12","Series alternadas. Criterio de Leibniz"],["2.13","Convergencia condicional y absoluta"],["2.14","Series de potencias. Intervalo de convergencia"],["2.15","Polinomio de Taylor"],["2.16","Serie de Taylor"],["2.17","Cálculos aproximados"]]},
+  {n:3,titulo:"Sistemas de ecuaciones, matrices y determinantes",horas:20,c:"--u3",objetivo:"Resolver sistemas lineales, operar con matrices, calcular inversas, determinantes y autovalores.",
+   contenidos:[["3.1","Sistemas de n ecuaciones con m incógnitas"],["3.2","Matriz y matriz aumentada"],["3.3","Operaciones elementales de fila"],["3.4","Matriz escalonada reducida"],["3.5","Método de Gauss-Jordan"],["3.6","Aplicaciones de los sistemas lineales"],["3.7","Tipos de matrices"],["3.8","Operaciones con matrices"],["3.9","Inversa de una matriz"],["3.10","Determinantes y cofactores"],["3.11","Autovalores y autovectores"],["3.12","Regla de Cramer"]]},
+  {n:4,titulo:"Números complejos",horas:8,c:"--u4",objetivo:"Operar con complejos en forma rectangular, polar y exponencial; calcular potencias, raíces y logaritmos.",
+   contenidos:[["4.1","ℂ como campo"],["4.2","Operaciones y conjugado"],["4.3","Representación geométrica, módulo y argumento"],["4.4","Forma polar"],["4.5","Producto y cociente en forma polar"],["4.6","Teorema de De Moivre"],["4.7","Raíces n-ésimas"],["4.8","Teorema fundamental del álgebra"],["4.9","Forma exponencial"],["4.10","Logaritmo complejo"],["4.11","Potencias de base y exponente complejos"]]},
+  {n:5,titulo:"Espacios vectoriales",horas:16,c:"--u5",objetivo:"Trabajar con vectores en ℝⁿ, productos escalar y vectorial, rectas y planos.",
+   contenidos:[["5.1","Espacio vectorial real"],["5.2","ℝⁿ como espacio vectorial"],["5.3","Suma y producto por escalar"],["5.4","Dependencia e independencia lineal"],["5.5","Producto escalar. Norma"],["5.6","Proyección, paralelismo, ortogonalidad y ángulo"],["5.7","Producto vectorial"],["5.8","Vectores coplanares"],["5.9","La recta en ℝ³"],["5.10","Ecuación normal de un plano"],["5.11","Ángulos entre rectas y planos"],["5.12","Intersecciones de rectas y planos"]]},
+];
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const F={unidad:0,tipo:"",q:""};
+try{const s=JSON.parse(localStorage.getItem("ma1103.indice")||"{}");if(s.unidad>=0&&s.unidad<=5)F.unidad=s.unidad;if(typeof s.tipo==="string")F.tipo=s.tipo}catch{}
+const save=()=>{try{localStorage.setItem("ma1103.indice",JSON.stringify({unidad:F.unidad,tipo:F.tipo}))}catch{}};
+
+function isNew(r){if(!r.fecha)return false;const d=(Date.now()-new Date(r.fecha+"T12:00:00").getTime())/864e5;return d>=-1&&d<=21}
+function matches(r){
+  if(F.tipo&&r.tipo!==F.tipo)return false;
+  if(!F.q)return true;
+  const u=UNIDADES.find(x=>x.n===r.unidad),temas=(r.temas||[]).map(t=>t+" "+(u?.contenidos.find(c=>c[0]===t)?.[1]||""));
+  const hay=norm([r.titulo,r.descripcion,r.tipo,u?.titulo,...temas].join(" "));
+  return norm(F.q).split(/\s+/).filter(Boolean).every(w=>hay.includes(w));
+}
+function card(r,u){
+  return `<a class="res" href="${esc(r.archivo)}" style="--c:var(${u.c})">
+    <div class="res-top"><span class="type">${esc(r.tipo)}</span>${isNew(r)?'<span class="new">Nuevo</span>':""}</div>
+    <h3>${esc(r.titulo)}</h3><p>${esc(r.descripcion||"")}</p>
+    ${r.temas?.length?`<div class="tags">${r.temas.map(t=>`<span title="${esc(u.contenidos.find(c=>c[0]===t)?.[1]||"")}">${esc(t)}</span>`).join("")}</div>`:""}
+    <span class="open">Abrir →</span></a>`;
+}
+function render(){
+  $("#strip").innerHTML=UNIDADES.map(u=>{const k=RECURSOS.filter(r=>r.unidad===u.n).length;return `<button class="seg" type="button" style="--c:var(${u.c});flex:${u.horas} 1 0" aria-pressed="${F.unidad===u.n}" data-u="${u.n}" title="${esc(u.titulo)}"><b>${u.n}. ${esc(u.titulo)}</b><small>${u.horas} h · <span class="cnt">${k} recurso${k===1?"":"s"}</span></small></button>`}).join("");
+  document.querySelectorAll(".seg").forEach(b=>b.onclick=()=>{const n=+b.dataset.u;F.unidad=F.unidad===n?0:n;save();render()});
+  const tipos=[...new Set(RECURSOS.map(r=>r.tipo))];
+  $("#types").innerHTML=[["","Todos"],...tipos.map(t=>[t,t])].map(([v,l])=>`<button class="chip" type="button" data-t="${esc(v)}" aria-pressed="${F.tipo===v}">${esc(l)}</button>`).join("");
+  document.querySelectorAll("#types .chip").forEach(b=>b.onclick=()=>{F.tipo=b.dataset.t;save();render()});
+  let total=0;
+  const html=UNIDADES.filter(u=>!F.unidad||u.n===F.unidad).map(u=>{
+    const all=RECURSOS.filter(r=>r.unidad===u.n),list=all.filter(matches);total+=list.length;
+    if((F.q||F.tipo)&&!list.length&&!F.unidad)return"";
+    const body=list.length?`<div class="cards">${list.map(r=>card(r,u)).join("")}</div>`:`<p class="empty">${all.length?"Ningún recurso de esta unidad coincide con la búsqueda.":"Todavía no hay recursos para esta unidad. Los nuevos HTML aparecerán aquí."}</p>`;
+    return `<section class="unit" id="unidad-${u.n}" style="--c:var(${u.c})" aria-labelledby="ut${u.n}">
+      <div class="unit-head"><span class="unit-num">${u.n}</span><div><h2 id="ut${u.n}">${esc(u.titulo)}</h2><div class="unit-meta">${esc(u.objetivo)}</div></div><span class="hours">${u.horas} h</span></div>
+      <div class="unit-body">${body}
+        <details class="syl"><summary>Contenidos del programa (${u.contenidos.length})</summary><ol>${u.contenidos.map(c=>`<li><span>${c[0]}</span>${esc(c[1])}</li>`).join("")}</ol></details>
+      </div></section>`}).join("");
+  $("#units").innerHTML=html||`<p class="empty">No hay recursos que coincidan con «${esc(F.q)}». Pruebe con otra palabra.</p>`;
+  const filt=[F.unidad?`unidad ${F.unidad}`:"",F.tipo,F.q?`«${F.q}»`:""].filter(Boolean).join(" · ");
+  $("#status").textContent=`${total} de ${RECURSOS.length} recurso${RECURSOS.length===1?"":"s"}${filt?" · filtro: "+filt:""}`;
+}
+let t=0;$("#q").addEventListener("input",e=>{clearTimeout(t);t=setTimeout(()=>{F.q=e.target.value.trim();render()},150)});
+render();
+</script>
+</body>
+</html>
