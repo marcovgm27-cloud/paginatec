@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía paso a paso · Cómo construir la página del proyecto final · MATEM</title>
+<meta name="description" content="Guía para construir, con IA y verificación docente, una página HTML con preguntas socráticas, videos por fragmentos con candados, práctica e infografía. MATEM-DOCENTES 2026, Momento 5.">
+<style>
+/* Ficha técnica de estilo MATEM (la misma del modelo) */
+:root{
+  --navy:#1C2B4A; --navy-2:#2A3D63; --red:#B3282D; --red-soft:#FBEAEA;
+  --bg:#F2F3F5; --dots:#D9DCE1; --line:#D9DCE1; --card:#FFFFFF; --soft:#F7F8FA;
+  --text:#1F2633; --muted:#5B6472; --ok:#1E7B3A; --ok-bg:#E8F3EC; --yel:#FFF3CD;
+  --font-body:"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display:"Arial Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+  --font-mono:Consolas, "SFMono-Regular", Menlo, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{margin:0;color:var(--text);font-family:var(--font-body);font-size:18px;line-height:1.6;background-color:var(--bg);background-image:radial-gradient(circle,var(--dots) 1.6px,transparent 1.8px);background-size:26px 26px}
+a{color:var(--red)}
+h1,h2,h3,h4{color:var(--navy);margin:0;line-height:1.15}
+p{margin:0 0 14px}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.read{max-width:780px}
+.skip{position:absolute;left:16px;top:-60px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:12px;z-index:60}
+.skip:focus{top:12px}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;box-shadow:0 2px 10px rgba(28,43,74,.25)}
+.topbar .wrap{display:flex;align-items:center;gap:14px;min-height:62px}
+.brand{font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em;color:#fff;text-decoration:none;white-space:nowrap;text-transform:uppercase}
+.brand span{color:#FF9EA1}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;text-decoration:none;color:#DCE3F0;font-weight:600;font-size:15px;padding:8px 10px;border-radius:10px;min-height:44px;display:flex;align-items:center}
+.nav a:hover,.nav a.on{background:var(--navy-2);color:#fff}
+.progbar{height:5px;background:var(--navy-2)}
+.progbar span{display:block;height:100%;width:0;background:var(--red);transition:width .4s var(--ease)}
+.kicker{display:block;font-family:var(--font-mono);font-size:14px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.display{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:.01em}
+.hero-title{font-size:clamp(36px,6.6vw,66px);line-height:.98}
+.hero-title .l2{display:block;color:var(--red)}
+.sec-title{font-size:clamp(26px,3.6vw,36px);margin-bottom:12px}
+.sub{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(19px,2.4vw,23px);margin:0 0 10px}
+.lead{font-size:clamp(18px,2.1vw,21px)}
+.muted{color:var(--muted)}
+.small{font-size:16px}
+.mono{font-family:var(--font-mono)}
+.card{background:var(--card);border-radius:22px;padding:clamp(18px,3.4vw,30px)}
+.soft{background:var(--soft);border-radius:18px;padding:16px 18px}
+.grid{display:grid;gap:16px}
+.grid>*,.row2>*,.row3>*{min-width:0}
+@media(min-width:800px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
+section.block{padding:36px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:15px;font-weight:600;color:var(--navy)}
+.chip.dark{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:0;border-radius:14px;padding:10px 20px;background:var(--navy);color:#fff;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--navy-2)}
+.btn.red{background:var(--red)}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn.sm{min-height:42px;padding:8px 14px;font-size:16px}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hero{padding:42px 0 18px}
+.hero .meta{display:grid;gap:16px;margin-top:26px}
+@media(min-width:900px){.hero .meta{grid-template-columns:1.2fr 1fr}}
+.obj{border-left:6px solid var(--red);padding-left:14px;margin:0}
+/* agenda y cronómetro */
+.agenda{display:grid;gap:8px}
+.ag{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 12px}
+.ag b{color:var(--navy)}
+.ag .m{font-family:var(--font-mono);font-weight:700;color:var(--red);font-size:15px}
+.ag.now{border-color:var(--red)}
+.clock{font-family:var(--font-display);font-weight:800;font-size:clamp(40px,7vw,58px);color:var(--navy);line-height:1}
+.clock.done{color:var(--red)}
+/* anatomía */
+.anat{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.piece{display:flex;flex-direction:column;gap:6px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px 14px;text-decoration:none;color:var(--text)}
+.piece:hover{border-color:var(--navy)}
+.piece .t{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--navy)}
+.piece .ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px}
+.piece .s{font-size:15.5px}
+.piece .go{font-family:var(--font-mono);font-size:13px;color:var(--red);font-weight:700}
+/* pasos */
+.step{scroll-margin-top:86px}
+.step-head{display:grid;grid-template-columns:62px 1fr auto;gap:16px;align-items:start;margin-bottom:16px}
+.num{width:62px;height:62px;border-radius:18px;background:var(--navy);color:#fff;font-family:var(--font-display);font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center}
+.step.done .num{background:var(--ok)}
+.step-head h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(23px,3.1vw,31px);margin-bottom:4px}
+.markdone{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--navy);cursor:pointer;min-height:44px;white-space:nowrap}
+.markdone input{width:22px;height:22px;accent-color:var(--ok)}
+#builder .markdone{white-space:normal}
+@media(max-width:640px){.step-head{grid-template-columns:52px 1fr}.num{width:52px;height:52px;font-size:26px}.markdone{grid-column:1/-1}}
+ol.todo{margin:0 0 12px;padding-left:1.3em}
+ol.todo li{margin-bottom:8px}
+ul.tick{list-style:none;margin:0;padding:0}
+ul.tick li{position:relative;padding-left:28px;margin-bottom:8px}
+ul.tick li::before{content:"✓";position:absolute;left:0;top:0;color:var(--ok);font-weight:800}
+.note{display:flex;gap:12px;background:var(--soft);border-radius:14px;padding:12px 14px;font-size:16.5px;margin-top:12px}
+.note .ic{flex:none;font-weight:800;color:var(--red);font-family:var(--font-mono)}
+.note.ok{background:var(--ok-bg)}.note.ok .ic{color:var(--ok)}
+.note.warn{background:var(--yel)}.note.warn .ic{color:#8A6100}
+.why{border-left:6px solid var(--red);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:12px 0}
+.why b{color:var(--navy)}
+table.t{width:100%;border-collapse:collapse;font-size:16px;background:#fff}
+table.t th,table.t td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.t thead th{background:var(--navy);color:#fff}
+.scroll{overflow-x:auto}
+/* paleta */
+.swatches{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.sw{border:2px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:pointer;text-align:left;padding:0}
+.sw .c{height:58px}
+.sw .i{padding:8px 10px;font-size:14.5px}
+.sw .i b{display:block;color:var(--navy)}
+.demo-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px;background:var(--bg);border-radius:14px}
+/* código y prompts */
+.code{background:var(--navy);color:#EEF2F9;border-radius:16px;padding:14px 16px;font-family:var(--font-mono);font-size:15px;line-height:1.55;white-space:pre-wrap;overflow-x:auto;margin:8px 0}
+.prompt{background:#fff;border:2px solid var(--line);border-left:8px solid var(--red);border-radius:16px;padding:14px 16px;font-family:var(--font-mono);font-size:14.5px;line-height:1.6;white-space:pre-wrap;max-height:380px;overflow:auto;color:var(--navy)}
+textarea.prompt{width:100%;min-height:420px;max-height:none;resize:vertical}
+.pane-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
+.pane-title h4{font-family:var(--font-mono);font-size:15px;text-transform:uppercase;letter-spacing:.05em}
+/* constructor */
+.builder{display:grid;gap:14px}
+.f label,.f .lbl{display:block;font-weight:700;color:var(--navy);font-size:15.5px;margin-bottom:4px}
+.f input,.f textarea,.f select{width:100%;border:2px solid var(--line);border-radius:12px;padding:8px 11px;background:#fff;color:var(--text);font-size:16px;min-height:44px}
+.f textarea{min-height:70px;resize:vertical}
+fieldset{border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin:0;min-width:0}
+legend{font-weight:800;color:var(--red);font-family:var(--font-mono);font-size:14px;text-transform:uppercase;letter-spacing:.05em;padding:0 6px}
+.row3{display:grid;gap:10px}
+@media(min-width:800px){.row3{grid-template-columns:110px 1.6fr 1fr 1.2fr}.row2{display:grid;gap:10px;grid-template-columns:1fr 1fr}}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;font-size:16px;font-weight:600;z-index:70;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:min(560px,92vw);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+details.more{background:var(--soft);border-radius:14px;padding:10px 14px;margin-top:10px}
+details.more summary{cursor:pointer;font-weight:700;color:var(--navy);min-height:40px;display:flex;align-items:center}
+footer{padding:30px 0 70px;font-size:15.5px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
+@media print{.topbar,.btn,.markdone,#cronometro .btn-row,.toast{display:none!important}body{background:#fff}.prompt{max-height:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#inicio">MATEM<span>·</span>Guía E5</a>
+    <nav class="nav" aria-label="Pasos de la guía" id="nav"></nav>
+  </div>
+  <div class="progbar" aria-hidden="true"><span id="progBar"></span></div>
+</header>
+
+<main id="main">
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <span class="kicker">MATEM-DOCENTES 2026 · Momento 5 · Guía de construcción</span>
+    <h1 class="display hero-title">De la idea al .zip<span class="l2">Cómo se construye la página del proyecto final</span></h1>
+    <p class="lead read" style="margin-top:18px">Esta guía desarma el modelo «Ecuaciones sen x = k» pieza por pieza y muestra, en diez pasos, cómo obtener cada elemento con ayuda de la IA: el diseño, las preguntas socráticas, los videos por fragmentos, los candados, la práctica, la infografía y la ficha.</p>
+    <div class="chips">
+      <span class="chip dark">10 pasos</span>
+      <span class="chip red">Constructor del prompt 6R incluido</span>
+      <span class="chip">Lista de verificación de la rúbrica</span>
+      <span class="chip">Comandos y prompts listos para copiar</span>
+    </div>
+    <div class="meta">
+      <div class="card">
+        <span class="kicker">Lo que se lleva cada persona</span>
+        <p class="obj">Al terminar, usted podrá producir con IA una página HTML de una secuencia didáctica sobre <b>un único aprendizaje</b>, verificarla como estudiante y como docente, y entregarla en <span class="mono">Apellido_Nombre_E5.zip</span> con su ficha.</p>
+        <div class="btn-row" style="margin-top:18px">
+          <a class="btn red" href="https://marcovgm27-cloud.github.io/paginatec/matem-proyecto-final/" target="_blank" rel="noopener">Abrir el modelo</a>
+          <a class="btn ghost" href="#paso1">Empezar la guía</a>
+        </div>
+        <p class="small muted" style="margin:12px 0 0">El modelo sirve para ver cómo queda y desarmarlo. No es una plantilla para copiar: su página trata su tema.</p>
+      </div>
+      <div class="card" id="cronometro">
+        <span class="kicker">Para facilitar: 30 minutos</span>
+        <div class="agenda" id="agenda"></div>
+        <div class="btn-row" style="margin-top:12px;justify-content:space-between">
+          <span class="clock" id="clock" role="timer">05:00</span>
+          <div class="btn-row"><button class="btn sm" type="button" id="tGo">Iniciar</button><button class="btn ghost sm" type="button" id="tNext">Siguiente bloque</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ANATOMÍA ===================== -->
+<section class="block" id="anatomia" style="padding-top:8px">
+  <div class="wrap">
+    <span class="kicker">Antes de empezar</span>
+    <h2 class="display sec-title">El modelo, pieza por pieza</h2>
+    <p class="read">Cada pieza cumple una función pedagógica distinta. Toque una para ir al paso donde se construye.</p>
+    <div class="anat" id="anat"></div>
+  </div>
+</section>
+
+<div class="wrap" id="steps">
+
+<!-- PASO 1 -->
+<section class="block step" id="paso1"><article class="card">
+  <div class="step-head"><span class="num">1</span><div><span class="kicker" style="margin-bottom:4px">Antes de abrir la IA</span><h2>Conozca qué se entrega y cómo se califica</h2></div><label class="markdone"><input type="checkbox" data-done="1"> Hecho</label></div>
+  <div class="grid g2">
+    <div>
+      <h3 class="sub">El producto</h3>
+      <ul class="tick">
+        <li>Una <b>página HTML</b> que el estudiante recorre de principio a fin, sobre <b>un único aprendizaje</b>.</li>
+        <li><b>Al menos tres preguntas socráticas</b>: la pista y la respuesta quedan ocultas hasta que el estudiante las pide.</li>
+        <li><b>Su video</b> (el del Entregable 4 u otro propio), incrustado o enlazado.</li>
+        <li><b>Una infografía de síntesis</b> al cierre: fija, imagen o generada con las respuestas.</li>
+        <li><b>Una ficha</b> de una página (o al final de la misma página) con aprendizaje, qué probó, autoevaluación, reflexión ética y declaración de IA.</li>
+      </ul>
+      <p class="small muted" style="margin-top:8px">Los candados, el video por fragmentos y la práctica del modelo son mejoras: suman, pero no son obligatorias.</p>
+    </div>
+    <div>
+      <h3 class="sub">La rúbrica en una tabla</h3>
+      <div class="scroll"><table class="t">
+        <thead><tr><th>Criterio</th><th>Puntos</th></tr></thead>
+        <tbody>
+          <tr><td>Corrección matemática de la página</td><td>30</td></tr>
+          <tr><td>Secuencia y componentes</td><td>25</td></tr>
+          <tr><td>Funcionamiento, prueba y reflexión</td><td>35</td></tr>
+          <tr><td>Transparencia, privacidad y formato</td><td>10</td></tr>
+        </tbody></table></div>
+      <div class="why"><b>Lo único que no es flexible es la matemática.</b> Si la página da por correcto algo falso y usted no lo corrigió ni lo anotó en la ficha, la nota máxima es 69. Con los tres componentes, sin error matemático y con ficha: al menos 80.</div>
+      <p class="small"><b>Fechas:</b> revisión previa opcional hasta el miércoles 18 de noviembre, 11:59 p. m. (foro del Momento 5). Entrega única: viernes 20 de noviembre, 11:59 p. m.</p>
+    </div>
+  </div>
+</article></section>
+
+<!-- PASO 2 -->
+<section class="block step" id="paso2"><article class="card">
+  <div class="step-head"><span class="num">2</span><div><span class="kicker" style="margin-bottom:4px">Situación inicial y eje</span><h2>Elija un aprendizaje y escríbalo en una línea</h2></div><label class="markdone"><input type="checkbox" data-done="2"> Hecho</label></div>
+  <ol class="todo">
+    <li>Tome como eje <b>el tema de su video del Entregable 4</b>: es el recurso que más cuesta rehacer.</li>
+    <li>Escriba el contenido del programa y lo que el estudiante logra al terminar, con un verbo observable (resolver, justificar, reconocer, calcular).</li>
+    <li>Use la notación del formulario de MATEM: «sen», grados cuando corresponda, coma decimal e intervalos como <span class="mono">]a, b[</span>.</li>
+  </ol>
+  <div class="grid g2">
+    <div class="soft"><span class="kicker">Así quedó en el modelo</span><p style="margin:0"><b>Contenido:</b> 6. Trigonometría, b) círculo trigonométrico y f) ecuaciones trigonométricas.<br><b>Aprendizaje:</b> resolver ecuaciones de la forma sen x = k en [0°, 360°[ y justificar cuántas soluciones tienen.</p></div>
+    <div class="soft"><span class="kicker">Errores comunes</span><ul style="margin:0;padding-left:1.2em" class="small"><li>Dos aprendizajes en uno («función inversa y logaritmos»).</li><li>Verbos que no se observan («comprender», «conocer»).</li><li>Preguntas, video e infografía sobre temas distintos: baja el criterio 2.</li></ul></div>
+  </div>
+</article></section>
+
+<!-- PASO 3 -->
+<section class="block step" id="paso3"><article class="card">
+  <div class="step-head"><span class="num">3</span><div><span class="kicker" style="margin-bottom:4px">El estilo de la página</span><h2>Escoja el diseño: la ficha técnica de estilo</h2></div><label class="markdone"><input type="checkbox" data-done="3"> Hecho</label></div>
+  <p class="read">Una <b>ficha técnica de estilo</b> fija colores, letras y componentes antes de pedir la página. Así la IA no inventa un diseño distinto cada vez y todas las secciones se ven iguales. El modelo usa los colores de MATEM.</p>
+  <h3 class="sub">Paleta MATEM (toque un color para copiar su código)</h3>
+  <div class="swatches" id="swatches"></div>
+  <h3 class="sub" style="margin-top:18px">Componentes que se repiten</h3>
+  <div class="demo-row">
+    <span class="chip dark">Chip oscuro</span><span class="chip red">Chip rojo</span><span class="chip">Chip claro</span>
+    <button class="btn sm" type="button">Botón principal</button><button class="btn red sm" type="button">Botón de acción</button><button class="btn ghost sm" type="button">Botón secundario</button>
+    <span class="num" style="width:44px;height:44px;font-size:22px;border-radius:13px">3</span>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div>
+      <h3 class="sub">Reglas de la ficha</h3>
+      <ul class="tick small">
+        <li>Sin fuentes ni bibliotecas externas: la página abre sin Internet.</li>
+        <li>Títulos en mayúscula condensada; texto a 18 px; botones de al menos 44 px de alto.</li>
+        <li>Tarjetas blancas con esquinas redondeadas sobre fondo gris con puntos.</li>
+        <li>Rojo solo para lo importante: acciones, alertas, pasos actuales.</li>
+        <li>Se lee bien en un teléfono: una sola columna en pantallas angostas.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="sub">¿Le gusta el diseño de otra página?</h3>
+      <p class="small">Así se hizo el modelo: se tomó como referencia la estructura del taller «GeoGebra + IA» (barra superior, chips, tarjetas, pasos numerados) y se cambiaron los colores por los de MATEM. Pida a la IA que extraiga la ficha de una página que le guste:</p>
+      <div class="pane-title"><h4>Prompt: extraer una ficha de estilo</h4><button class="btn sm" type="button" data-copy="pEstilo">Copiar</button></div>
+      <div class="prompt" id="pEstilo"></div>
+    </div>
+  </div>
+</article></section>
+
+<!-- PASO 4 -->
+<section class="block step" id="paso4"><article class="card">
+  <div class="step-head"><span class="num">4</span><div><span class="kicker" style="margin-bottom:4px">Lo decide y lo resuelve usted, sin IA</span><h2>Resuelva primero: preguntas, pistas y errores</h2></div><label class="markdone"><input type="checkbox" data-done="4"> Hecho</label></div>
+  <p class="read">Antes de pedir nada a la IA, escriba en su cuaderno cada pregunta con su respuesta correcta, la pista que daría y el error que espera. Ese material es el que usted le entrega a la IA: <b>la IA no inventa preguntas ni respuestas</b>.</p>
+  <div class="scroll"><table class="t">
+    <thead><tr><th>Función en la secuencia</th><th>Pregunta del modelo</th><th>Respuesta</th><th>Pista</th><th>Error esperado → retroalimentación</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Predicción</b> (antes del video)</td><td>¿Cuántos ángulos de [0°, 360°[ cumplen sen x = 1/2?</td><td>Dos: 30° y 150°</td><td>¿Cuántas veces pasa un punto que gira por la altura 1/2?</td><td>No se califica: se compara al final</td></tr>
+      <tr><td><b>2. Cálculo a mano</b></td><td>Resuelva sen x = √2/2</td><td>45° y 135°</td><td>Ángulo especial del cuadrante I y el otro cuadrante con seno positivo</td><td>225° → «está en III, donde el seno es negativo»</td></tr>
+      <tr><td><b>3. Justificación</b></td><td>¿Tiene razón Sofía: sen x = 1,2 tiene dos soluciones?</td><td>No: −1 ≤ sen x ≤ 1</td><td>¿Entre qué valores se mueve la altura de P?</td><td>«Sí» → «el signo de k no basta»</td></tr>
+    </tbody></table></div>
+  <div class="note"><span class="ic">Regla</span><span>Una pregunta socrática hace pensar <b>antes</b> de dar la respuesta: la pista aparece primero y la respuesta solo si el estudiante la pide o después del segundo intento.</span></div>
+  <div class="note ok"><span class="ic">Consejo</span><span>Si hizo un tutor socrático en el Momento 3, sus instrucciones (como texto) son una buena fuente de preguntas y pistas. No dependa del enlace de la Gem: desde el 17 de noviembre puede quedar en solo lectura.</span></div>
+</article></section>
+
+<!-- PASO 5 -->
+<section class="block step" id="paso5"><article class="card">
+  <div class="step-head"><span class="num">5</span><div><span class="kicker" style="margin-bottom:4px">El recurso explicativo</span><h2>Prepare el video y decida sus fragmentos</h2></div><label class="markdone"><input type="checkbox" data-done="5"> Hecho</label></div>
+  <div class="grid g2">
+    <div>
+      <h3 class="sub">5.1 Elija dónde se detiene</h3>
+      <ol class="todo">
+        <li>Mire su video con un reloj y anote los segundos donde <b>termina una idea</b>: ahí va una pausa para pensar.</li>
+        <li>Para cada pausa escriba una <b>pregunta de control</b> sobre lo que se acaba de ver, con respuesta y pista.</li>
+        <li>Dos o tres fragmentos bastan para un video de 1 a 2 minutos.</li>
+      </ol>
+      <div class="scroll"><table class="t small">
+        <thead><tr><th>Video del modelo</th><th>Se detiene en</th><th>Pregunta de control</th></tr></thead>
+        <tbody>
+          <tr><td>1 · Seno en el círculo</td><td>0:14 y 0:30</td><td>¿Qué representa sen θ? · ¿Entre qué valores está?</td></tr>
+          <tr><td>2 · ¿Cuántas soluciones?</td><td>0:14 y 0:30</td><td>Soluciones con k = 0,5 · con k = 1,3</td></tr>
+          <tr><td>3 · Ejemplo resuelto</td><td>0:16 y 0:28</td><td>Ángulo de referencia · cuadrantes con seno negativo</td></tr>
+        </tbody></table></div>
+    </div>
+    <div>
+      <h3 class="sub">5.2 Archivo listo para la página</h3>
+      <ul class="tick small">
+        <li>Nombre sin espacios ni tildes: <span class="mono">video_inversa.mp4</span>.</li>
+        <li>En la <b>misma carpeta</b> que la página.</li>
+        <li>Calidad baja: el .zip completo no debe pasar de 20 MB. Si pesa más, súbalo a YouTube como «no listado» y enlácelo.</li>
+      </ul>
+      <div class="pane-title"><h4>Bajar el peso del video (ffmpeg)</h4><button class="btn sm" type="button" data-copy="cmdFf">Copiar</button></div>
+      <div class="code" id="cmdFf">ffmpeg -i mi_video.mp4 -vf scale=-2:540 -c:v libx264 -crf 28 -preset veryfast -c:a aac -b:a 96k video_liviano.mp4</div>
+      <p class="small muted">En Colab: anteponga <span class="mono">!</span> al comando. 540p y crf 28 suelen dejar un video de 1 a 2 minutos en 2 a 6 MB.</p>
+    </div>
+  </div>
+  <h3 class="sub" style="margin-top:12px">5.3 La narración: dos caminos, ninguna frase cortada</h3>
+  <div class="grid g2">
+    <div class="soft"><b style="color:var(--navy)">A. Voz grabada dentro del video</b> (como en el Entregable 4, con gTTS). Es la opción más estable: suena igual en todos los equipos. Al fragmentar, ponga cada pausa <b>después</b> de que termina la frase, nunca en medio.</div>
+    <div class="soft"><b style="color:var(--navy)">B. Voz del navegador leyendo subtítulos</b> (como en el modelo). El video no tiene audio; la página lee cada frase. Hay que exigir que <b>el video espere a que termine cada frase</b>: si no, la voz se corta al llegar a la siguiente. Nos pasó al construir el modelo.</div>
+  </div>
+  <details class="more"><summary>¿Cómo se hicieron los videos cortos del modelo? (demostraciones visuales)</summary>
+    <p class="small" style="margin-top:8px">Se programaron como animaciones (círculo, recta y = k, gráfica del seno) con un guion de tiempos: cada fragmento termina en un cuadro quieto que resume la idea, para que la pausa caiga en un buen momento. Si usted hace su video con Manim y Claude Code o Colab, agregue esta línea a su prompt del Momento 4:</p>
+    <div class="code" id="cmdManim">Deje un cuadro quieto de 1 segundo al final de cada idea, en los segundos [__], [__] y [__], con el resultado escrito en pantalla, para poder detener el video ahí y hacer una pregunta.</div>
+    <button class="btn ghost sm" type="button" data-copy="cmdManim">Copiar la línea</button>
+  </details>
+</article></section>
+
+<!-- PASO 6 -->
+<section class="block step" id="paso6"><article class="card">
+  <div class="step-head"><span class="num">6</span><div><span class="kicker" style="margin-bottom:4px">La IA escribe el código</span><h2>Arme el prompt de Seis R y pida la página</h2></div><label class="markdone"><input type="checkbox" data-done="6"> Hecho</label></div>
+  <p class="read">Llene el constructor con lo que resolvió en los pasos 2, 4 y 5. Viene lleno con los datos del modelo para que vea un ejemplo completo. El prompt se arma solo abajo; cópielo en un <b>chat nuevo</b> de cualquier LLM y pida el archivo completo.</p>
+  <div class="builder" id="builder">
+    <div class="row2">
+      <div class="f"><label for="bAprend">Aprendizaje (una línea)</label><textarea id="bAprend"></textarea></div>
+      <div class="f"><label for="bGrupo">Grupo destinatario</label><textarea id="bGrupo"></textarea></div>
+    </div>
+    <fieldset><legend>Video</legend>
+      <div class="row2">
+        <div class="f"><label for="bVideo">Nombre del archivo</label><input id="bVideo" type="text"></div>
+        <div class="f"><label for="bVoz">Narración</label><select id="bVoz"><option value="grabada">Voz grabada dentro del video</option><option value="navegador">Voz del navegador leyendo subtítulos</option><option value="ninguna">Sin narración (solo subtítulos)</option></select></div>
+      </div>
+      <div class="f" style="margin-top:10px"><span class="lbl">Pausas para pensar (deje vacía la fila que no use)</span></div>
+      <div id="bFrags" class="builder" style="gap:8px"></div>
+    </fieldset>
+    <fieldset><legend>Preguntas socráticas</legend><div id="bQs" class="builder" style="gap:10px"></div></fieldset>
+    <div class="row2">
+      <div class="f"><label for="bIdeas">Ideas clave de la infografía (una por línea)</label><textarea id="bIdeas" style="min-height:110px"></textarea></div>
+      <div class="f"><span class="lbl">Mejoras opcionales</span>
+        <label class="markdone" style="font-weight:600"><input type="checkbox" id="oCand" checked> Candados de avance entre pasos</label><br>
+        <label class="markdone" style="font-weight:600"><input type="checkbox" id="oNoSkip" checked> Video que no deja adelantar</label><br>
+        <label class="markdone" style="font-weight:600"><input type="checkbox" id="oPract" checked> Práctica autoevaluable antes de la infografía</label><br>
+        <label class="markdone" style="font-weight:600"><input type="checkbox" id="oFicha" checked> Ficha del proyecto al final de la página</label><br>
+        <label class="markdone" style="font-weight:600"><input type="checkbox" id="oTutor" checked> Botón «vista de la persona tutora»</label>
+      </div>
+    </div>
+  </div>
+  <div class="pane-title"><h4>Su prompt de Seis R</h4><div class="btn-row"><button class="btn red sm" type="button" id="bCopy">Copiar el prompt</button><button class="btn ghost sm" type="button" id="bClear">Vaciar para mi tema</button><button class="btn ghost sm" type="button" id="bModel">Volver al ejemplo</button></div></div>
+  <textarea class="prompt" id="bOut" aria-label="Prompt generado (se puede editar)"></textarea>
+  <div class="note warn"><span class="ic">Ojo</span><span>Pida el código <b>completo</b> en un solo bloque. Cópielo en un archivo de texto, guárdelo como <span class="mono">index.html</span> (o con su nombre) en la carpeta del video y ábralo con doble clic en Chrome, Edge o Firefox.</span></div>
+</article></section>
+
+<!-- PASO 7 -->
+<section class="block step" id="paso7"><article class="card">
+  <div class="step-head"><span class="num">7</span><div><span class="kicker" style="margin-bottom:4px">Funcionamiento y prueba (35 puntos)</span><h2>Ábrala y recórrala como estudiante</h2></div><label class="markdone"><input type="checkbox" data-done="7"> Hecho</label></div>
+  <p class="read">Recorra la página completa al menos una vez, como lo haría un estudiante, y anote lo que pasa: eso es el «Qué probé» de la ficha.</p>
+  <div class="scroll"><table class="t">
+    <thead><tr><th>Pruebe</th><th>Debe pasar</th></tr></thead>
+    <tbody>
+      <tr><td>Abrir con doble clic, sin Internet</td><td>Todo se ve; el video carga desde la carpeta.</td></tr>
+      <tr><td>Pulsar «Comprobar» sin responder</td><td>Pide una respuesta; no da la solución.</td></tr>
+      <tr><td>Responder mal dos veces</td><td>Primero aparece la pista; después, la respuesta explicada.</td></tr>
+      <tr><td>Arrastrar la barra del video hacia adelante</td><td>Vuelve atrás: no deja adelantar (si pidió esa mejora).</td></tr>
+      <tr><td>Llegar al final de un fragmento</td><td>El video se detiene <b>después</b> de la última frase y aparece la pregunta.</td></tr>
+      <tr><td>Escuchar la narración completa</td><td>Ninguna frase se corta; si se pausa, la frase se repite completa.</td></tr>
+      <tr><td>Intentar abrir un paso bloqueado</td><td>Sigue cerrado hasta terminar el anterior.</td></tr>
+      <tr><td>Abrir en el celular</td><td>Una columna, botones grandes, video visible.</td></tr>
+      <tr><td>Mover el video a otra carpeta</td><td>Aparece un aviso claro, no un recuadro negro mudo.</td></tr>
+    </tbody></table></div>
+  <div class="pane-title"><h4>Si algo falla: pida un solo cambio a la vez</h4><button class="btn sm" type="button" data-copy="pDepurar">Copiar</button></div>
+  <div class="prompt" id="pDepurar"></div>
+</article></section>
+
+<!-- PASO 8 -->
+<section class="block step" id="paso8"><article class="card">
+  <div class="step-head"><span class="num">8</span><div><span class="kicker" style="margin-bottom:4px">Corrección matemática (30 puntos)</span><h2>Verifique la matemática usted</h2></div><label class="markdone"><input type="checkbox" data-done="8"> Hecho</label></div>
+  <div class="grid g2">
+    <div>
+      <ol class="todo">
+        <li>Resuelva a mano <b>cada</b> pregunta y compare con lo que la página da por correcto.</li>
+        <li>Lea cada pista y cada retroalimentación: ¿alguna afirma algo falso o confuso?</li>
+        <li>Compare la infografía con el video: no deben contradecirse.</li>
+        <li>Revise la notación: sen, coma decimal, ]a, b[, grados.</li>
+        <li>Si algo no logra corregirlo, <b>anótelo en la ficha como limitación</b>: así no se aplica el tope de 69.</li>
+      </ol>
+    </div>
+    <div class="soft">
+      <span class="kicker">Errores que la IA cometió o suele cometer</span>
+      <ul class="small" style="margin:0;padding-left:1.2em">
+        <li>Incluir 360° en [0°, 360°[ (sen x = 0 → {0°, 180°}, no {0°, 180°, 360°}).</li>
+        <li>Aceptar «1» pero no «1,0» o «45°» en un campo numérico.</li>
+        <li>Retroalimentación genérica («Incorrecto») que no explica el error.</li>
+        <li>Infografía con una idea que no aparece en el video ni en las preguntas.</li>
+        <li>Botón que muestra la respuesta antes de que el estudiante la pida.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pane-title"><h4>Revisión crítica de la matemática</h4><button class="btn sm" type="button" data-copy="pRevisar">Copiar</button></div>
+  <div class="prompt" id="pRevisar"></div>
+  <p class="small muted">La IA ayuda a encontrar sospechas; la decisión de qué es correcto es suya. «La IA puede generar; el tutor debe interpretar, verificar y decidir».</p>
+</article></section>
+
+<!-- PASO 9 -->
+<section class="block step" id="paso9"><article class="card">
+  <div class="step-head"><span class="num">9</span><div><span class="kicker" style="margin-bottom:4px">Reflexión y transparencia</span><h2>Complete la ficha del proyecto</h2></div><label class="markdone"><input type="checkbox" data-done="9"> Hecho</label></div>
+  <p class="read">Puede usar la plantilla de Word de esta semana o ponerla como sección al final de la página, como en el modelo (botón «Ficha del proyecto»).</p>
+  <div class="scroll"><table class="t">
+    <thead><tr><th>Parte</th><th>Qué escribir</th><th>Ejemplo del modelo</th></tr></thead>
+    <tbody>
+      <tr><td>1. Aprendizaje y grupo</td><td>Contenido del programa, qué logra el estudiante, componentes</td><td>sen x = k en [0°, 360°[ · 3 preguntas · 3 videos · infografía generada</td></tr>
+      <tr><td>2. Qué probé</td><td>Un recorrido completo, qué ajustó, qué limitación queda</td><td>«La narración se cortaba; ahora el video espera a la voz»</td></tr>
+      <tr><td>3. Autoevaluación</td><td>Los 7 criterios del Cuaderno (sección 14), marcados con honestidad</td><td>Trazabilidad marcada «Parcial»: falta el registro de prompts</td></tr>
+      <tr><td>4. Reflexión ética</td><td>Qué hace el estudiante sin IA; cuidados con menores de edad</td><td>Predice, calcula y justifica sin IA; la página no pide ni guarda datos</td></tr>
+      <tr><td>5. Declaración de IA</td><td>Herramienta y mes; para qué; qué verificó y cómo</td><td>Claude (Anthropic), noviembre de 2026: código y animaciones</td></tr>
+    </tbody></table></div>
+  <div class="note"><span class="ic">Privacidad</span><span>La página no debe pedir nombres ni guardar respuestas. Si la IA agrega un campo «Su nombre» o guarda en el navegador, pida que lo quite.</span></div>
+</article></section>
+
+<!-- PASO 10 -->
+<section class="block step" id="paso10"><article class="card">
+  <div class="step-head"><span class="num">10</span><div><span class="kicker" style="margin-bottom:4px">Formato (10 puntos)</span><h2>Empaquete, entregue y, si quiere, publique</h2></div><label class="markdone"><input type="checkbox" data-done="10"> Hecho</label></div>
+  <div class="grid g2">
+    <div>
+      <h3 class="sub">Entrega en el aula virtual</h3>
+      <div class="code" style="white-space:pre">Apellido_Nombre_E5/
+├── index.html       ← su página
+├── video_tema.mp4   ← misma carpeta
+├── ficha_E5.pdf     ← o al final de la página
+└── infografia.png   ← solo si es imagen aparte</div>
+      <ol class="todo small">
+        <li>Comprima la carpeta: <span class="mono">Apellido_Nombre_E5.zip</span>.</li>
+        <li><b>Descomprímala en otra carpeta y abra la página</b>: si el video no se ve ahí, tampoco se verá al calificar.</li>
+        <li>Súbala a la tarea «Entregable 5» y pulse <b>Enviar tarea</b>. Hay una sola entrega.</li>
+      </ol>
+    </div>
+    <div>
+      <h3 class="sub">Opcional: un enlace para sus estudiantes (GitHub Pages)</h3>
+      <ol class="todo small">
+        <li>En github.com cree un repositorio público (por ejemplo, <span class="mono">mis-recursos</span>).</li>
+        <li><b>Add file › Upload files</b>: suba la carpeta con <span class="mono">index.html</span> y el video.</li>
+        <li><b>Settings › Pages</b>: Source «Deploy from a branch», rama <span class="mono">main</span>, carpeta <span class="mono">/ (root)</span>. Guarde.</li>
+        <li>En uno o dos minutos la página queda en <span class="mono">https://usuario.github.io/mis-recursos/carpeta/</span>.</li>
+      </ol>
+      <p class="small muted">Así está publicado el modelo: <a href="https://marcovgm27-cloud.github.io/paginatec/matem-proyecto-final/" target="_blank" rel="noopener">marcovgm27-cloud.github.io/paginatec/matem-proyecto-final</a>. GitHub acepta archivos de hasta 25 MB por la web.</p>
+    </div>
+  </div>
+  <h3 class="sub" style="margin-top:16px">Lista final antes de enviar</h3>
+  <div id="finalList"></div>
+</article></section>
+</div>
+
+<section class="block" id="cierre">
+  <div class="wrap">
+    <div class="card">
+      <span class="kicker">Para cerrar</span>
+      <h2 class="display sec-title">Quién hace qué</h2>
+      <div class="grid g3">
+        <div class="soft"><b style="color:var(--navy)">El estudiante</b><p class="small" style="margin:6px 0 0">Predice, calcula a mano y explica antes de ver cada respuesta; mira el video con una pregunta en mente; al final compara lo que pensaba con lo que aprendió.</p></div>
+        <div class="soft"><b style="color:var(--navy)">La IA</b><p class="small" style="margin:6px 0 0">Escribe el código, da forma a la infografía, propone redacción y ayuda a buscar errores.</p></div>
+        <div class="soft"><b style="color:var(--navy)">Usted</b><p class="small" style="margin:6px 0 0">Decide el aprendizaje, resuelve cada pregunta, elige las pistas, verifica que todo sea correcto y responde por lo que entrega.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--navy)">Guía de construcción del proyecto final · MATEM-DOCENTES 2026 · Momento 5 · Equipo facilitador.</b> Elaborada con apoyo de inteligencia artificial (Claude, Anthropic, noviembre de 2026) y revisada por el equipo. Se basa en la Guía del Entregable 5, su rúbrica y su ficha. No pide ni guarda datos.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastT;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+async function copyText(text, label = 'Copiado') {
+  try {
+    if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+    else { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); if (!ok) throw 0; }
+    toast(label + ' al portapapeles');
+  } catch (e) { toast('No se pudo copiar: seleccione el texto y cópielo.'); }
+}
+
+/* ---------- pasos y navegación ---------- */
+const STEPS = ['Entrega', 'Aprendizaje', 'Diseño', 'Preguntas', 'Video', 'Prompt 6R', 'Probar', 'Matemática', 'Ficha', 'Entregar'];
+$('#nav').innerHTML = '<a href="#anatomia">Piezas</a>' + STEPS.map((s, i) => `<a href="#paso${i + 1}" data-nav="${i + 1}">${i + 1} ${s}</a>`).join('');
+const done = new Set();
+document.addEventListener('change', e => {
+  const c = e.target.closest('[data-done]'); if (!c) return;
+  const n = +c.dataset.done; c.checked ? done.add(n) : done.delete(n);
+  $('#paso' + n).classList.toggle('done', c.checked);
+  $('#progBar').style.width = (done.size / STEPS.length * 100) + '%';
+  $(`[data-nav="${n}"]`).textContent = `${c.checked ? '✓' : n} ${STEPS[n - 1]}`;
+});
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { const n = en.target.id.replace('paso', ''); $$('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === n)); } }), {rootMargin:'-40% 0px -55% 0px'});
+  $$('.step').forEach(s => io.observe(s));
+}
+
+/* ---------- agenda y cronómetro (30 min) ---------- */
+const AG = [
+  {m:4, t:'Qué se entrega y el modelo por dentro', d:'Pasos 1 y piezas'},
+  {m:4, t:'Aprendizaje y diseño', d:'Pasos 2 y 3'},
+  {m:5, t:'Resolver primero y preparar el video', d:'Pasos 4 y 5'},
+  {m:8, t:'El prompt de Seis R en vivo', d:'Paso 6'},
+  {m:6, t:'Probar y verificar', d:'Pasos 7 y 8'},
+  {m:3, t:'Ficha, .zip y publicación', d:'Pasos 9 y 10'}
+];
+let ai = 0, left = AG[0].m * 60, run = false, h = null;
+function renderAg() { $('#agenda').innerHTML = AG.map((a, i) => `<div class="ag ${i === ai ? 'now' : ''}"><span class="m">${a.m} min</span><span><b>${a.t}</b><br><span class="small muted">${a.d}</span></span><span>${i < ai ? '✓' : ''}</span></div>`).join(''); }
+const show = () => { $('#clock').textContent = `${String(Math.floor(left / 60)).padStart(2, '0')}:${String(left % 60).padStart(2, '0')}`; };
+function stop() { run = false; clearInterval(h); $('#tGo').textContent = 'Iniciar'; }
+$('#tGo').addEventListener('click', () => {
+  if (run) { stop(); return; }
+  run = true; $('#tGo').textContent = 'Pausar'; $('#clock').classList.remove('done');
+  h = setInterval(() => { left--; show(); if (left <= 0) { stop(); $('#clock').classList.add('done'); toast('Tiempo del bloque cumplido'); } }, 1000);
+});
+$('#tNext').addEventListener('click', () => { stop(); ai = (ai + 1) % AG.length; left = AG[ai].m * 60; $('#clock').classList.remove('done'); renderAg(); show(); });
+renderAg(); show();
+
+/* ---------- anatomía del modelo ---------- */
+const ANAT = [
+  ['🏷', 'Ficha técnica', 'Curso, contenido, aprendizaje, grupo y requisitos al inicio.', 2],
+  ['🎨', 'Estilo MATEM', 'Colores, letras y componentes fijados antes de pedir la página.', 3],
+  ['🔒', 'Ruta con candados', 'Cada paso se abre al terminar el anterior; barra de progreso.', 6],
+  ['?', 'Preguntas socráticas', 'Predicción, cálculo a mano y justificación; pista antes que respuesta.', 4],
+  ['▶', 'Videos por fragmentos', 'Se detienen con una pregunta de control y no dejan adelantar.', 5],
+  ['🔊', 'Subtítulos y voz', 'La voz marca el ritmo: el video espera a que termine cada frase.', 5],
+  ['✎', 'Práctica con candado', 'Cuatro ítems con retroalimentación según el error.', 6],
+  ['▦', 'Infografía de síntesis', 'Ideas clave y las respuestas del estudiante; se imprime.', 6],
+  ['📋', 'Ficha del proyecto', 'Qué probé, autoevaluación, reflexión ética, declaración de IA.', 9],
+  ['📦', 'Carpeta y .zip', 'Página y videos juntos; publicación opcional en GitHub Pages.', 10]
+];
+$('#anat').innerHTML = ANAT.map(([ic, t, s, n]) => `<a class="piece" href="#paso${n}"><span class="t"><span class="ic" aria-hidden="true">${ic}</span>${t}</span><span class="s">${s}</span><span class="go">→ Paso ${n}</span></a>`).join('');
+
+/* ---------- paleta ---------- */
+const PAL = [['Azul MATEM', '#1C2B4A', 'Barra, títulos, botones'], ['Rojo MATEM', '#B3282D', 'Acciones y alertas'], ['Gris de fondo', '#F2F3F5', 'Fondo con puntos'], ['Línea', '#D9DCE1', 'Bordes y separadores'], ['Verde', '#1E7B3A', 'Correcto y completado'], ['Amarillo nota', '#FFF3CD', 'Pistas y recuadros'], ['Texto', '#1F2633', 'Párrafos'], ['Texto suave', '#5B6472', 'Notas']];
+$('#swatches').innerHTML = PAL.map(([n, c, u]) => `<button class="sw" type="button" data-hex="${c}"><div class="c" style="background:${c}"></div><div class="i"><b>${n}</b><span class="mono">${c}</span><br><span class="muted">${u}</span></div></button>`).join('');
+$('#swatches').addEventListener('click', e => { const b = e.target.closest('[data-hex]'); if (b) copyText(b.dataset.hex, 'Color ' + b.dataset.hex + ' copiado'); });
+
+/* ---------- prompts fijos ---------- */
+const P_ESTILO = `[ROL] Actúe como diseñador de interfaces educativas.
+[RESULTADO] Una ficha técnica de estilo, en lista, que yo pueda pegar en otro prompt: colores con su código hexadecimal y su uso, tipografía (familias del sistema, tamaños), componentes que se repiten (barra superior, tarjetas, chips, botones, pasos numerados, recuadros de pista y de retroalimentación) y reglas de espacio.
+[RECEPTOR] Docentes que no programan.
+[RESTRICCIONES] Conserve la estructura y los componentes de la página de referencia, pero use estos colores: azul #1C2B4A, rojo #B3282D, gris #F2F3F5, línea #D9DCE1, verde #1E7B3A, amarillo #FFF3CD. Sin fuentes ni bibliotecas externas. Contraste legible y botones de al menos 44 px.
+[RECURSOS] Página de referencia: [pegue aquí el código HTML o describa la página].
+[REVISIÓN] Antes de responder, compruebe que cada color tiene un uso y que no hay dos componentes con el mismo papel.`;
+const P_DEPURAR = `[ROL] Actúe como programador web educativo.
+[RESULTADO] El archivo HTML completo corregido, en un solo bloque, y después una lista de lo que cambió.
+[RECEPTOR] Docente que no programa.
+[RESTRICCIONES] Corrija solo este problema; no cambie preguntas, respuestas, pistas, textos ni diseño. Mantenga el archivo autocontenido, sin bibliotecas externas.
+[RECURSOS] Problema que observo: [p. ej.: la voz se corta cuando el video pasa a la frase siguiente / el video deja adelantar / el paso 3 se abre sin terminar el 2 / el video no aparece]. Qué hice para que ocurra: [ ]. Mi archivo: [pegue aquí todo el código].
+[REVISIÓN] Señale la línea o la función que causaba el problema y explique cómo comprobar en el navegador que ya no ocurre. No afirme que probó la página.`;
+const P_REVISAR = `[ROL] Actúe como revisor riguroso de recursos de matemática de MATEM-Precálculo.
+[RESULTADO] Una tabla con: lugar de la página, lo que dice, si es correcto, por qué y la corrección propuesta.
+[RECEPTOR] La persona tutora, que decide qué corregir.
+[RESTRICCIONES] Revise cada pregunta, cada respuesta que la página da por correcta, cada pista, cada retroalimentación y cada dato de la infografía. Revise la notación (sen, coma decimal, intervalos ]a, b[, grados). No reescriba la página.
+[RECURSOS] Aprendizaje: [ ]. Lo que dice el video: [resuma]. Mi archivo: [pegue aquí todo el código].
+[REVISIÓN] Distinga errores matemáticos de imprecisiones de redacción. Si no está seguro de algo, dígalo en vez de afirmarlo.`;
+$('#pEstilo').textContent = P_ESTILO; $('#pDepurar').textContent = P_DEPURAR; $('#pRevisar').textContent = P_REVISAR;
+document.addEventListener('click', e => { const b = e.target.closest('[data-copy]'); if (b) copyText($('#' + b.dataset.copy).textContent, 'Copiado'); });
+
+/* ---------- constructor del prompt 6R ---------- */
+const MODEL = {
+  aprend:'Resolver ecuaciones de la forma sen x = k en [0°, 360°[ y justificar cuántas soluciones tienen (MATEM-Precálculo, 6. Trigonometría, b y f).',
+  grupo:'Estudiantes de Ciclo Diversificado, de 15 a 17 años, inscritos en MATEM-Precálculo. Trato de usted, español de Costa Rica.',
+  video:'video2_cuantas_soluciones.mp4', voz:'navegador',
+  frags:[['0:14', 'Para k = 0,5, ¿cuántas soluciones tiene sen x = k en [0°, 360°[?', '2 (30° y 150°)', 'Cada cruce de la recta roja con la curva es una solución.'],
+         ['0:30', '¿Cuántas soluciones tiene sen x = 1,3?', 'Ninguna: sen x nunca pasa de 1', 'Recuerde cuál es el valor más alto de sen x.'],
+         ['', '', '', '']],
+  qs:[['Predicción (antes del video)', 'Sin calcular, ¿cuántos ángulos x en [0°, 360°[ cumplen sen x = 1/2?', 'Dos: 30° y 150° (no se califica; se compara al final)', 'Imagine un punto que da una vuelta al círculo: ¿cuántas veces pasa por la altura 1/2?', ''],
+      ['Cálculo a mano', 'Resuelva sen x = √2/2 con x en [0°, 360°[ (dos casillas).', '45° y 135°, en cualquier orden', '√2/2 es el seno de un ángulo especial del cuadrante I; ¿en qué otro cuadrante el seno es positivo?', 'Si escribe 225° o 315°: «ese ángulo está en un cuadrante donde el seno es negativo».'],
+      ['Justificación', 'Sofía dice: «sen x = 1,2 tiene dos soluciones porque 1,2 es positivo». ¿Tiene razón? (tres opciones)', 'No: −1 ≤ sen x ≤ 1, así que no hay soluciones', 'Recuerde entre qué valores se mueve la altura de P.', 'Si elige «Sí»: «el signo de k no basta; k debe estar entre −1 y 1».']],
+  ideas:'El seno es la altura del punto en el círculo: −1 ≤ sen x ≤ 1.\nCon la recta y = k: 0, 1 o 2 soluciones según k.\nÁngulo de referencia con |k| y luego los cuadrantes según el signo.\nEjemplo: sen x = −√3/2 → S = {240°, 300°}; 360° no pertenece a [0°, 360°[.'
+};
+const QLAB = ['Pregunta 1', 'Pregunta 2', 'Pregunta 3'];
+$('#bFrags').innerHTML = [0, 1, 2].map(i => `<div class="row3">
+  <div class="f"><label for="fT${i}">Segundo</label><input id="fT${i}" type="text" placeholder="0:14"></div>
+  <div class="f"><label for="fQ${i}">Pregunta de control</label><input id="fQ${i}" type="text"></div>
+  <div class="f"><label for="fA${i}">Respuesta</label><input id="fA${i}" type="text"></div>
+  <div class="f"><label for="fH${i}">Pista</label><input id="fH${i}" type="text"></div></div>`).join('');
+$('#bQs').innerHTML = QLAB.map((l, i) => `<div class="soft" style="padding:12px"><b style="color:var(--red);font-family:var(--font-mono);font-size:14px;text-transform:uppercase">${l}</b>
+  <div class="row2" style="margin-top:6px"><div class="f"><label for="qF${i}">Función</label><input id="qF${i}" type="text"></div><div class="f"><label for="qE${i}">Enunciado</label><input id="qE${i}" type="text"></div></div>
+  <div class="row2" style="margin-top:6px"><div class="f"><label for="qR${i}">Respuesta correcta</label><input id="qR${i}" type="text"></div><div class="f"><label for="qP${i}">Pista</label><input id="qP${i}" type="text"></div></div>
+  <div class="f" style="margin-top:6px"><label for="qX${i}">Error esperado y su retroalimentación (opcional)</label><input id="qX${i}" type="text"></div></div>`).join('');
+
+function fill(D) {
+  $('#bAprend').value = D.aprend; $('#bGrupo').value = D.grupo; $('#bVideo').value = D.video; $('#bVoz').value = D.voz; $('#bIdeas').value = D.ideas;
+  D.frags.forEach((f, i) => ['T', 'Q', 'A', 'H'].forEach((k, j) => $('#f' + k + i).value = f[j]));
+  D.qs.forEach((q, i) => ['F', 'E', 'R', 'P', 'X'].forEach((k, j) => $('#q' + k + i).value = q[j]));
+  build();
+}
+const v = id => ($('#' + id).value || '').trim();
+function build() {
+  const cand = $('#oCand').checked, noskip = $('#oNoSkip').checked, pract = $('#oPract').checked, ficha = $('#oFicha').checked, tutor = $('#oTutor').checked;
+  const voz = $('#bVoz').value;
+  const frags = [0, 1, 2].filter(i => v('fT' + i)).map(i => `- En ${v('fT' + i)}: «${v('fQ' + i)}» Respuesta: ${v('fA' + i)}. Pista: ${v('fH' + i)}.`);
+  const qs = [0, 1, 2].map(i => `Pregunta ${i + 1} (${v('qF' + i) || 'función'}): «${v('qE' + i) || '[enunciado]'}» Respuesta: ${v('qR' + i) || '[respuesta]'}. Pista: ${v('qP' + i) || '[pista]'}.${v('qX' + i) ? ' Retroalimentación para el error esperado: ' + v('qX' + i) : ''}`);
+  const ideas = v('bIdeas').split('\n').map(s => s.trim()).filter(Boolean).map(s => '- ' + s);
+  const orden = ['ficha técnica (curso, contenido, aprendizaje, grupo, requisitos)', cand ? 'ruta de pasos con candados y barra de progreso' : null, 'pregunta 1 (predicción)', 'el video', 'las demás preguntas', pract ? 'una práctica de 3 o 4 ítems' : null, 'la infografía de síntesis', ficha ? 'la ficha del proyecto en una sección plegable para la persona tutora' : null, 'pie con la declaración de uso de IA'].filter(Boolean);
+  const tecVideo = [
+    `el video se inserta con la etiqueta video y el archivo «${v('bVideo') || '[archivo.mp4]'}», en la misma carpeta, con un aviso visible si no carga`,
+    frags.length ? 'controles propios (reproducir/pausar, retroceder 5 s, repetir el fragmento); el video se detiene en cada pausa indicada y muestra su pregunta de control; para continuar, el estudiante responde (pista al primer error, respuesta al segundo)' : null,
+    noskip ? 'no permite adelantar más allá de lo ya visto (al intentarlo, vuelve atrás); sí permite retroceder' : null,
+    voz === 'navegador' ? 'subtítulos sincronizados y narración con la voz del navegador en español: el video espera a que termine cada frase antes de pasar a la siguiente y antes de mostrar una pregunta; nunca corte una frase al cambiar de subtítulo; si el estudiante pausa, al seguir se repite la frase completa' : null,
+    voz === 'grabada' ? 'el audio ya viene grabado en el video: cada pausa ocurre después de que termina la frase, nunca en medio' : null,
+    voz === 'ninguna' ? 'subtítulos sincronizados debajo del video' : null
+  ].filter(Boolean);
+  $('#bOut').value =
+`[ROL] Actúe como diseñador didáctico de MATEM-Precálculo (Universidad Nacional, Costa Rica) y programador de páginas web educativas.
+
+[RESULTADO] Un solo archivo HTML, con sus estilos y su JavaScript dentro del mismo archivo, sin bibliotecas ni fuentes externas, que funcione sin Internet al abrirlo con doble clic y se lea bien en un teléfono. Orden: ${orden.join('; ')}. Entregue el código completo en un solo bloque.
+
+[RECEPTOR] ${v('bGrupo') || '[grupo destinatario]'}
+
+[RESTRICCIONES]
+Pedagógicas:
+- Todo trata un único aprendizaje. Cada pregunta muestra primero el enunciado y un espacio para responder; la pista aparece solo al pulsar «Ver una pista» o tras el primer error; la respuesta, solo al pulsar «Ver la respuesta» o tras el segundo error. La retroalimentación explica el error, no solo dice «incorrecto».
+- No agregue preguntas, pistas, respuestas ni datos que no estén en [RECURSOS].
+Técnicas:
+${tecVideo.map(s => '- ' + s[0].toUpperCase() + s.slice(1) + '.').join('\n')}
+${cand ? '- Candados: cada paso queda oculto, con un aviso de bloqueo, hasta completar el anterior.\n' : ''}${tutor ? '- Un botón al pie «Vista de la persona tutora» abre todos los pasos y quita el bloqueo del video, para revisar o proyectar.\n' : ''}- La infografía se construye con HTML y CSS, usa las ideas clave y muestra lo que el estudiante respondió junto al resultado correcto; un botón la imprime sola.
+- Los campos numéricos aceptan coma o punto decimal y el símbolo °.
+- La página no pide nombre ni guarda datos (sin localStorage).
+- Estilo: azul #1C2B4A en barra y títulos, rojo #B3282D en acciones, fondo gris #F2F3F5 con puntos, tarjetas blancas redondeadas, verde #1E7B3A para correcto, amarillo #FFF3CD para pistas; títulos en mayúscula condensada; botones de al menos 44 px.
+- Notación de MATEM: «sen», coma decimal, intervalos como ]a, b[, grados con °.
+
+[RECURSOS]
+Aprendizaje: ${v('bAprend') || '[aprendizaje en una línea]'}
+Video: ${v('bVideo') || '[archivo.mp4]'}.${frags.length ? '\nPausas para pensar:\n' + frags.join('\n') : ''}
+${qs.join('\n')}${pract ? '\nPráctica: proponga 3 o 4 ítems de opción múltiple sobre el mismo aprendizaje, con retroalimentación por opción, y márquelos como PROPUESTA para que yo los verifique.' : ''}
+Ideas clave para la infografía:
+${ideas.join('\n') || '- [idea clave]'}
+
+[REVISIÓN] Antes de entregar el código, compruebe que cada respuesta coincide con [RECURSOS], que ninguna respuesta es visible antes de tiempo, que la infografía no afirma nada fuera de las ideas clave y que el código no tiene errores de sintaxis. Al final, liste las cinco cosas que la persona tutora debe probar al abrir la página. No afirme que probó la página: eso lo hace la persona tutora.`;
+}
+$('#builder').addEventListener('input', build);
+$('#builder').addEventListener('change', build);
+$('#bCopy').addEventListener('click', () => copyText($('#bOut').value, 'Prompt copiado'));
+$('#bClear').addEventListener('click', () => {
+  fill({aprend:'', grupo:MODEL.grupo, video:'', voz:'grabada', frags:[['', '', '', ''], ['', '', '', ''], ['', '', '', '']], qs:[['Predicción (antes del video)', '', '', '', ''], ['Cálculo a mano', '', '', '', ''], ['Justificación', '', '', '', '']], ideas:''});
+  toast('Campos vacíos: escriba su tema');
+});
+$('#bModel').addEventListener('click', () => { fill(MODEL); toast('Ejemplo del modelo cargado'); });
+fill(MODEL);
+
+/* ---------- lista final ---------- */
+const FINAL = ['La página abre con doble clic desde la carpeta descomprimida y se recorre hasta el final.', 'Hay al menos tres preguntas y ninguna muestra la respuesta antes de que el estudiante la pida.', 'Resolví cada pregunta a mano y la página da por correcto lo mismo que yo.', 'El video se ve (incrustado o por enlace), trata el mismo aprendizaje y su narración no se corta.', 'La infografía resume las ideas clave y no contradice el video ni las preguntas.', 'La página no pide nombre ni guarda datos del estudiante.', 'La ficha tiene sus cinco partes y la declaración de uso de IA.', 'El archivo se llama Apellido_Nombre_E5.zip y pesa menos de 20 MB.'];
+$('#finalList').innerHTML = FINAL.map((t, i) => `<label class="markdone" style="display:flex;white-space:normal;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line);font-weight:500;font-size:16.5px"><input type="checkbox" style="margin-top:3px"> <span>${esc(t)}</span></label>`).join('');
+</script>
+</body>
+</html>
