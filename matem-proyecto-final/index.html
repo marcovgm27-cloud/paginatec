@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecuaciones sen x = k · Proyecto final (modelo) · MATEM</title>
+<meta name="description" content="Secuencia didáctica en una página: preguntas socráticas, videos por fragmentos con candados de avance, práctica autoevaluable e infografía de síntesis. MATEM-Precálculo 2026.">
+<style>
+/* =========================================================
+   FICHA TÉCNICA DE ESTILO (colores MATEM)
+   Azul MATEM #1C2B4A · Rojo MATEM #B3282D · Gris #F2F3F5
+   Línea #D9DCE1 · Verde #1E7B3A · Amarillo nota #FFF3CD
+   Sin fuentes ni bibliotecas externas: abre sin Internet.
+   ========================================================= */
+:root{
+  --navy:#1C2B4A; --navy-2:#2A3D63; --red:#B3282D; --red-soft:#FBEAEA;
+  --bg:#F2F3F5; --dots:#D9DCE1; --line:#D9DCE1; --card:#FFFFFF; --soft:#F7F8FA;
+  --text:#1F2633; --muted:#5B6472; --ok:#1E7B3A; --ok-bg:#E8F3EC; --yel:#FFF3CD; --blue:#2E5FA8;
+  --font-body:"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display:"Arial Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+  --font-mono:Consolas, "SFMono-Regular", Menlo, monospace;
+  --font-math:"Cambria Math", "STIX Two Math", "Times New Roman", serif;
+  --r-card:22px; --r-btn:14px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{margin:0;color:var(--text);font-family:var(--font-body);font-size:18px;line-height:1.6;
+  background-color:var(--bg);background-image:radial-gradient(circle,var(--dots) 1.6px,transparent 1.8px);background-size:26px 26px}
+a{color:var(--red)}
+h1,h2,h3,h4{color:var(--navy);margin:0;line-height:1.15}
+p{margin:0 0 14px}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.read{max-width:760px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-60px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:12px;z-index:60}
+.skip:focus{top:12px}
+
+/* ---------- barra superior con progreso ---------- */
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;box-shadow:0 2px 10px rgba(28,43,74,.25)}
+.topbar .wrap{display:flex;align-items:center;gap:14px;min-height:62px}
+.brand{font-family:var(--font-display);font-weight:800;font-size:22px;letter-spacing:.04em;color:#fff;text-decoration:none;white-space:nowrap;text-transform:uppercase}
+.brand span{color:#FF9EA1}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;text-decoration:none;color:#DCE3F0;font-weight:600;font-size:15px;padding:8px 10px;border-radius:10px;min-height:44px;display:flex;align-items:center;gap:6px}
+.nav a:hover{background:var(--navy-2);color:#fff}
+.nav a.is-locked{opacity:.55}
+.prog{min-width:120px;text-align:right;font-family:var(--font-mono);font-size:14px;color:#DCE3F0}
+.progbar{height:5px;background:var(--navy-2)}
+.progbar span{display:block;height:100%;width:0;background:var(--red);transition:width .5s var(--ease)}
+
+/* ---------- tipografía ---------- */
+.kicker{display:block;font-family:var(--font-mono);font-size:14px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.display{font-family:var(--font-display);font-weight:800;text-transform:uppercase;letter-spacing:.01em}
+.hero-title{font-size:clamp(38px,7vw,70px);line-height:.98}
+.hero-title .l2{display:block;color:var(--red)}
+.sec-title{font-size:clamp(26px,3.6vw,36px);margin-bottom:12px}
+.sub{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(20px,2.6vw,25px);margin-bottom:10px}
+.lead{font-size:clamp(18px,2.1vw,21px)}
+.muted{color:var(--muted)}
+.small{font-size:16px}
+.mono{font-family:var(--font-mono)}
+.m{white-space:nowrap;font-weight:600}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-family:var(--font-math);font-size:.9em;line-height:1.05;margin:0 2px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 2px}
+
+/* ---------- tarjetas y rejillas ---------- */
+.card{background:var(--card);border-radius:var(--r-card);padding:clamp(18px,3.6vw,30px);box-shadow:0 1px 0 rgba(28,43,74,.06)}
+.soft{background:var(--soft);border-radius:18px;padding:18px}
+.grid{display:grid;gap:16px}
+@media(min-width:780px){.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.g4{grid-template-columns:repeat(4,1fr)}}
+section.block{padding:40px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:15px;font-weight:600;color:var(--navy)}
+.chip.dark{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.red{background:var(--red);border-color:var(--red);color:#fff}
+.chip.ok{background:var(--ok-bg);border-color:#B9DCC5;color:var(--ok)}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:0;border-radius:var(--r-btn);padding:10px 20px;background:var(--navy);color:#fff;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none;transition:transform .15s var(--ease),background .15s}
+.btn:hover{background:var(--navy-2)}
+.btn:active{transform:scale(.98)}
+.btn.red{background:var(--red)}
+.btn.red:hover{background:#9A2126}
+.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn.sm{min-height:42px;padding:8px 14px;font-size:16px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.icon-btn{width:46px;height:46px;border-radius:12px;border:0;background:var(--navy);color:#fff;font-size:19px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn[disabled]{opacity:.4;cursor:not-allowed}
+
+/* ---------- encabezado ---------- */
+.hero{padding:44px 0 24px}
+.hero .meta{display:grid;gap:16px;margin-top:28px}
+@media(min-width:900px){.hero .meta{grid-template-columns:1.25fr 1fr}}
+.obj{border-left:6px solid var(--red);padding-left:14px;margin:0}
+.ficha{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;margin:0;font-size:16px}
+.ficha dt{font-weight:800;color:var(--navy)}
+.ficha dd{margin:0}
+@media(max-width:560px){.ficha{grid-template-columns:1fr}.ficha dd{margin-bottom:6px}}
+.rule{display:flex;gap:12px;align-items:flex-start;margin:0 0 12px;font-size:16.5px}
+.rule .ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px}
+
+/* ---------- ruta con candados ---------- */
+.route{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.route a{display:flex;gap:10px;align-items:center;text-decoration:none;background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 12px;color:var(--navy);min-height:58px;font-weight:700;font-size:15.5px;line-height:1.25}
+.route .n{flex:none;width:34px;height:34px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:18px}
+.route a.done{border-color:#B9DCC5}
+.route a.done .n{background:var(--ok-bg);color:var(--ok)}
+.route a.now{border-color:var(--red)}
+.route a.now .n{background:var(--red);color:#fff}
+.route a.locked{color:var(--muted);background:var(--soft)}
+
+/* ---------- pasos ---------- */
+.step{scroll-margin-top:86px}
+.step-head{display:grid;grid-template-columns:62px 1fr;gap:16px;align-items:start;margin-bottom:18px}
+.num{width:62px;height:62px;border-radius:18px;background:var(--navy);color:#fff;font-family:var(--font-display);font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center}
+.step.is-done .num{background:var(--ok)}
+.step-head h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(24px,3.2vw,32px);margin-bottom:6px}
+.lockbox{display:flex;gap:14px;align-items:center;background:var(--soft);border:2px dashed var(--line);border-radius:18px;padding:18px;color:var(--muted)}
+.lockbox .padlock{flex:none;width:52px;height:52px;border-radius:14px;background:#fff;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:24px}
+.unlock-anim{animation:pop .6s var(--ease)}
+@keyframes pop{0%{transform:scale(.98);opacity:.4}100%{transform:none;opacity:1}}
+
+/* ---------- preguntas ---------- */
+.q{background:var(--soft);border-radius:18px;padding:18px;margin-top:12px}
+.q .enun{font-weight:700;color:var(--navy);font-size:19px;margin-bottom:10px}
+.opts{display:grid;gap:8px;margin:8px 0}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;min-height:48px;border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 14px;font-size:17px;color:var(--text);cursor:pointer}
+.opt:hover{border-color:var(--navy)}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:#EEF2F9}
+.opt.sel-ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.sel-no{border-color:var(--red);background:var(--red-soft)}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy);font-size:15px}
+.inrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.inrow label{font-weight:700;color:var(--navy)}
+input[type=text],textarea,select{border:2px solid var(--line);border-radius:12px;padding:9px 12px;min-height:46px;background:#fff;color:var(--text);font-size:17px}
+input[type=text]{width:120px}
+textarea{width:100%;min-height:90px;resize:vertical}
+.pista,.fb{margin-top:12px;border-radius:14px;padding:12px 14px;font-size:17px}
+.pista{background:var(--yel);border-left:6px solid #E0B84A}
+.fb.ok{background:var(--ok-bg);border-left:6px solid var(--ok);color:#16432A}
+.fb.no{background:var(--red-soft);border-left:6px solid var(--red);color:#5E1518}
+.fb.info{background:#EEF2F9;border-left:6px solid var(--navy)}
+.fb b,.pista b{display:block}
+.tag-help{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* ---------- reproductor por fragmentos ---------- */
+.player{display:grid;gap:18px}
+@media(min-width:980px){.player{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}}
+.vbox{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9}
+.vbox video{display:block;width:100%;height:100%;background:#000}
+.vbox .veil{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(28,43,74,.55);color:#fff;text-align:center;padding:16px}
+.vbox .veil .big{width:74px;height:74px;border-radius:20px;background:var(--red);color:#fff;border:0;font-size:30px;cursor:pointer}
+.vbox .stop{position:absolute;right:12px;bottom:12px;background:var(--red);color:#fff;font-weight:800;border-radius:10px;padding:4px 10px;font-size:14px}
+.vbar{position:relative;height:12px;background:var(--line);border-radius:999px;margin-top:12px;overflow:visible}
+.vbar .seen{position:absolute;left:0;top:0;bottom:0;background:#9AA6BC;border-radius:999px}
+.vbar .cur{position:absolute;left:0;top:0;bottom:0;background:var(--red);border-radius:999px}
+.vbar .mark{position:absolute;top:-5px;width:4px;height:22px;background:var(--navy);border-radius:2px;transform:translateX(-2px)}
+.vctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.vtime{font-family:var(--font-mono);font-size:15px;color:var(--muted);min-width:110px}
+.frags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.frag{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);background:#fff;border-radius:12px;padding:6px 10px;font-size:14.5px;font-weight:700;color:var(--muted)}
+.frag.now{border-color:var(--red);color:var(--red)}
+.frag.done{border-color:#B9DCC5;color:var(--ok);background:var(--ok-bg)}
+.cap{background:var(--navy);color:#fff;border-radius:16px;padding:14px 16px;min-height:86px;font-size:18px}
+.cap .kicker{color:#FF9EA1;margin-bottom:4px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:16px;cursor:pointer;min-height:44px}
+.toggle input{width:20px;height:20px;accent-color:var(--red)}
+.checkpoint{border:2px solid var(--red);background:#fff;border-radius:18px;padding:16px;margin-top:0}
+.checkpoint .kicker{margin-bottom:6px}
+.note{display:flex;gap:12px;background:var(--soft);border-radius:14px;padding:12px 14px;font-size:16.5px;margin-top:12px}
+.note .ic{flex:none;font-weight:800;color:var(--red);font-family:var(--font-mono)}
+
+/* ---------- práctica ---------- */
+.score{font-family:var(--font-mono);font-weight:700;font-size:15px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+.qitem+.qitem{margin-top:18px;padding-top:18px;border-top:2px dashed var(--line)}
+
+/* ---------- infografía ---------- */
+.info{background:#fff;border:3px solid var(--navy);border-radius:24px;overflow:hidden}
+.info-head{background:var(--navy);color:#fff;padding:18px 22px}
+.info-head h3{color:#fff;font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:clamp(22px,3vw,30px)}
+.info-head p{margin:4px 0 0;color:#DCE3F0}
+.info-body{padding:18px;display:grid;gap:14px}
+@media(min-width:820px){.info-body{grid-template-columns:repeat(2,1fr)}}
+.ic-card{border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start}
+.ic-card .n{width:52px;height:52px;border-radius:14px;background:var(--red);color:#fff;font-family:var(--font-display);font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center}
+.ic-card h4{font-size:18px;margin-bottom:4px}
+.ic-card p{margin:0;font-size:16.5px}
+.mine{grid-column:1/-1;background:var(--yel);border-radius:18px;padding:14px 16px}
+.mine table{width:100%;border-collapse:collapse;font-size:16px}
+.mine th,.mine td{text-align:left;padding:6px 8px;border-bottom:1px solid #EAD9A5;vertical-align:top}
+.mini-t{width:100%;border-collapse:collapse;font-size:15.5px;margin-top:6px}
+.mini-t td{border-bottom:1px solid var(--line);padding:4px 6px}
+
+/* ---------- ficha del proyecto ---------- */
+.fp table{width:100%;border-collapse:collapse;font-size:16px}
+.fp th,.fp td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.fp thead th{background:var(--navy);color:#fff}
+.fp th[scope=row]{background:var(--soft);color:var(--navy);width:28%}
+.mk{font-weight:800;color:var(--ok);text-align:center}
+details.fp-wrap>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+details.fp-wrap>summary::-webkit-details-marker{display:none}
+
+footer{padding:30px 0 80px;font-size:15.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;font-size:16px;font-weight:600;z-index:70;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:min(560px,92vw);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media print{
+  body{background:#fff}
+  .topbar,.hero,#ruta,.step:not(#paso8),footer,.toast,#paso8 .step-head,#paso8 .btn-row,#fichaProyecto{display:none!important}
+  #paso8,#paso8 .card{padding:0;box-shadow:none}
+  .info{border-width:2px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#inicio">MATEM<span>·</span>E5</a>
+    <nav class="nav" aria-label="Pasos de la secuencia" id="nav"></nav>
+    <div class="prog" id="progTxt" aria-live="polite">0 de 8</div>
+  </div>
+  <div class="progbar" aria-hidden="true"><span id="progBar"></span></div>
+</header>
+
+<main id="main">
+
+<!-- ===================== ENCABEZADO Y FICHA TÉCNICA ===================== -->
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <span class="kicker">Proyecto final · Modelo de página · Trigonometría</span>
+    <h1 class="display hero-title">Ecuaciones sen x = k<span class="l2">¿Cuántas soluciones y cuáles?</span></h1>
+    <p class="lead read" style="margin-top:18px">Una secuencia para recorrer de principio a fin: usted predice, mira demostraciones visuales por fragmentos, calcula a mano y justifica. Cada paso se abre cuando termina el anterior.</p>
+    <div class="chips">
+      <span class="chip dark">Unos 35 minutos</span>
+      <span class="chip red">3 videos cortos por fragmentos</span>
+      <span class="chip">3 preguntas socráticas</span>
+      <span class="chip">Práctica con candado</span>
+      <span class="chip">Funciona sin Internet</span>
+      <span class="chip">No pide ni guarda datos</span>
+    </div>
+    <div class="meta">
+      <div class="card">
+        <span class="kicker">Ficha técnica</span>
+        <dl class="ficha">
+          <dt>Curso</dt><dd>MATEM-Precálculo 2026</dd>
+          <dt>Contenido</dt><dd>6. Trigonometría · b) círculo trigonométrico y f) ecuaciones trigonométricas</dd>
+          <dt>Aprendizaje</dt><dd><p class="obj">Al terminar, usted podrá resolver ecuaciones de la forma <span class="m">sen x = k</span> en <span class="m">[0°, 360°[</span> y justificar cuántas soluciones tienen.</p></dd>
+          <dt>Grupo</dt><dd>Estudiantes de Ciclo Diversificado inscritos en MATEM-Precálculo</dd>
+          <dt>Conocimientos previos</dt><dd>Ángulos en grados, cuadrantes, valores del seno en 30°, 45° y 60°</dd>
+          <dt>Componentes</dt><dd>3 preguntas socráticas · 3 videos incrustados · práctica autoevaluable · infografía de síntesis</dd>
+          <dt>Requisitos</dt><dd>Navegador actualizado. Los tres archivos <span class="mono">.mp4</span> deben estar en la misma carpeta que esta página.</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <span class="kicker">Cómo funciona esta página</span>
+        <div class="rule"><span class="ic" aria-hidden="true">🔒</span><span><b>Candados de avance.</b> Cada paso se abre al terminar el anterior. La barra superior muestra su progreso.</span></div>
+        <div class="rule"><span class="ic" aria-hidden="true">▶</span><span><b>Videos por fragmentos.</b> El video se detiene al final de cada fragmento y hace una pregunta. No se puede adelantar, pero sí retroceder. La narración marca el ritmo: el video espera a que termine cada frase.</span></div>
+        <div class="rule"><span class="ic" aria-hidden="true">?</span><span><b>Primero piense.</b> La pista y la respuesta aparecen solo si usted las pide o después de intentarlo.</span></div>
+        <div class="rule" style="margin:0"><span class="ic" aria-hidden="true">✎</span><span><b>Tenga a mano su cuaderno.</b> Varias preguntas piden resolver antes de responder.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RUTA ===================== -->
+<section class="block" id="ruta" style="padding-top:8px">
+  <div class="wrap">
+    <span class="kicker">Su ruta</span>
+    <h2 class="display sec-title">Ocho pasos, uno tras otro</h2>
+    <div class="route" id="route"></div>
+  </div>
+</section>
+
+<div class="wrap" id="pasos"></div>
+
+<!-- ===================== FICHA DEL PROYECTO (para la persona tutora) ===================== -->
+<section class="block" id="fichaProyecto">
+  <div class="wrap">
+    <details class="card fp-wrap">
+      <summary><span class="chip dark">Para la persona tutora</span><span class="sub" style="margin:0">Ficha del proyecto (Entregable 5)</span><span class="small muted">· abrir</span></summary>
+      <div class="fp" style="margin-top:18px">
+        <p class="small muted">La Guía del Entregable 5 permite incluir la ficha al final de la página. Este es el ejemplo del equipo facilitador; cada persona escribe la suya sobre su propia secuencia.</p>
+        <h3 class="sub">1. Aprendizaje y grupo</h3>
+        <table>
+          <tr><th scope="row">Aprendizaje</th><td>Resolver ecuaciones de la forma sen x = k en [0°, 360°[ y justificar cuántas soluciones tienen (programa, 6. Trigonometría, b y f).</td></tr>
+          <tr><th scope="row">Grupo destinatario</th><td>MATEM-Precálculo, Ciclo Diversificado, antes de las ecuaciones trigonométricas generales.</td></tr>
+          <tr><th scope="row">Componentes</th><td>3 preguntas socráticas (predicción, cálculo a mano y justificación); 3 videos incrustados, por fragmentos y con preguntas de control; práctica de 4 ítems; infografía generada con las respuestas del estudiante.</td></tr>
+        </table>
+        <h3 class="sub" style="margin-top:18px">2. Qué probé</h3>
+        <table>
+          <tr><th scope="row">Recorrido como estudiante</th><td>Recorrí la secuencia completa en computadora y en celular: respuestas correctas, incorrectas y vacías en cada pregunta. Comprobé que ningún paso se abre antes de tiempo, que el video se detiene en cada fragmento y que no deja adelantar.</td></tr>
+          <tr><th scope="row">Qué ajusté</th><td>La narración se cortaba cuando el video llegaba a la frase siguiente: ahora el video espera a que la voz termine. Separé la pista de la respuesta y corregí la ubicación de los rótulos de 60° en el video 3.</td></tr>
+          <tr><th scope="row">Limitación que queda</th><td>La narración usa la voz del navegador: el video espera a que termine cada frase, así que no se corta, pero el timbre cambia según el equipo y algunos navegadores no tienen voz en español. Los subtítulos dicen todo lo que se narra.</td></tr>
+        </table>
+        <h3 class="sub" style="margin-top:18px">3. Autoevaluación (Cuaderno, sección 14)</h3>
+        <table>
+          <thead><tr><th scope="col">Criterio</th><th scope="col">2 Logrado</th><th scope="col">1 Parcial</th><th scope="col">0 Requiere corrección</th><th scope="col">Evidencia</th></tr></thead>
+          <tbody>
+            <tr><td>Corrección matemática</td><td class="mk">✓</td><td></td><td></td><td>Cada respuesta resuelta a mano; infografía y videos coinciden.</td></tr>
+            <tr><td>Propósito didáctico</td><td class="mk">✓</td><td></td><td></td><td>Un solo aprendizaje; cada recurso cumple una función distinta.</td></tr>
+            <tr><td>Preservación del razonamiento</td><td class="mk">✓</td><td></td><td></td><td>Predicción, cálculo en el cuaderno y justificación sin IA.</td></tr>
+            <tr><td>Retroalimentación</td><td class="mk">✓</td><td></td><td></td><td>Mensajes según el error (cuadrante equivocado, 360° incluido…).</td></tr>
+            <tr><td>Calidad técnica</td><td class="mk">✓</td><td></td><td></td><td>Abre con doble clic, sin Internet; probada en celular.</td></tr>
+            <tr><td>Transparencia y privacidad</td><td class="mk">✓</td><td></td><td></td><td>Declaración de IA al pie; no pide ni guarda datos.</td></tr>
+            <tr><td>Trazabilidad</td><td></td><td class="mk">✓</td><td></td><td>Falta adjuntar el registro de los prompts usados.</td></tr>
+          </tbody>
+        </table>
+        <h3 class="sub" style="margin-top:18px">4. Reflexión ética sobre esta secuencia</h3>
+        <p>En esta secuencia el estudiante no usa IA: predice, resuelve en su cuaderno y justifica antes de ver cada respuesta, y los candados impiden saltarse ese trabajo. La IA me ayudó a programar la página y a dibujar los videos, pero el aprendizaje, las preguntas, las respuestas y su verificación son decisiones mías. Como la usarán menores de edad, la página no pide nombres ni guarda respuestas, no enlaza a servicios externos y no muestra publicidad; quien la use en clase debe revisar que los videos estén en la carpeta y explicar que el error forma parte del aprendizaje.</p>
+        <h3 class="sub" style="margin-top:18px">5. Declaración de uso de IA y privacidad</h3>
+        <table>
+          <tr><th scope="row">Herramientas</th><td>Claude (Anthropic), noviembre de 2026.</td></tr>
+          <tr><th scope="row">Para qué se usaron</th><td>Código de la página, animaciones de los tres videos y redacción de las retroalimentaciones.</td></tr>
+          <tr><th scope="row">Qué verifiqué y cómo</th><td>Resolví a mano cada pregunta y cada ítem de la práctica y los comparé con la página; revisé cuadro por cuadro los valores de los videos (30°, 150°, 90°, 270°, 210°, 330°, 240°, 300°).</td></tr>
+        </table>
+        <p style="margin-top:12px">☑ Confirmo que la página y esta ficha no contienen datos identificables de estudiantes. &nbsp; ☑ Soy la persona responsable de este recurso.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--navy)">Modelo del proyecto final · MATEM-DOCENTES 2026 · Equipo facilitador.</b> Página y videos generados con apoyo de inteligencia artificial (Claude, Anthropic, noviembre de 2026) a partir del aprendizaje, las preguntas, las respuestas y las pistas definidas por el equipo; revisados antes de publicarse. La página no pide ni guarda datos de quien la usa.</p>
+    <div class="btn-row"><button class="btn ghost sm" type="button" id="teacherMode" aria-pressed="false">Vista de la persona tutora: abrir todos los pasos</button></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =========================================================
+   Utilidades
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastT;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+const F = (a, b) => `<span class="frac"><span>${a}</span><span>${b}</span></span>`;   // fracción apilada
+const num = s => { const t = String(s).replace(/°/g, '').replace(',', '.').replace(/\s+/g, ''); return t === '' || !/^[+-]?\d+(\.\d+)?$/.test(t) ? NaN : parseFloat(t); };
+const mmss = x => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`;
+let TEACHER = false;
+
+/* Voz del navegador: el video espera a que cada frase termine (nunca se corta) */
+const VOZ = {on:('speechSynthesis' in window), rate:1, token:0, speaking:false};
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const vs = speechSynthesis.getVoices().filter(v => /^es/i.test(v.lang));
+  if (!vs.length) return null;
+  const pref = ['es-CR', 'es-MX', 'es-US', 'es-419', 'es-CO', 'es-AR', 'es-CL', 'es-PE', 'es-ES'];
+  const score = v => {
+    const l = v.lang.replace('_', '-'), i = pref.indexOf(l);
+    return (i < 0 ? 0 : 20 - i) + (/natural|online|neural/i.test(v.name) ? 15 : 0) + (/google/i.test(v.name) ? 6 : 0)
+      + (/dalia|paloma|sabina|paola|camila|salom|elena|laura|helena|monica|m[oó]nica|lupe|mia|valentina/i.test(v.name) ? 3 : 0);
+  };
+  return vs.sort((a, b) => score(b) - score(a))[0];
+}
+/* habla y llama a done() una sola vez al terminar (o si el navegador no avisa) */
+function speak(text, done) {
+  const my = ++VOZ.token;
+  const fin = () => { if (my !== VOZ.token) return; VOZ.speaking = false; VOZ.token++; done && done(); };
+  if (!VOZ.on || !('speechSynthesis' in window)) { done && done(); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text), v = pickVoice();
+  if (v) u.voice = v; u.lang = v ? v.lang : 'es-MX'; u.rate = VOZ.rate;
+  u.onend = fin; u.onerror = fin;
+  VOZ.speaking = true;
+  setTimeout(() => speechSynthesis.speak(u), 60);
+  setTimeout(fin, Math.max(3500, text.length * 95 / VOZ.rate) + 4000);   // respaldo si no llega onend
+}
+function hush() { VOZ.token++; VOZ.speaking = false; if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+
+/* =========================================================
+   Respuestas del estudiante (solo en memoria; nada se guarda)
+   ========================================================= */
+const R = {pred:null, q2:null, q3:null, practica:[], ayuda:0};
+
+/* =========================================================
+   Datos: pasos de la secuencia
+   ========================================================= */
+const STEPS = [
+  {id:'paso1', n:1, short:'Prediga', title:'Antes de los videos: haga una predicción', kind:'Pregunta socrática 1 · Situación inicial', mins:'3 min'},
+  {id:'paso2', n:2, short:'Video 1', title:'El seno en el círculo trigonométrico', kind:'Video por fragmentos · Exploración', mins:'5 min'},
+  {id:'paso3', n:3, short:'Video 2', title:'¿Cuántas soluciones tiene sen x = k?', kind:'Video por fragmentos · Exploración', mins:'5 min'},
+  {id:'paso4', n:4, short:'Calcule', title:'Calcule a mano', kind:'Pregunta socrática 2 · Retroalimentación', mins:'5 min'},
+  {id:'paso5', n:5, short:'Video 3', title:'Un ejemplo resuelto, paso a paso', kind:'Video por fragmentos · Formalización', mins:'5 min'},
+  {id:'paso6', n:6, short:'Justifique', title:'Justifique con sus palabras', kind:'Pregunta socrática 3 · Argumentación', mins:'4 min'},
+  {id:'paso7', n:7, short:'Práctica', title:'Práctica con candado', kind:'Evaluación formativa · Evidencia', mins:'6 min'},
+  {id:'paso8', n:8, short:'Síntesis', title:'Su infografía de síntesis', kind:'Cierre · Síntesis', mins:'2 min'}
+];
+const state = {open:1, done:new Set()};
+
+/* =========================================================
+   Datos: videos, fragmentos, subtítulos y preguntas de control
+   ========================================================= */
+const VIDEOS = {
+  v1:{src:'video1_seno_circulo.mp4', dur:42, title:'Video 1 · El seno en el círculo trigonométrico',
+    focus:'Mientras lo ve, fíjese en qué parte del dibujo representa el seno.',
+    frags:[
+      {end:14, name:'¿Qué es sen θ?', q:{type:'mc', text:'Según el video, ¿qué representa sen θ en el círculo trigonométrico?',
+        opts:[['La coordenada x del punto P', false, 'Esa es la proyección sobre el eje horizontal, que corresponde al coseno. Mire otra vez la línea roja: es vertical.'],
+              ['La altura de P, es decir, su coordenada y', true, 'Correcto: sen θ es la coordenada y de P. Por eso sen 30° = 0,5: a 30°, P está a media unidad de altura.'],
+              ['La longitud del arco desde 0° hasta P', false, 'El arco mide el ángulo, no su seno. El seno es una altura.']],
+        hint:'Observe la línea roja que baja desde P hasta el eje x. ¿Es horizontal o vertical?'}},
+      {end:30, name:'Una vuelta completa', q:{type:'mc', text:'Mientras P da una vuelta completa, ¿entre qué valores se mueve sen θ?',
+        opts:[['Entre 0 y 1', false, 'Debajo del eje x la altura es negativa: en 270° vale −1.'],
+              ['Entre −1 y 1', true, 'Correcto: el radio es 1, así que la altura de P nunca pasa de 1 ni baja de −1.'],
+              ['Entre 0° y 360°', false, 'Eso describe el ángulo θ, no el valor de su seno.']],
+        hint:'¿Cuál fue el punto más alto de la curva? ¿Y el más bajo?'}},
+      {end:42, name:'Dos ángulos, un mismo seno', q:null}
+    ],
+    cues:[
+      [0, "Este es el círculo trigonométrico: radio 1 y centro en el origen.", "Este es el círculo trigonométrico. Tiene radio uno y su centro está en el origen."],
+      [2, "El punto P gira desde 0° hasta formar un ángulo θ de 30°.", "El punto P gira desde cero grados, hasta formar un ángulo theta de treinta grados."],
+      [3.5, "La altura de P, su coordenada y, es el seno del ángulo.", "La altura de P, es decir, su coordenada y, es el seno del ángulo."],
+      [6, "Cuando θ mide 30°, la altura de P es 0,5.", "Cuando theta mide treinta grados, la altura de P es cero coma cinco."],
+      [9.5, "Por eso, sen 30° = 0,5, es decir, un medio.", "Por eso, seno de treinta grados es igual a cero coma cinco, es decir, un medio."],
+      [14, "Ahora P da una vuelta completa, de 0° a 360°.", "Ahora, P da una vuelta completa, de cero a trescientos sesenta grados."],
+      [16, "A la derecha, su altura va dibujando la curva del seno.", "A la derecha, su altura va dibujando la curva del seno."],
+      [19, "En 90° la altura llega a su máximo: 1.", "En noventa grados, la altura llega a su máximo: uno."],
+      [23, "En 270° llega a su mínimo: −1.", "En doscientos setenta grados, llega a su mínimo: menos uno."],
+      [27.3, "El seno siempre está entre −1 y 1.", "El seno siempre está entre menos uno y uno."],
+      [30, "Volvamos a 30°: su altura es un medio.", "Volvamos a treinta grados. Su altura es un medio."],
+      [31, "Tracemos la recta horizontal y = 1/2.", "Tracemos la recta horizontal, y igual a un medio."],
+      [33, "Corta el círculo en otro punto: el de 150°.", "La recta corta el círculo en otro punto: el de ciento cincuenta grados."],
+      [34, "En la gráfica también hay dos cruces: 30° y 150°.", "En la gráfica también hay dos cruces: en treinta y en ciento cincuenta grados."],
+      [36, "sen 30° = sen 150° = 1/2: dos ángulos con el mismo seno.", "Seno de treinta grados, igual a seno de ciento cincuenta grados, igual a un medio. Son dos ángulos con el mismo seno."]]},
+  v2:{src:'video2_cuantas_soluciones.mp4', dur:48, title:'Video 2 · ¿Cuántas soluciones tiene sen x = k?',
+    focus:'Mientras lo ve, cuente cuántas veces la recta roja corta la curva.',
+    frags:[
+      {end:14, name:'La recta y = k', q:{type:'num', text:'Para k = 0,5, ¿cuántas soluciones tiene sen x = k en [0°, 360°[?', answer:2,
+        fb:{ok:'Correcto: la recta y = 0,5 corta la curva dos veces, en 30° y en 150°.', 1:'Hay más de un cruce. Además de 30°, ¿qué otro ángulo tiene la misma altura?', 0:'Sí hay cruces: 0,5 está entre −1 y 1.', other:'Cuente los puntos rojos sobre la curva.'},
+        hint:'Cada punto donde la recta roja toca la curva es una solución.'}},
+      {end:30, name:'Cuando k crece', q:{type:'mc', text:'¿Cuántas soluciones tiene sen x = 1,3 en [0°, 360°[?',
+        opts:[['Ninguna', true, 'Correcto: sen x nunca pasa de 1, así que la recta y = 1,3 no toca la curva.'],
+              ['Una', false, 'Una sola solución ocurre con k = 1 (en 90°). Con 1,3 la recta ya está por encima de la curva.'],
+              ['Dos', false, '1,3 es positivo, pero eso no basta: sen x no puede valer más de 1.']],
+        hint:'Recuerde el video 1: ¿cuál es el valor más alto que alcanza sen x?'}},
+      {end:48, name:'Cuando k es negativo', q:null}
+    ],
+    cues:[
+      [0, "Queremos saber cuántos ángulos x cumplen sen x = k.", "Queremos saber cuántos ángulos x cumplen que seno de x es igual a k."],
+      [3.2, "Dibujamos la recta horizontal y = k; aquí, k = 0,5.", "Dibujamos la recta horizontal y igual a k. Aquí, k vale cero coma cinco."],
+      [6, "Cada cruce de la recta con la gráfica es una solución.", "Cada cruce de la recta con la gráfica es una solución."],
+      [8, "Para k = 0,5 hay dos cruces: 30° y 150°.", "Para k igual a cero coma cinco, hay dos cruces: treinta y ciento cincuenta grados."],
+      [14, "Subamos la recta: los dos cruces se acercan.", "Subamos la recta. Los dos cruces se acercan."],
+      [21, "Con k = 1 se juntan en uno solo: x = 90°.", "Con k igual a uno, se juntan en uno solo: x igual a noventa grados."],
+      [24.5, "Si k pasa de 1, la recta ya no toca la gráfica.", "Si k pasa de uno, la recta ya no toca la gráfica."],
+      [27, "Con k = 1,3 no hay soluciones.", "Con k igual a uno coma tres, no hay soluciones."],
+      [30.5, "Ahora bajemos la recta hacia valores negativos.", "Ahora, bajemos la recta hacia valores negativos."],
+      [35.5, "Con k = −1 hay una sola solución: x = 270°.", "Con k igual a menos uno, hay una sola solución: x igual a doscientos setenta grados."],
+      [38.3, "Con k = −0,5 vuelven a ser dos: 210° y 330°.", "Con k igual a menos cero coma cinco, vuelven a ser dos: doscientos diez y trescientos treinta grados."],
+      [41.5, "Resumen: cero, una o dos soluciones, según el valor de k.", "En resumen: puede haber cero, una o dos soluciones, según el valor de k."],
+      [43, "Ojo: 360° no se cuenta, porque el intervalo [0°, 360°[ no lo incluye.", "Ojo: trescientos sesenta grados no se cuenta, porque el intervalo no lo incluye."]]},
+  v3:{src:'video3_ejemplo_resuelto.mp4', dur:46, title:'Video 3 · Ejemplo: sen x = −√3/2',
+    focus:'Antes de cada fragmento, intente adelantarse en su cuaderno al paso siguiente.',
+    frags:[
+      {end:16, name:'¿Hay soluciones? Ángulo de referencia', q:{type:'mc', text:'Si sen α = √3/2 y α está en el primer cuadrante, ¿cuánto mide α?',
+        opts:[['30°', false, 'sen 30° = 1/2 = 0,5. Usted busca el ángulo cuyo seno es √3/2 ≈ 0,87.'],
+              ['60°', true, 'Correcto: sen 60° = √3/2. Ese es el ángulo de referencia.'],
+              ['120°', false, 'sen 120° también vale √3/2, pero 120° está en el segundo cuadrante. El ángulo de referencia está en el primero.']],
+        hint:'Repase los valores especiales: sen 30°, sen 45°, sen 60°.'}},
+      {end:28, name:'¿En qué cuadrantes?', q:{type:'mc', text:'¿En qué cuadrantes el seno es negativo?',
+        opts:[['I y II', false, 'En I y II el punto está arriba del eje x: su altura es positiva.'],
+              ['II y III', false, 'En II la altura es positiva. Revise el signo cuadrante por cuadrante.'],
+              ['III y IV', true, 'Correcto: debajo del eje x la altura es negativa.']],
+        hint:'El seno es la altura. ¿Dónde están los puntos con altura negativa?'}},
+      {end:46, name:'Las dos soluciones', q:null}
+    ],
+    cues:[
+      [0, "Resolvamos sen x = −√3/2, con x en [0°, 360°[.", "Resolvamos: seno de x igual a menos raíz de tres sobre dos, con x entre cero y trescientos sesenta grados."],
+      [3.5, "−√3/2 es aproximadamente −0,87.", "Menos raíz de tres sobre dos, es aproximadamente menos cero coma ochenta y siete."],
+      [5.5, "Como está entre −1 y 1, hay dos soluciones.", "Como está entre menos uno y uno, hay dos soluciones."],
+      [10, "Paso 2: buscamos el ángulo de referencia con el valor positivo.", "Paso dos: buscamos el ángulo de referencia, con el valor positivo."],
+      [12, "sen α = √3/2, entonces α = 60°.", "Si seno de alfa es raíz de tres sobre dos, entonces alfa mide sesenta grados."],
+      [16, "Paso 3: ¿dónde es negativo el seno?", "Paso tres: ¿dónde es negativo el seno?"],
+      [19, "El seno es la altura: es negativa debajo del eje x.", "El seno es la altura, y es negativa debajo del eje x."],
+      [22, "Entonces las soluciones están en los cuadrantes III y IV.", "Entonces, las soluciones están en los cuadrantes tercero y cuarto."],
+      [28.5, "Paso 4: en el cuadrante III, x = 180° + 60° = 240°.", "Paso cuatro: en el tercer cuadrante, x es ciento ochenta más sesenta: doscientos cuarenta grados."],
+      [33, "En el cuadrante IV, x = 360° − 60° = 300°.", "En el cuarto cuadrante, x es trescientos sesenta menos sesenta: trescientos grados."],
+      [37, "La gráfica lo confirma: dos cruces, en 240° y 300°.", "La gráfica lo confirma: hay dos cruces, en doscientos cuarenta y en trescientos grados."],
+      [40, "El conjunto solución es S = {240°, 300°}.", "El conjunto solución es: doscientos cuarenta y trescientos grados."]]}
+};
+
+/* =========================================================
+   Datos: práctica con candado
+   ========================================================= */
+const PRACTICA = [
+  {text:'¿Cuántas soluciones tiene sen x = −1 en [0°, 360°[?', opts:[
+    ['Ninguna', false, '−1 sí es un valor posible del seno: es su mínimo.'],
+    ['Una: x = 270°', true, 'Correcto: la altura −1 solo se alcanza en el punto más bajo del círculo, en 270°.'],
+    ['Dos: x = 270° y x = 90°', false, 'sen 90° = 1, no −1. La recta y = −1 toca la curva una sola vez.']],
+   hint:'k = −1 es un extremo: ¿cuántos puntos del círculo tienen altura −1?'},
+  {text:'¿Cuál es el conjunto solución de sen x = 0 en [0°, 360°[?', opts:[
+    ['S = {0°, 180°, 360°}', false, 'sen 360° = 0, pero 360° no pertenece a [0°, 360°[: el intervalo es abierto en 360°.'],
+    ['S = {0°, 180°}', true, 'Correcto: la altura es 0 en los puntos sobre el eje x, en 0° y 180°. 360° queda fuera del intervalo.'],
+    ['S = {90°, 270°}', false, 'En 90° y 270° el seno vale 1 y −1. Ahí el que vale 0 es el coseno.']],
+   hint:'¿Qué puntos del círculo están sobre el eje x? Revise si el intervalo incluye 360°.'},
+  {text:'¿Cuál es el conjunto solución de sen x = −1/2 en [0°, 360°[?', opts:[
+    ['S = {30°, 150°}', false, 'Esas son las soluciones de sen x = 1/2. Con −1/2 el seno es negativo: cuadrantes III y IV.'],
+    ['S = {210°, 330°}', true, 'Correcto: referencia 30°; III: 180° + 30° = 210°; IV: 360° − 30° = 330°.'],
+    ['S = {150°, 330°}', false, 'sen 150° = +1/2: 150° está en el cuadrante II, donde el seno es positivo.'],
+    ['S = {240°, 300°}', false, 'Esos ángulos usan la referencia 60°, que corresponde a √3/2, no a 1/2.']],
+   hint:'Ángulo de referencia: sen α = 1/2. Luego ubique los cuadrantes donde el seno es negativo.'},
+  {text:'Sin calcular los ángulos: ¿en qué cuadrantes están las soluciones de sen x = 0,8?', opts:[
+    ['I y II', true, 'Correcto: 0,8 es positivo y está entre −1 y 1, así que hay dos soluciones, arriba del eje x.'],
+    ['I y IV', false, 'En IV el seno es negativo. El que es positivo en I y IV es el coseno.'],
+    ['Solo en el I', false, 'La recta y = 0,8 corta el círculo dos veces: también en el cuadrante II.']],
+   hint:'0,8 es positivo: ¿en qué cuadrantes la altura es positiva?'}
+];
+
+/* =========================================================
+   Construcción de los pasos
+   ========================================================= */
+function stepShell(s, body) {
+  return `<section class="block step" id="${s.id}" data-n="${s.n}" aria-labelledby="${s.id}-t">
+    <article class="card">
+      <div class="step-head"><span class="num" aria-hidden="true">${s.n}</span><div>
+        <span class="kicker" style="margin-bottom:4px">${s.kind} · ${s.mins}</span>
+        <h2 id="${s.id}-t">${s.title}</h2>
+      </div></div>
+      <div class="lockbox" data-lock><span class="padlock" aria-hidden="true">🔒</span><div><b style="color:var(--navy)">Paso bloqueado.</b> Se abre cuando termine el paso ${s.n - 1}.</div></div>
+      <div class="step-body" data-body hidden>${body}</div>
+    </article>
+  </section>`;
+}
+const qBtns = (id, extra = '') => `<div class="btn-row" style="margin-top:10px"><button class="btn sm" type="button" data-check="${id}">Comprobar</button><button class="btn ghost sm" type="button" data-hint="${id}">Ver una pista</button>${extra}</div>`;
+const mcOpts = (id, opts) => `<div class="opts" role="group">${opts.map((o, i) => `<button type="button" class="opt" data-opt="${id}" data-i="${i}" aria-pressed="false"><span class="l">${String.fromCharCode(97 + i)}</span><span>${o[0]}</span></button>`).join('')}</div>`;
+
+const BODY = {
+paso1:`<p class="read">El valor 1/2 aparece muchas veces en trigonometría. Antes de ver los videos, apueste: no importa si se equivoca, al final va a comparar.</p>
+  <div class="q">
+    <div class="enun">Pregunta 1. Sin calcular, ¿cuántos ángulos x en <span class="m">[0°, 360°[</span> cumplen <span class="m">sen x = ${F(1, 2)}</span>?</div>
+    ${mcOpts('p1', [['Ninguno'], ['Uno'], ['Dos'], ['Más de dos']])}
+    <div class="btn-row" style="margin-top:10px"><button class="btn sm" type="button" id="savePred">Guardar mi predicción</button><button class="btn ghost sm" type="button" data-hint="p1">Ver una pista</button></div>
+    <div class="pista" id="hint-p1" hidden><b>Pista</b>Imagine un punto que da una vuelta completa al círculo. ¿Cuántas veces pasa por la altura 1/2?</div>
+    <div class="fb info" id="fb-p1" hidden></div>
+  </div>`,
+paso2:'', paso3:'', paso5:'',
+paso4:`<p class="read">Ahora usted. Resuelva en su cuaderno antes de escribir: primero el ángulo de referencia y luego los cuadrantes.</p>
+  <div class="q">
+    <div class="enun">Pregunta 2. Resuelva <span class="m">sen x = ${F('√2', 2)}</span> con <span class="m">x</span> en <span class="m">[0°, 360°[</span>.</div>
+    <div class="inrow"><label for="q2a">x₁ =</label><input type="text" id="q2a" inputmode="decimal" autocomplete="off" aria-describedby="q2help"><span>°</span>
+      <label for="q2b" style="margin-left:8px">x₂ =</label><input type="text" id="q2b" inputmode="decimal" autocomplete="off" aria-describedby="q2help"><span>°</span></div>
+    <p class="small muted" id="q2help" style="margin:0">Escriba solo números, en grados y en cualquier orden.</p>
+    ${qBtns('q2', '<button class="btn ghost sm" type="button" data-reveal="q2">Ver la respuesta</button>')}
+    <div class="pista" id="hint-q2" hidden><b>Pista</b>√2/2 es el seno de un ángulo especial del primer cuadrante. ¿En qué otro cuadrante el seno también es positivo?</div>
+    <div class="fb" id="fb-q2" hidden></div>
+  </div>`,
+paso6:`<p class="read">Una cosa es calcular y otra es explicar por qué. Lea el argumento de una compañera.</p>
+  <div class="q">
+    <div class="enun">Pregunta 3. Sofía dice: «<span class="m">sen x = 1,2</span> tiene dos soluciones en <span class="m">[0°, 360°[</span>, porque 1,2 es positivo y el seno es positivo en los cuadrantes I y II». ¿Tiene razón?</div>
+    ${mcOpts('q3', [['Sí: con k positivo siempre hay dos soluciones, en I y en II.'], ['No: −1 ≤ sen x ≤ 1, así que sen x nunca vale 1,2 y no hay soluciones.'], ['No: tiene una sola solución, en 90°.']])}
+    <label class="small" for="q3txt" style="font-weight:700;color:var(--navy);display:block;margin-top:10px">Explique con sus palabras (opcional; no se guarda):</label>
+    <textarea id="q3txt" placeholder="Escriba aquí su justificación…"></textarea>
+    ${qBtns('q3', '<button class="btn ghost sm" type="button" data-reveal="q3">Ver la respuesta</button>')}
+    <div class="pista" id="hint-q3" hidden><b>Pista</b>Recuerde el recuadro del video 1: ¿entre qué valores se mueve la altura de P?</div>
+    <div class="fb" id="fb-q3" hidden></div>
+  </div>`,
+paso7:`<div class="btn-row" style="justify-content:space-between;margin-bottom:6px"><p class="read" style="margin:0">Cuatro ítems. El paso 8 se abre cuando los cuatro estén resueltos: al primer error verá una pista; al segundo, la respuesta.</p><span class="score" id="pScore">0 de 4 resueltos</span></div>
+  <div id="practica"></div>`,
+paso8:`<p class="read">Su infografía reúne lo que usted pensaba al principio, lo que respondió y las ideas clave. Puede imprimirla o guardarla como PDF.</p>
+  <div class="btn-row"><button class="btn red" type="button" id="genInfo">Generar mi infografía</button><button class="btn ghost" type="button" id="printInfo" hidden>Imprimir o guardar como PDF</button></div>
+  <div id="infoBox" style="margin-top:18px"></div>`
+};
+
+function videoBody(key) {
+  const V = VIDEOS[key];
+  return `<p class="read">${V.focus}</p>
+  <div class="player" data-player="${key}">
+    <div>
+      <div class="vbox">
+        <video id="vid-${key}" preload="metadata" playsinline disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" src="${V.src}">
+          Su navegador no puede mostrar el video. Abra el archivo ${V.src}, que acompaña a esta página.
+        </video>
+        <div class="veil" id="veil-${key}"><button class="big" type="button" data-vplay="${key}" aria-label="Reproducir el video">▶</button><span>Pulse para empezar el fragmento 1</span></div>
+        <span class="stop" id="stop-${key}" hidden>⏸ Pausa para pensar</span>
+      </div>
+      <div class="vbar" aria-hidden="true"><span class="seen" id="seen-${key}"></span><span class="cur" id="cur-${key}"></span>${V.frags.slice(0, -1).map(f => `<span class="mark" style="left:${f.end / V.dur * 100}%"></span>`).join('')}</div>
+      <div class="vctrl">
+        <button class="btn sm" type="button" data-vplay="${key}" id="pbtn-${key}">▶ Reproducir</button>
+        <button class="icon-btn" type="button" data-vback="${key}" aria-label="Retroceder 5 segundos" title="Retroceder 5 s">↺</button>
+        <button class="btn ghost sm" type="button" data-vfrag="${key}">Repetir el fragmento</button>
+        <span class="vtime" id="time-${key}">0:00 / ${mmss(V.dur)}</span>
+        <button class="btn ghost sm" type="button" data-vfull="${key}">Pantalla completa</button>
+      </div>
+      <div class="frags" id="frags-${key}"></div>
+      <p class="small muted" style="margin:10px 0 0" id="msg-${key}" aria-live="polite">El video se detiene al final de cada fragmento. Puede retroceder, pero no adelantar.</p>
+    </div>
+    <div>
+      <div class="cap" aria-live="polite" id="cap-${key}"><span class="kicker">Subtítulos</span><span>Pulse Reproducir para empezar.</span></div>
+      <div class="btn-row" style="margin-top:8px">
+        <label class="toggle"><input type="checkbox" data-voice checked> Narración con voz</label>
+        <label class="toggle small">Velocidad <select data-rate style="min-height:40px;padding:4px 8px"><option value="0.85">lenta</option><option value="1" selected>normal</option><option value="1.15">rápida</option></select></label>
+      </div>
+      <div id="cp-${key}" style="margin-top:12px"></div>
+    </div>
+  </div>`;
+}
+
+$('#pasos').innerHTML = STEPS.map(s => stepShell(s, s.id === 'paso2' ? videoBody('v1') : s.id === 'paso3' ? videoBody('v2') : s.id === 'paso5' ? videoBody('v3') : BODY[s.id])).join('');
+
+/* =========================================================
+   Candados de avance y progreso
+   ========================================================= */
+function renderRoute() {
+  const cls = s => state.done.has(s.n) ? 'done' : (s.n <= state.open || TEACHER ? 'now' : 'locked');
+  $('#route').innerHTML = STEPS.map(s => { const c = cls(s); return `<a href="#${s.id}" class="${c}"><span class="n">${c === 'done' ? '✓' : c === 'locked' ? '🔒' : s.n}</span><span>${s.short}<br><span class="small muted" style="font-weight:600">${c === 'done' ? 'Listo' : c === 'locked' ? 'Bloqueado' : 'Abierto'}</span></span></a>`; }).join('');
+  $('#nav').innerHTML = STEPS.map(s => `<a href="#${s.id}" class="${s.n > state.open && !TEACHER ? 'is-locked' : ''}">${state.done.has(s.n) ? '✓' : s.n > state.open && !TEACHER ? '🔒' : s.n} ${s.short}</a>`).join('') + '<a href="#fichaProyecto">Ficha</a>';
+  const n = state.done.size;
+  $('#progTxt').textContent = `${n} de ${STEPS.length} pasos`;
+  $('#progBar').style.width = (n / STEPS.length * 100) + '%';
+}
+function applyLocks() {
+  STEPS.forEach(s => {
+    const sec = $('#' + s.id), open = s.n <= state.open || TEACHER;
+    const body = $('[data-body]', sec), lock = $('[data-lock]', sec);
+    if (open && body.hidden) { body.hidden = false; lock.hidden = true; body.classList.add('unlock-anim'); }
+    if (!open) { body.hidden = true; lock.hidden = false; }
+    sec.classList.toggle('is-done', state.done.has(s.n));
+  });
+  renderRoute();
+}
+function complete(n, msg) {
+  if (state.done.has(n)) return;
+  state.done.add(n);
+  if (state.open < n + 1 && n < STEPS.length) state.open = n + 1;
+  applyLocks();
+  if (n < STEPS.length) {
+    toast(msg || `Paso ${n + 1} desbloqueado`);
+    const next = STEPS[n];
+    const b = $(`#${next.id} [data-body]`);
+    if (b) b.insertAdjacentHTML('afterbegin', '');
+    setTimeout(() => $('#' + next.id).scrollIntoView({behavior:'smooth', block:'start'}), 650);
+  } else toast('¡Secuencia completa!');
+}
+
+/* =========================================================
+   Paso 1: predicción (no se califica: se compara al final)
+   ========================================================= */
+let predSel = null;
+const PRED = ['Ninguno', 'Uno', 'Dos', 'Más de dos'];
+document.addEventListener('click', e => {
+  const o = e.target.closest('.opt[data-opt]'); if (!o) return;
+  const id = o.dataset.opt, box = o.closest('.opts');
+  if (box.dataset.closed === '1') return;
+  $$('.opt', box).forEach(x => { x.setAttribute('aria-pressed', String(x === o)); x.classList.remove('sel-ok', 'sel-no'); });
+  if (id === 'p1') predSel = +o.dataset.i;
+});
+$('#savePred').addEventListener('click', () => {
+  if (predSel === null) { const f = $('#fb-p1'); f.hidden = false; f.innerHTML = '<b>Elija una opción</b>No importa si no está seguro: es una predicción.'; return; }
+  R.pred = PRED[predSel];
+  const f = $('#fb-p1'); f.hidden = false;
+  f.innerHTML = `<b>Predicción guardada: «${R.pred}»</b>No le decimos todavía si acertó. Los videos 1 y 2 le darán la respuesta; al final la va a comparar.`;
+  $('.opts', $('#paso1')).dataset.closed = '1';
+  $('#savePred').disabled = true;
+  complete(1, 'Paso 2 desbloqueado: video 1');
+});
+
+/* =========================================================
+   Pistas y preguntas con dos intentos
+   ========================================================= */
+const tries = {};
+function showHint(id) { const h = $('#hint-' + id); if (h) h.hidden = false; }
+document.addEventListener('click', e => { const h = e.target.closest('[data-hint]'); if (h) showHint(h.dataset.hint); });
+
+function fb(id, cls, html) { const f = $('#fb-' + id); f.hidden = false; f.className = 'fb ' + cls; f.innerHTML = html; }
+
+/* Pregunta 2: sen x = √2/2 → {45°, 135°} */
+function checkQ2(reveal) {
+  if (state.done.has(4) && !TEACHER) return;
+  const a = num($('#q2a').value), b = num($('#q2b').value);
+  const set = [a, b].filter(x => !isNaN(x)).map(x => ((x % 360) + 360) % 360 === x ? x : x).sort((p, q) => p - q);
+  if (reveal) { R.q2 = R.q2 || '(pidió la respuesta)'; R.ayuda++; return finishQ2(false, true); }
+  if (set.length < 2) { fb('q2', 'no', '<b>Faltan datos</b>Escriba las dos soluciones, una en cada casilla.'); return; }
+  R.q2 = `${$('#q2a').value.trim()}°, ${$('#q2b').value.trim()}°`.replace(/°°/g, '°');
+  const ok = set[0] === 45 && set[1] === 135;
+  if (ok) return finishQ2(true, false);
+  tries.q2 = (tries.q2 || 0) + 1;
+  let why = 'Revise el ángulo de referencia y los cuadrantes donde el seno es positivo.';
+  if (set.includes(45) && set.includes(225)) why = '225° está en el cuadrante III, donde el seno es negativo: sen 225° = −√2/2.';
+  else if (set.includes(45) && set.includes(315)) why = '315° está en el cuadrante IV, donde el seno es negativo.';
+  else if (set.includes(45) && set.includes(45 + 360)) why = 'Las soluciones deben estar en [0°, 360°[.';
+  else if (set.includes(30) || set.includes(150)) why = 'Esos ángulos corresponden a sen x = 1/2. √2/2 ≈ 0,71 es el seno de otro ángulo especial.';
+  else if (set.includes(60) || set.includes(120)) why = 'Esos ángulos corresponden a sen x = √3/2. √2/2 ≈ 0,71 es el seno de otro ángulo especial.';
+  else if (set.includes(45)) why = '45° está bien. La otra solución está en el cuadrante II: 180° − 45°.';
+  else if (set.includes(135)) why = '135° está bien. ¿Cuál es el ángulo de referencia en el cuadrante I?';
+  if (tries.q2 >= 2) { R.ayuda++; return finishQ2(false, true, why); }
+  showHint('q2');
+  fb('q2', 'no', `<b>Todavía no</b>${why} Lea la pista e inténtelo una vez más.`);
+}
+function finishQ2(ok, shown, why = '') {
+  const sol = 'Referencia: sen 45° = √2/2, así que α = 45°. El seno es positivo en I y II: x = 45° y x = 180° − 45° = 135°. S = {45°, 135°}.';
+  fb('q2', ok ? 'ok' : 'info', ok ? `<b>✓ Correcto</b>${sol}` : `<b>Respuesta</b>${why ? why + ' ' : ''}${sol}`);
+  $$('#paso4 input').forEach(i => i.readOnly = true);
+  complete(4, 'Paso 5 desbloqueado: video 3');
+}
+
+/* Pregunta 3: justificar */
+let q3Sel = null;
+document.addEventListener('click', e => { const o = e.target.closest('.opt[data-opt="q3"]'); if (o) q3Sel = +o.dataset.i; });
+function checkQ3(reveal) {
+  if (state.done.has(6) && !TEACHER) return;
+  const box = $('#paso6 .opts');
+  const sol = 'Sofía no tiene razón. Que k sea positivo no basta: el seno es una altura en un círculo de radio 1, así que −1 ≤ sen x ≤ 1. Como 1,2 > 1, la ecuación no tiene soluciones: S = ∅.';
+  if (reveal) { R.q3 = R.q3 || '(pidió la respuesta)'; R.ayuda++; fb('q3', 'info', `<b>Respuesta</b>${sol}`); box.dataset.closed = '1'; return complete(6); }
+  if (q3Sel === null) { fb('q3', 'no', '<b>Elija una opción</b>Luego, si quiere, explique con sus palabras.'); return; }
+  const opt = $$('.opt', box)[q3Sel], txt = ['Sí: dos soluciones', 'No: no hay soluciones', 'No: una solución'][q3Sel];
+  R.q3 = txt;
+  if (q3Sel === 1) { opt.classList.add('sel-ok'); fb('q3', 'ok', `<b>✓ Correcto</b>${sol}`); box.dataset.closed = '1'; return complete(6); }
+  opt.classList.add('sel-no');
+  tries.q3 = (tries.q3 || 0) + 1;
+  const why = q3Sel === 0 ? 'El signo de k no es lo único que importa: también hay que ver si k está entre −1 y 1.' : 'La única solución en 90° corresponde a k = 1. Con 1,2 la recta y = 1,2 queda por encima de la curva.';
+  if (tries.q3 >= 2) { R.ayuda++; fb('q3', 'info', `<b>Respuesta</b>${why} ${sol}`); box.dataset.closed = '1'; return complete(6); }
+  showHint('q3'); fb('q3', 'no', `<b>Todavía no</b>${why} Lea la pista y vuelva a elegir.`);
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-check]'), r = e.target.closest('[data-reveal]');
+  const id = (c || r || {}).dataset ? (c || r).dataset.check || (c || r).dataset.reveal : null;
+  if (!id) return;
+  if (id === 'q2') checkQ2(!!r);
+  if (id === 'q3') checkQ3(!!r);
+});
+
+/* =========================================================
+   Reproductor por fragmentos: sin adelantar, con pausas para pensar
+   ========================================================= */
+const PL = {};
+function initPlayer(key, stepN) {
+  const V = VIDEOS[key], v = $('#vid-' + key);
+  const P = PL[key] = {fi:0, max:0, lockAt:V.frags[0].end, waiting:false, raf:null, shown:-1, spoken:-1,
+                       holding:false, tries:0, done:false, ayuda:false, pendingCheck:false, pendingFinish:false};
+  const fragsBox = $('#frags-' + key), stopTag = $('#stop-' + key);
+  function renderFrags() {
+    fragsBox.innerHTML = V.frags.map((f, i) => {
+      const c = i < P.fi || P.done ? 'done' : i === P.fi ? 'now' : '';
+      return `<span class="frag ${c}">${c === 'done' ? '✓' : i === P.fi ? '▶' : '🔒'} ${i + 1}. ${esc(f.name)}</span>`;
+    }).join('');
+  }
+  const fragStart = () => P.fi === 0 ? 0 : V.frags[P.fi - 1].end;
+  const cueAt = t => { let k = -1; V.cues.forEach((c, i) => { if (t >= c[0] - 0.02) k = i; }); return k; };
+  const limit = () => TEACHER ? V.dur : P.lockAt;
+  function bar() {
+    const d = V.dur;
+    $('#seen-' + key).style.width = Math.min(100, P.max / d * 100) + '%';
+    $('#cur-' + key).style.width = Math.min(100, v.currentTime / d * 100) + '%';
+    $('#time-' + key).textContent = `${mmss(v.currentTime)} / ${mmss(d)}`;
+  }
+  function showCue(k) {
+    if (k < 0 || k === P.shown) return;
+    P.shown = k;
+    $('#cap-' + key).innerHTML = `<span class="kicker">Fragmento ${P.fi + 1} de ${V.frags.length}</span><span>${esc(V.cues[k][1])}</span>`;
+  }
+  /* la voz manda: si la frase no ha terminado al llegar a la siguiente, el video espera */
+  function sayCue(k) {
+    P.spoken = k;
+    speak(V.cues[k][2] || V.cues[k][1], () => {
+      if (P.spoken !== k) return;
+      if (P.holding) {
+        P.holding = false; stopTag.hidden = true;
+        if (P.pendingCheck) { P.pendingCheck = false; checkpoint(); }
+        else if (P.pendingFinish) { P.pendingFinish = false; finish(); }
+        else v.play().catch(() => {});
+      }
+    });
+  }
+  function hold(at, label) {
+    P.holding = true; v.pause(); if (at !== null) v.currentTime = at;
+    stopTag.textContent = label; stopTag.hidden = false;
+  }
+  function loop() {
+    if (v.paused) { P.raf = null; return; }
+    const t = v.currentTime, L = limit(), k = cueAt(t);
+    // fin de fragmento: la voz termina su frase antes de la pregunta
+    if (t >= L - 0.06 && P.fi < V.frags.length - 1 && !TEACHER) {
+      P.max = Math.max(P.max, L); bar();
+      if (P.waiting) { v.pause(); v.currentTime = Math.max(0, L - 0.06); P.raf = null; return; }
+      if (VOZ.on && VOZ.speaking) { P.pendingCheck = true; hold(Math.max(0, L - 0.06), '🔊 Terminando la explicación…'); P.raf = null; return; }
+      v.pause(); v.currentTime = Math.max(0, L - 0.06); checkpoint(); P.raf = null; return;
+    }
+    // el video llegó a la frase siguiente pero la anterior aún suena: esperar sin cortarla
+    if (VOZ.on && VOZ.speaking && k > P.spoken) {
+      hold(Math.max(0, V.cues[k][0] - 0.06), '🔊 Escuchando…'); P.raf = null; return;
+    }
+    showCue(k);
+    if (VOZ.on && k > P.spoken) sayCue(k);
+    P.max = Math.max(P.max, Math.min(t, L));
+    bar();
+    P.raf = requestAnimationFrame(loop);
+  }
+  function setBtn() { $('#pbtn-' + key).innerHTML = (v.paused && !P.holding) ? (P.done ? '↺ Ver otra vez' : '▶ Reproducir') : '❚❚ Pausar'; }
+  v.addEventListener('play', () => { $('#veil-' + key).hidden = true; if (!P.holding) stopTag.hidden = true; setBtn(); if (!P.raf) P.raf = requestAnimationFrame(loop); });
+  v.addEventListener('pause', setBtn);
+  v.addEventListener('ended', () => {
+    P.max = V.dur; bar();
+    if (P.done) { setBtn(); return; }
+    if (VOZ.on && VOZ.speaking) { P.pendingFinish = true; P.holding = true; stopTag.textContent = '🔊 Terminando la explicación…'; stopTag.hidden = false; setBtn(); }
+    else finish();
+  });
+  /* bloqueo de adelantar: cualquier salto más allá de lo visto vuelve atrás */
+  v.addEventListener('seeking', () => {
+    if (!TEACHER) {
+      const lim = Math.min(P.max, P.lockAt);
+      if (v.currentTime > lim + 0.3) { v.currentTime = Math.max(0, lim - 0.06); $('#msg-' + key).textContent = 'No se puede adelantar: termine primero el fragmento.'; }
+    }
+  });
+  v.addEventListener('contextmenu', e => e.preventDefault());
+  v.addEventListener('error', () => { $('#veil-' + key).innerHTML = `<b>No se encontró el video.</b><span class="small">Compruebe que el archivo <span class="mono">${V.src}</span> esté en la misma carpeta que esta página.</span>`; $('#veil-' + key).hidden = false; });
+  /* el estudiante pausa o salta: se calla la voz y, al seguir, se repite la frase actual completa */
+  function interrupt() { hush(); P.holding = false; P.pendingCheck = false; stopTag.hidden = true; P.spoken = cueAt(v.currentTime) - 1; P.shown = -1; }
+  function jump(t) {
+    interrupt(); v.currentTime = t;
+    const k = cueAt(t); if (k >= 0 && t - V.cues[k][0] > 0.6 && VOZ.on) { v.currentTime = V.cues[k][0]; }
+    P.spoken = cueAt(v.currentTime) - 1; bar(); showCue(cueAt(v.currentTime));
+  }
+  function play() {
+    if (P.done && v.ended) { v.currentTime = 0; interrupt(); }
+    if (P.pendingFinish) return;
+    v.play().catch(() => toast('El navegador no pudo reproducir el video.'));
+  }
+  function checkpoint() {
+    const f = V.frags[P.fi], q = f.q; P.waiting = true; P.tries = 0;
+    stopTag.textContent = '⏸ Pausa para pensar'; stopTag.hidden = false;
+    $('#msg-' + key).textContent = `Fin del fragmento ${P.fi + 1}. Responda para abrir el fragmento ${P.fi + 2}.`;
+    const id = `${key}-${P.fi}`;
+    let inner = '';
+    if (q.type === 'mc') inner = mcOpts(id, q.opts);
+    else inner = `<div class="inrow"><label for="in-${id}">Número de soluciones:</label><input type="text" id="in-${id}" inputmode="numeric" autocomplete="off"></div>`;
+    $('#cp-' + key).innerHTML = `<div class="checkpoint unlock-anim"><span class="kicker">🔒 Pregunta de control · fragmento ${P.fi + 1}</span>
+      <div class="q" style="margin:0;background:transparent;padding:0"><div class="enun">${esc(q.text)}</div>${inner}
+      ${qBtns(id)}<div class="pista" id="hint-${id}" hidden><b>Pista</b>${esc(q.hint)}</div><div class="fb" id="fb-${id}" hidden></div></div></div>`;
+    let sel = null;
+    $$('.opt', $('#cp-' + key)).forEach(o => o.addEventListener('click', () => { sel = +o.dataset.i; }));
+    $(`[data-check="${id}"]`).addEventListener('click', () => {
+      if (!P.waiting) return;
+      let ok, msg;
+      if (q.type === 'mc') {
+        if (sel === null) { fb(id, 'no', '<b>Elija una opción</b>'); return; }
+        ok = q.opts[sel][1]; msg = q.opts[sel][2];
+        $$('.opt', $('#cp-' + key)).forEach((o, i) => o.classList.toggle(ok ? 'sel-ok' : 'sel-no', i === sel));
+      } else {
+        const val = num($('#in-' + id).value);
+        if (isNaN(val)) { fb(id, 'no', '<b>Escriba un número</b>'); return; }
+        ok = val === q.answer; msg = ok ? q.fb.ok : (q.fb[val] || q.fb.other);
+      }
+      if (ok) return unlockNext(id, `<b>✓ Correcto</b>${esc(msg)}`, 'ok');
+      P.tries++;
+      if (P.tries >= 2) {
+        P.ayuda = true;
+        const right = q.type === 'mc' ? q.opts.find(o => o[1]) : null;
+        return unlockNext(id, `<b>Respuesta</b>${esc(msg)} ${q.type === 'mc' ? 'La respuesta es: «' + esc(right[0]) + '». ' + esc(right[2]) : esc(q.fb.ok)}`, 'info');
+      }
+      showHint(id);
+      fb(id, 'no', `<b>Todavía no</b>${esc(msg)} Lea la pista e inténtelo otra vez.`);
+    });
+  }
+  function unlockNext(id, html, cls) {
+    fb(id, cls, html + '<div class="btn-row" style="margin-top:10px"><button class="btn red sm" type="button" data-cont>▶ Continuar con el fragmento ' + (P.fi + 2) + '</button></div>');
+    $$('.opts', $('#cp-' + key)).forEach(b => b.dataset.closed = '1');
+    P.waiting = false; P.fi++; P.lockAt = V.frags[P.fi].end; renderFrags();
+    stopTag.hidden = true;
+    $('#msg-' + key).textContent = `Fragmento ${P.fi + 1} abierto.`;
+    $('[data-cont]', $('#cp-' + key)).addEventListener('click', () => { $('#cp-' + key).innerHTML = ''; play(); });
+  }
+  function finish() {
+    P.done = true; P.holding = false; stopTag.hidden = true; P.fi = V.frags.length - 1; renderFrags(); setBtn();
+    let extra = '';
+    if (key === 'v1' && R.pred) extra = ` Usted predijo «${esc(R.pred)}» para sen x = 1/2: el video mostró dos ángulos, 30° y 150°.`;
+    $('#cp-' + key).innerHTML = `<div class="fb ok"><b>✓ Video completo</b>Puede verlo otra vez cuando quiera.${extra}</div>`;
+    $('#msg-' + key).textContent = 'Video completo: ahora puede moverse libremente por él.';
+    complete(stepN);
+  }
+  $(`[data-vplay="${key}"]`, $('#veil-' + key)).addEventListener('click', play);
+  $('#pbtn-' + key).addEventListener('click', () => { if (v.paused && !P.holding) play(); else { v.pause(); jump(v.currentTime); setBtn(); } });
+  $(`[data-vback="${key}"]`).addEventListener('click', () => { const was = !v.paused || P.holding; jump(Math.max(0, v.currentTime - 5)); if (was) play(); });
+  $(`[data-vfrag="${key}"]`).addEventListener('click', () => { jump(P.waiting ? fragStart() : fragStart()); play(); });
+  $(`[data-vfull="${key}"]`).addEventListener('click', () => { const b = v.closest('.vbox'); if (document.fullscreenElement) document.exitFullscreen(); else if (b.requestFullscreen) b.requestFullscreen().catch(() => toast('Pantalla completa no disponible aquí.')); });
+  renderFrags(); bar();
+  P.interrupt = interrupt;
+  return P;
+}
+initPlayer('v1', 2); initPlayer('v2', 3); initPlayer('v3', 5);
+if (!('speechSynthesis' in window)) $$('[data-voice]').forEach(x => { x.checked = false; x.disabled = true; });
+
+/* voz: un solo ajuste para toda la página */
+document.addEventListener('change', e => {
+  if (e.target.matches('[data-voice]')) {
+    if (e.target.checked && !('speechSynthesis' in window)) { e.target.checked = false; toast('Este navegador no tiene narración por voz; los subtítulos siguen disponibles.'); return; }
+    VOZ.on = e.target.checked; $$('[data-voice]').forEach(x => x.checked = VOZ.on); if (!VOZ.on) { hush(); Object.values(PL).forEach(P => P.interrupt()); } else Object.values(PL).forEach(P => P.interrupt());
+  }
+  if (e.target.matches('[data-rate]')) { VOZ.rate = parseFloat(e.target.value); $$('[data-rate]').forEach(x => x.value = e.target.value); }
+});
+
+/* =========================================================
+   Paso 7: práctica con candado
+   ========================================================= */
+const PS = PRACTICA.map(() => ({tries:0, done:false, first:null, sel:null}));
+$('#practica').innerHTML = PRACTICA.map((it, i) => `
+  <div class="qitem" data-pi="${i}">
+    <div class="enun" style="font-weight:700;color:var(--navy);font-size:18.5px">${i + 1}. ${it.text}</div>
+    ${mcOpts('pr' + i, it.opts)}
+    <div class="btn-row"><button class="btn sm" type="button" data-pcheck="${i}">Comprobar</button><button class="btn ghost sm" type="button" data-hint="pr${i}">Ver una pista</button></div>
+    <div class="pista" id="hint-pr${i}" hidden><b>Pista</b>${it.hint}</div>
+    <div class="fb" id="fb-pr${i}" hidden></div>
+  </div>`).join('');
+$('#practica').addEventListener('click', e => {
+  const o = e.target.closest('.opt'); if (o) { const i = +o.closest('[data-pi]').dataset.pi; if (!PS[i].done) PS[i].sel = +o.dataset.i; return; }
+  const c = e.target.closest('[data-pcheck]'); if (!c) return;
+  const i = +c.dataset.pcheck, S = PS[i], it = PRACTICA[i];
+  if (S.done) return;
+  if (S.sel === null) { fb('pr' + i, 'no', '<b>Elija una opción</b>'); return; }
+  const [txt, ok, why] = it.opts[S.sel], btns = $$(`[data-pi="${i}"] .opt`);
+  btns.forEach((b, k) => b.classList.remove('sel-ok', 'sel-no'));
+  btns[S.sel].classList.add(ok ? 'sel-ok' : 'sel-no');
+  if (S.first === null) S.first = ok;
+  if (ok) { S.done = true; fb('pr' + i, 'ok', `<b>✓ Correcto</b>${why}`); }
+  else {
+    S.tries++;
+    if (S.tries >= 2) {
+      S.done = true; R.ayuda++;
+      const right = it.opts.find(x => x[1]);
+      fb('pr' + i, 'info', `<b>Respuesta</b>${why} La respuesta correcta es «${right[0]}»: ${right[2]}`);
+      btns[it.opts.indexOf(right)].classList.add('sel-ok');
+    } else { showHint('pr' + i); fb('pr' + i, 'no', `<b>Todavía no</b>${why} Lea la pista e inténtelo otra vez.`); }
+  }
+  if (S.done) $(`[data-pi="${i}"] .opts`).dataset.closed = '1';
+  const n = PS.filter(s => s.done).length, first = PS.filter(s => s.first === true).length;
+  $('#pScore').textContent = `${n} de 4 resueltos · ${first} al primer intento`;
+  if (n === PRACTICA.length) { R.practica = PS.map(s => s.first); complete(7, 'Paso 8 desbloqueado: su infografía'); }
+});
+
+/* =========================================================
+   Paso 8: infografía de síntesis (con las respuestas del estudiante)
+   ========================================================= */
+function circleSVG() {
+  const P = d => { const r = d * Math.PI / 180; return [100 + 70 * Math.cos(r), 100 - 70 * Math.sin(r)]; };
+  const [a1, b1] = P(30), [a2, b2] = P(150);
+  return `<svg viewBox="-12 0 224 200" width="160" height="150" role="img" aria-label="Círculo trigonométrico con la recta y = 1/2 que lo corta en 30° y 150°">
+    <line x1="10" y1="100" x2="190" y2="100" stroke="#5B6472"/><line x1="100" y1="10" x2="100" y2="190" stroke="#5B6472"/>
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#1C2B4A" stroke-width="3"/>
+    <line x1="10" y1="${b1}" x2="190" y2="${b1}" stroke="#B3282D" stroke-width="2" stroke-dasharray="6 5"/>
+    <line x1="${a1}" y1="100" x2="${a1}" y2="${b1}" stroke="#B3282D" stroke-width="4"/><line x1="${a2}" y1="100" x2="${a2}" y2="${b2}" stroke="#B3282D" stroke-width="4"/>
+    <circle cx="${a1}" cy="${b1}" r="6" fill="#B3282D"/><circle cx="${a2}" cy="${b2}" r="6" fill="#B3282D"/>
+    <text x="${a1 + 6}" y="${b1 - 8}" font-size="14" font-weight="700" fill="#1C2B4A">30°</text><text x="${a2 - 4}" y="${b2 - 8}" text-anchor="end" font-size="14" font-weight="700" fill="#1C2B4A">150°</text></svg>`;
+}
+$('#genInfo').addEventListener('click', () => {
+  const f = x => x ? esc(x) : '(sin responder)';
+  const pr = R.practica.length ? R.practica.filter(Boolean).length : 0;
+  $('#infoBox').innerHTML = `<div class="info">
+    <div class="info-head"><span class="kicker" style="color:#FF9EA1;margin-bottom:2px">Infografía de síntesis</span><h3>Ecuaciones sen x = k en [0°, 360°[</h3><p>Lo que aprendí en esta secuencia</p></div>
+    <div class="info-body">
+      <div class="ic-card"><span class="n">1</span><div><h4>El seno es una altura</h4><p>En el círculo trigonométrico, sen θ es la coordenada y del punto P. Por eso <b>−1 ≤ sen x ≤ 1</b>.</p></div></div>
+      <div class="ic-card"><span class="n">2</span><div><h4>Contar con la recta y = k</h4><table class="mini-t"><tr><td>k &gt; 1 o k &lt; −1</td><td><b>0 soluciones</b></td></tr><tr><td>k = 1 o k = −1</td><td><b>1</b> (90° o 270°)</td></tr><tr><td>−1 &lt; k &lt; 1</td><td><b>2 soluciones</b></td></tr></table></div></div>
+      <div class="ic-card"><span class="n">3</span><div><h4>Hallarlas en dos pasos</h4><p>Ángulo de referencia α con |k|. Luego, el signo: si k &gt; 0, <b>α y 180° − α</b>; si k &lt; 0, <b>180° + α y 360° − α</b>.</p></div></div>
+      <div class="ic-card" style="grid-template-columns:1fr auto;align-items:center"><div><h4>Ejemplo clave</h4><p>sen x = 1/2 → S = {30°, 150°}<br>sen x = −√3/2 → S = {240°, 300°}<br><span class="small muted">360° no pertenece a [0°, 360°[.</span></p></div>${circleSVG()}</div>
+      <div class="mine"><h4 style="margin-bottom:6px">Lo que usted respondió</h4>
+        <table><thead><tr><th>Pregunta</th><th>Usted</th><th>Resultado correcto</th></tr></thead><tbody>
+          <tr><td>Predicción: ¿cuántas soluciones tiene sen x = 1/2?</td><td>${f(R.pred)}</td><td>Dos: 30° y 150°</td></tr>
+          <tr><td>Calcule: sen x = √2/2</td><td>${f(R.q2)}</td><td>45° y 135°</td></tr>
+          <tr><td>¿Tiene razón Sofía con sen x = 1,2?</td><td>${f(R.q3)}</td><td>No: no hay soluciones</td></tr>
+          <tr><td>Práctica</td><td>${R.practica.length ? pr + ' de 4 al primer intento' : '(sin terminar)'}</td><td>4 ítems</td></tr>
+        </tbody></table>
+        <p class="small" style="margin:8px 0 0">${R.pred === 'Dos' ? '✓ Su predicción inicial fue correcta.' : R.pred ? 'Su predicción inicial cambió: ahora sabe por qué son dos.' : ''}</p></div>
+    </div></div>`;
+  $('#printInfo').hidden = false;
+  complete(8);
+});
+$('#printInfo').addEventListener('click', () => window.print());
+
+/* =========================================================
+   Vista de la persona tutora: abre todo (para revisar o proyectar)
+   ========================================================= */
+$('#teacherMode').addEventListener('click', e => {
+  TEACHER = !TEACHER; e.target.setAttribute('aria-pressed', String(TEACHER));
+  e.target.textContent = TEACHER ? 'Volver a la vista del estudiante (con candados)' : 'Vista de la persona tutora: abrir todos los pasos';
+  applyLocks(); toast(TEACHER ? 'Vista de la persona tutora: todo abierto, videos sin bloqueo' : 'Candados activados');
+});
+
+applyLocks();
+</script>
+</body>
+</html>
