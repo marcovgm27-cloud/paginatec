@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Así construí el proyecto final · Guía breve · MATEM</title>
+<style>
+:root{--navy:#1C2B4A;--navy-2:#2A3D63;--red:#B3282D;--bg:#F2F3F5;--line:#D9DCE1;--soft:#F7F8FA;--text:#1F2633;--muted:#5B6472;--ok:#1E7B3A;--ok-bg:#E8F3EC;--yel:#FFF3CD;
+--fb:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--fd:"Arial Narrow","Roboto Condensed","Segoe UI",Arial,sans-serif;--fm:Consolas,"SFMono-Regular",Menlo,monospace}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;color:var(--text);font-family:var(--fb);font-size:20px;line-height:1.55;background:var(--bg);background-image:radial-gradient(circle,#D9DCE1 1.6px,transparent 1.8px);background-size:26px 26px}
+h1,h2,h3{color:var(--navy);margin:0;line-height:1.12}
+p{margin:0 0 14px}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+.top .in{max-width:1180px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:14px;min-height:60px}
+.brand{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.brand span{color:#FF9EA1}
+.dots{display:flex;gap:6px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+@media(max-width:640px){.brand{font-size:15px}.brand .x{display:none}#all{display:none}.num{width:56px;height:56px;font-size:30px}}
+.dots button{flex:none;min-width:44px;height:44px;border-radius:12px;border:2px solid #4A5D85;background:transparent;color:#DCE3F0;font-weight:800;cursor:pointer;padding:0 10px}
+.dots button[aria-current="step"]{background:var(--red);border-color:var(--red);color:#fff}
+.dots button.seen{border-color:#8FA0C2;color:#fff}
+.bar{height:5px;background:var(--navy-2)}.bar span{display:block;height:100%;width:0;background:var(--red);transition:width .35s}
+main{max-width:1180px;margin:0 auto;padding:26px 18px 120px}
+.slide{background:#fff;border-radius:24px;padding:clamp(20px,3.6vw,40px);min-height:62vh}
+.k{display:block;font-family:var(--fm);font-size:15px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.t{font-family:var(--fd);font-weight:800;text-transform:uppercase;font-size:clamp(30px,4.6vw,52px);margin-bottom:18px}
+.t .r{color:var(--red)}
+.head{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.num{width:76px;height:76px;border-radius:20px;background:var(--navy);color:#fff;font-family:var(--fd);font-weight:800;font-size:40px;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;gap:18px}
+@media(min-width:860px){.g2{grid-template-columns:1fr 1fr}}
+.grid>*{min-width:0}
+.box{background:var(--soft);border-radius:18px;padding:16px 20px}
+.box h3{font-family:var(--fd);text-transform:uppercase;font-size:22px;margin-bottom:8px}
+.did{border-left:7px solid var(--navy)}
+.you{border-left:7px solid var(--red);background:#FBF3F3}
+.ok{border-left:7px solid var(--ok);background:var(--ok-bg)}
+ul{margin:0;padding-left:1.2em}li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.chip{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:17px;font-weight:600;color:var(--navy)}
+.chip.d{background:var(--navy);border-color:var(--navy);color:#fff}.chip.r{background:var(--red);border-color:var(--red);color:#fff}
+.sw{display:flex;flex-wrap:wrap;gap:10px}.sw span{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:15px}.sw i{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:17px;background:#fff}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}thead th{background:var(--navy);color:#fff}
+.scroll{overflow-x:auto}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:50px;border:0;border-radius:14px;padding:10px 22px;background:var(--navy);color:#fff;font-weight:700;font-size:18px;cursor:pointer;text-decoration:none}
+.btn.red{background:var(--red)}.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.prompt{background:#fff;border:2px solid var(--line);border-left:8px solid var(--red);border-radius:16px;padding:16px 18px;font-family:var(--fm);font-size:14.5px;line-height:1.55;white-space:pre-wrap;max-height:58vh;overflow:auto;color:var(--navy);margin:0}
+.hint{font-size:16px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.toast.show{opacity:1}
+body.all .slide{min-height:0;margin-bottom:22px}
+@media print{.top,.nav,.toast{display:none!important}body{background:#fff;font-size:12pt}.slide{min-height:0;break-inside:auto;border:1px solid var(--line);margin-bottom:12px}.prompt{max-height:none;overflow:visible;font-size:9pt}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><span class="brand">MATEM<span>·</span><b class="x" style="font-weight:800">Así lo construí</b></span><nav class="dots" id="dots" aria-label="Pasos"></nav><button class="btn ghost" type="button" id="all" style="min-height:44px;padding:6px 14px;font-size:15px">Ver todo</button></div><div class="bar"><span id="bar"></span></div></header>
+<main id="main">
+
+<section class="slide" data-s="0">
+  <span class="k">MATEM-DOCENTES 2026 · Momento 5 · Proyecto final</span>
+  <h1 class="t">Así construí <span class="r">la página modelo</span></h1>
+  <p style="font-size:23px;max-width:860px">Siete pasos de lo que hice, en orden, para obtener la página «Ecuaciones sen x = k». Al final está <b>el prompt completo</b> que genera el material.</p>
+  <div class="chips"><span class="chip d">7 pasos</span><span class="chip r">Prompt completo al final</span><span class="chip">Use ← y → para avanzar</span></div>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="box did"><h3>El resultado</h3><ul><li>Una página HTML con 8 pasos y candados.</li><li>3 preguntas socráticas, 3 videos por fragmentos, práctica e infografía.</li><li>Ficha del proyecto al final.</li></ul></div>
+    <div class="box"><h3>Véalo funcionando</h3><p style="margin:0 0 12px"><a href="https://marcovgm27-cloud.github.io/paginatec/matem-proyecto-final/" target="_blank" rel="noopener">marcovgm27-cloud.github.io/paginatec/matem-proyecto-final</a></p><a class="btn red" href="https://marcovgm27-cloud.github.io/paginatec/matem-proyecto-final/" target="_blank" rel="noopener">Abrir el modelo</a></div>
+  </div>
+</section>
+
+<section class="slide" data-s="1">
+  <div class="head"><span class="num">1</span><div><span class="k">Lo que se pide</span><h2 class="t">Leí la guía del Entregable 5</h2></div></div>
+  <div class="grid g2">
+    <div class="box did"><h3>Qué hice</h3><ul><li>Anoté los tres componentes obligatorios: <b>preguntas socráticas</b> (al menos 3), <b>video</b> e <b>infografía de síntesis</b>, sobre un único aprendizaje.</li><li>Anoté lo no negociable: <b>la matemática</b>. Algo falso sin corregir ni anotar deja la nota en 69.</li><li>Anoté el formato: <span style="font-family:var(--fm)">Apellido_Nombre_E5.zip</span> con la página, el video y la ficha.</li></ul></div>
+    <div class="box you"><h3>Usted</h3><p style="margin:0">Abra la Guía y la rúbrica del Entregable 5 en el aula virtual y marque los tres componentes.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-s="2">
+  <div class="head"><span class="num">2</span><div><span class="k">Un solo aprendizaje</span><h2 class="t">Elegí el aprendizaje del programa</h2></div></div>
+  <div class="grid g2">
+    <div class="box did"><h3>Qué hice</h3><p>Tomé del programa de MATEM-Precálculo: <b>6. Trigonometría</b>, b) círculo trigonométrico y f) ecuaciones trigonométricas.</p><p style="margin:0">Lo escribí en una línea: <b>«Resolver ecuaciones de la forma sen x = k en [0°, 360°[ y justificar cuántas soluciones tienen»</b>.</p></div>
+    <div class="box you"><h3>Usted</h3><p style="margin:0">Use el tema de su video del Entregable 4. Escriba qué logra el estudiante con un verbo que se observe: resolver, justificar, calcular.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-s="3">
+  <div class="head"><span class="num">3</span><div><span class="k">El diseño</span><h2 class="t">Fijé una ficha técnica de estilo</h2></div></div>
+  <div class="grid g2">
+    <div class="box did"><h3>Qué hice</h3><ul><li>Tomé como referencia la estructura de otra página que me gusta (el taller «GeoGebra + IA»): barra superior, chips, tarjetas, pasos numerados.</li><li>Cambié los colores por los de MATEM y fijé letras y botones.</li></ul>
+      <div class="sw" style="margin-top:10px"><span><i style="background:#1C2B4A"></i>#1C2B4A</span><span><i style="background:#B3282D"></i>#B3282D</span><span><i style="background:#F2F3F5"></i>#F2F3F5</span><span><i style="background:#D9DCE1"></i>#D9DCE1</span><span><i style="background:#1E7B3A"></i>#1E7B3A</span><span><i style="background:#FFF3CD"></i>#FFF3CD</span></div></div>
+    <div class="box you"><h3>Usted</h3><p style="margin:0">Use esta paleta o pida a la IA que extraiga la ficha de estilo de una página que le guste. Así todas las secciones se ven iguales.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-s="4">
+  <div class="head"><span class="num">4</span><div><span class="k">Sin IA</span><h2 class="t">Resolví primero las preguntas</h2></div></div>
+  <div class="scroll"><table><thead><tr><th>Pregunta</th><th>Respuesta</th><th>Pista</th></tr></thead><tbody>
+    <tr><td><b>1. Predicción:</b> ¿cuántos ángulos de [0°, 360°[ cumplen sen x = 1/2?</td><td>Dos: 30° y 150°</td><td>¿Cuántas veces pasa un punto que gira por la altura 1/2?</td></tr>
+    <tr><td><b>2. Cálculo:</b> resuelva sen x = √2/2</td><td>45° y 135°</td><td>Ángulo especial del cuadrante I y el otro cuadrante con seno positivo</td></tr>
+    <tr><td><b>3. Justificación:</b> ¿sen x = 1,2 tiene dos soluciones?</td><td>No: −1 ≤ sen x ≤ 1</td><td>¿Entre qué valores se mueve la altura?</td></tr>
+  </tbody></table></div>
+  <div class="box you" style="margin-top:16px"><h3>Usted</h3><p style="margin:0">Escriba sus tres preguntas con la respuesta, la pista y el error que espera. <b>La IA no inventa preguntas ni respuestas: usted se las da.</b></p></div>
+</section>
+
+<section class="slide" data-s="5">
+  <div class="head"><span class="num">5</span><div><span class="k">Demostraciones visuales</span><h2 class="t">Hice tres videos cortos y marqué sus pausas</h2></div></div>
+  <div class="scroll"><table><thead><tr><th>Video (40 a 50 s)</th><th>Se detiene en</th><th>Pregunta de control</th></tr></thead><tbody>
+    <tr><td>1 · El seno en el círculo</td><td>0:14 y 0:30</td><td>¿Qué representa sen θ? · ¿Entre qué valores está?</td></tr>
+    <tr><td>2 · ¿Cuántas soluciones tiene sen x = k?</td><td>0:14 y 0:30</td><td>Soluciones con k = 0,5 · con k = 1,3</td></tr>
+    <tr><td>3 · Ejemplo: sen x = −√3/2</td><td>0:16 y 0:28</td><td>Ángulo de referencia · cuadrantes con seno negativo</td></tr>
+  </tbody></table></div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="box did"><h3>Qué hice</h3><ul><li>Animé el círculo, la recta y = k y la gráfica del seno; cada idea termina en un cuadro quieto.</li><li>Escribí los subtítulos con su segundo exacto.</li><li>Guardé los videos en la misma carpeta que la página.</li></ul></div>
+    <div class="box you"><h3>Usted</h3><p style="margin:0">Use su video del Entregable 4. Mírelo con reloj y anote dónde <b>termina una idea</b>: ahí va una pausa con una pregunta.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-s="6">
+  <div class="head"><span class="num">6</span><div><span class="k">La IA escribe el código</span><h2 class="t">Pedí la página con un prompt de Seis R</h2></div></div>
+  <div class="grid g2">
+    <div class="box did"><h3>Qué hice</h3><ul><li>Pegué en el prompt <b>todo</b> lo de los pasos 2 a 5: aprendizaje, estilo, preguntas, pausas y subtítulos.</li><li>Pedí las mejoras: candados, video que no deja adelantar, práctica, infografía con las respuestas y ficha al final.</li><li>Pedí el archivo completo en un solo bloque y lo guardé como <span style="font-family:var(--fm)">index.html</span>.</li></ul></div>
+    <div class="box"><h3>Las seis R</h3><ul><li><b>Rol</b>: diseñador didáctico y programador.</li><li><b>Resultado</b>: un HTML autocontenido, 8 pasos.</li><li><b>Receptor</b>: estudiantes de MATEM.</li><li><b>Restricciones</b>: pista antes que respuesta, candados, estilo.</li><li><b>Recursos</b>: sus preguntas y sus videos.</li><li><b>Revisión</b>: lo que la IA debe comprobar.</li></ul></div>
+  </div>
+  <p class="hint" style="margin-top:14px">El prompt completo está en el último paso.</p>
+</section>
+
+<section class="slide" data-s="7">
+  <div class="head"><span class="num">7</span><div><span class="k">La parte que es suya</span><h2 class="t">Probé, corregí y verifiqué</h2></div></div>
+  <div class="grid g2">
+    <div class="box did"><h3>Qué probé como estudiante</h3><ul><li>Respuestas vacías, incorrectas dos veces y correctas.</li><li>Arrastrar el video hacia adelante: vuelve atrás.</li><li>Pasos bloqueados, celular y sin Internet.</li></ul></div>
+    <div class="box ok"><h3>Qué corregí</h3><ul><li><b>La voz se cortaba</b> al pasar a la frase siguiente: pedí que el video espere a que termine cada frase.</li><li>Rótulos encimados en un video.</li><li>Pedí <b>un cambio a la vez</b>.</li></ul></div>
+  </div>
+  <div class="box you" style="margin-top:16px"><h3>Al final</h3><p style="margin:0">Resolví a mano cada pregunta y la comparé con la página. Completé la ficha (qué probé, autoevaluación, reflexión ética, declaración de IA), armé el <span style="font-family:var(--fm)">.zip</span> y lo abrí descomprimido antes de entregarlo.</p></div>
+</section>
+
+<section class="slide" data-s="8">
+  <span class="k">Para generar el material</span>
+  <h2 class="t">El prompt <span class="r">completo</span></h2>
+  <div class="nav" style="margin:0 0 12px;justify-content:flex-start"><button class="btn red" type="button" id="copy">Copiar el prompt</button><span class="hint" style="align-self:center">Péguelo en un chat nuevo. Los tres videos van en la misma carpeta que el index.html.</span></div>
+  <pre class="prompt" id="prompt"></pre>
+</section>
+
+<div class="nav" id="nav"><button class="btn ghost" type="button" id="prev">← Anterior</button><button class="btn" type="button" id="next">Siguiente →</button></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+const PROMPT = "[ROL]\nActúe como diseñador didáctico de MATEM-Precálculo (Universidad Nacional, Costa Rica) y como programador de páginas web educativas.\n\n[RESULTADO]\nUn solo archivo HTML (index.html), con su CSS y su JavaScript dentro del mismo archivo, sin bibliotecas ni fuentes externas, que funcione sin Internet al abrirlo con doble clic y se lea bien en un teléfono. Los tres videos están en la misma carpeta. Entregue el código completo en un solo bloque.\nLa página es una secuencia de 8 pasos con candados, en este orden:\n1. Encabezado: título «Ecuaciones sen x = k · ¿Cuántas soluciones y cuáles?», chips (unos 35 minutos, 3 videos cortos por fragmentos, 3 preguntas socráticas, práctica con candado, funciona sin Internet, no pide ni guarda datos), una tarjeta «Ficha técnica» (curso, contenido, aprendizaje, grupo, conocimientos previos, componentes, requisitos) y una tarjeta «Cómo funciona esta página».\n2. Una ruta visual de los 8 pasos (abierto, bloqueado 🔒 o listo ✓) y una barra de progreso en la barra superior.\n3. Paso 1 · Pregunta socrática 1 (predicción).\n4. Paso 2 · Video 1 por fragmentos.\n5. Paso 3 · Video 2 por fragmentos.\n6. Paso 4 · Pregunta socrática 2 (cálculo a mano).\n7. Paso 5 · Video 3 por fragmentos.\n8. Paso 6 · Pregunta socrática 3 (justificación).\n9. Paso 7 · Práctica con candado (4 ítems).\n10. Paso 8 · Infografía de síntesis generada con las respuestas del estudiante, con botón para imprimirla sola.\n11. Una sección plegable «Ficha del proyecto (para la persona tutora)» con las cinco partes de la ficha del Entregable 5 y un pie con la declaración de uso de IA.\n\n[RECEPTOR]\nEstudiantes de Ciclo Diversificado, de 15 a 17 años, inscritos en MATEM-Precálculo. Trato de usted, español de Costa Rica.\n\n[RESTRICCIONES]\nPedagógicas\n- Un único aprendizaje: resolver ecuaciones de la forma sen x = k en [0°, 360°[ y justificar cuántas soluciones tienen.\n- Cada pregunta muestra primero el enunciado y el espacio para responder. La pista aparece solo con «Ver una pista» o tras el primer error; la respuesta, solo con «Ver la respuesta» o tras el segundo error. La retroalimentación explica el error; nunca dice solo «incorrecto».\n- La predicción del paso 1 no se califica: se guarda y se compara en la infografía.\n- No agregue preguntas, respuestas, pistas ni datos que no estén en [RECURSOS].\nCandados\n- Cada paso muestra un recuadro «Paso bloqueado» y oculta su contenido hasta completar el anterior. Al completar un paso, el siguiente se abre y la página se desplaza a él.\n- Al pie, un botón «Vista de la persona tutora» abre todos los pasos y quita el bloqueo de los videos, para revisar o proyectar.\nVideos por fragmentos\n- Etiqueta video sin controles nativos (playsinline, disablepictureinpicture, controlslist=\"nodownload noplaybackrate\"), con un velo inicial con botón ▶ y un aviso claro si el archivo no carga.\n- Controles propios: reproducir/pausar, retroceder 5 s, repetir el fragmento, pantalla completa; barra de avance no interactiva con marcas en las pausas; fichas de fragmentos (▶ actual, 🔒 bloqueado, ✓ listo).\n- El video se detiene en cada pausa indicada (controle el tiempo con requestAnimationFrame, no solo con timeupdate) y muestra la pregunta de control al lado. Para continuar hay que responder (pista al primer error; respuesta al segundo) y pulsar «Continuar con el fragmento n».\n- No deja adelantar más allá de lo ya visto: en el evento seeking, si el tiempo supera lo visto, vuelve atrás. Sí deja retroceder. Al terminar el video, queda libre.\n- Subtítulos sincronizados en un recuadro azul al lado del video.\n- Narración con la voz del navegador (speechSynthesis), activada por defecto, con preferencia por voces en español latino y selector de velocidad. Lea cada subtítulo cambiando símbolos por palabras (sen → seno de, ° → grados, √ → raíz de, − → menos, 0,5 → cero coma cinco).\n- REGLA CLAVE: ninguna frase se corta. Si el video llega a la frase siguiente o al final de un fragmento mientras la voz sigue hablando, el video se queda quieto hasta que la frase termine (con un aviso «🔊 Escuchando…») y solo entonces continúa o muestra la pregunta. No llame a speechSynthesis.cancel() al cambiar de subtítulo. Si el estudiante pausa o retrocede, al seguir se repite la frase completa. Use un temporizador de respaldo por si el navegador no avisa el final de la voz.\nTécnicas y estilo\n- Los campos numéricos aceptan coma o punto decimal y el símbolo °.\n- La página no pide nombre ni guarda datos (sin localStorage); las respuestas viven solo en memoria.\n- Estilo MATEM: barra superior azul #1C2B4A, acciones en rojo #B3282D, fondo gris #F2F3F5 con puntos, líneas #D9DCE1, tarjetas blancas redondeadas, verde #1E7B3A para correcto, amarillo #FFF3CD para pistas; títulos en mayúscula condensada; texto de 18 px; botones de al menos 44 px; pasos con número grande en un cuadro azul (verde al completarse).\n- Notación de MATEM: «sen», coma decimal, intervalos como [0°, 360°[, grados con °. Fracciones como √3/2 bien presentadas.\n- Al imprimir, solo sale la infografía.\n\n[RECURSOS]\nPaso 1 · Pregunta 1 (predicción)\n- «Sin calcular, ¿cuántos ángulos x en [0°, 360°[ cumplen sen x = 1/2?» Opciones: Ninguno / Uno / Dos / Más de dos. Botón «Guardar mi predicción». Pista: «Imagine un punto que da una vuelta completa al círculo: ¿cuántas veces pasa por la altura 1/2?». Respuesta (se muestra al terminar el video 1 y en la infografía): dos, 30° y 150°.\n\nPaso 2 · video1_seno_circulo.mp4 (42 s). Indicación: «Mientras lo ve, fíjese en qué parte del dibujo representa el seno.»\n- Pausa en 0:14 · «Según el video, ¿qué representa sen θ en el círculo trigonométrico?»\n  a) La coordenada x del punto P → «Esa es la proyección horizontal, que corresponde al coseno. La línea roja es vertical.»\n  b) La altura de P, es decir, su coordenada y ✓ → «sen θ es la coordenada y de P; por eso sen 30° = 0,5.»\n  c) La longitud del arco desde 0° hasta P → «El arco mide el ángulo, no su seno.»\n  Pista: «Observe la línea roja que baja desde P: ¿es horizontal o vertical?»\n- Pausa en 0:30 · «Mientras P da una vuelta completa, ¿entre qué valores se mueve sen θ?»\n  a) Entre 0 y 1 → «Debajo del eje x la altura es negativa: en 270° vale −1.»\n  b) Entre −1 y 1 ✓ → «El radio es 1: la altura nunca pasa de 1 ni baja de −1.»\n  c) Entre 0° y 360° → «Eso describe el ángulo, no su seno.»\n  Pista: «¿Cuál fue el punto más alto de la curva? ¿Y el más bajo?»\n- Al terminar: «Usted predijo [su predicción]; el video mostró dos ángulos, 30° y 150°.»\n- Subtítulos:\n  0:00 · Este es el círculo trigonométrico: radio 1 y centro en el origen.\n  0:02 · El punto P gira desde 0° hasta formar un ángulo θ de 30°.\n  0:03,5 · La altura de P, su coordenada y, es el seno del ángulo.\n  0:06 · Cuando θ mide 30°, la altura de P es 0,5.\n  0:09,5 · Por eso, sen 30° = 0,5, es decir, un medio.\n  0:14 · Ahora P da una vuelta completa, de 0° a 360°.\n  0:16 · A la derecha, su altura va dibujando la curva del seno.\n  0:19 · En 90° la altura llega a su máximo: 1.\n  0:23 · En 270° llega a su mínimo: −1.\n  0:27,3 · El seno siempre está entre −1 y 1.\n  0:30 · Volvamos a 30°: su altura es un medio.\n  0:31 · Tracemos la recta horizontal y = 1/2.\n  0:33 · Corta el círculo en otro punto: el de 150°.\n  0:34 · En la gráfica también hay dos cruces: 30° y 150°.\n  0:36 · sen 30° = sen 150° = 1/2: dos ángulos con el mismo seno.\n\nPaso 3 · video2_cuantas_soluciones.mp4 (48 s). Indicación: «Cuente cuántas veces la recta roja corta la curva.»\n- Pausa en 0:14 · respuesta numérica: «Para k = 0,5, ¿cuántas soluciones tiene sen x = k en [0°, 360°[?» Correcta: 2 → «La recta y = 0,5 corta la curva en 30° y 150°.» Si escribe 1: «Además de 30°, ¿qué otro ángulo tiene la misma altura?» Si escribe 0: «Sí hay cruces: 0,5 está entre −1 y 1.» Pista: «Cada punto donde la recta toca la curva es una solución.»\n- Pausa en 0:30 · «¿Cuántas soluciones tiene sen x = 1,3?»\n  a) Ninguna ✓ → «sen x nunca pasa de 1.»  b) Una → «Una sola solución ocurre con k = 1, en 90°.»  c) Dos → «1,3 es positivo, pero sen x no puede valer más de 1.»\n  Pista: «¿Cuál es el valor más alto de sen x?»\n- Subtítulos:\n  0:00 · Queremos saber cuántos ángulos x cumplen sen x = k.\n  0:03,2 · Dibujamos la recta horizontal y = k; aquí, k = 0,5.\n  0:06 · Cada cruce de la recta con la gráfica es una solución.\n  0:08 · Para k = 0,5 hay dos cruces: 30° y 150°.\n  0:14 · Subamos la recta: los dos cruces se acercan.\n  0:21 · Con k = 1 se juntan en uno solo: x = 90°.\n  0:24,5 · Si k pasa de 1, la recta ya no toca la gráfica.\n  0:27 · Con k = 1,3 no hay soluciones.\n  0:30,5 · Ahora bajemos la recta hacia valores negativos.\n  0:35,5 · Con k = −1 hay una sola solución: x = 270°.\n  0:38,3 · Con k = −0,5 vuelven a ser dos: 210° y 330°.\n  0:41,5 · Resumen: cero, una o dos soluciones, según el valor de k.\n  0:43 · Ojo: 360° no se cuenta, porque el intervalo [0°, 360°[ no lo incluye.\n\nPaso 4 · Pregunta 2 (cálculo a mano)\n- «Resuelva sen x = √2/2 con x en [0°, 360°[.» Dos casillas (x₁, x₂), en grados y en cualquier orden. Correcto: 45° y 135°.\n- Pista: «√2/2 es el seno de un ángulo especial del cuadrante I. ¿En qué otro cuadrante el seno también es positivo?»\n- Retroalimentación por error: 45 y 225 → «225° está en III, donde el seno es negativo.» 45 y 315 → «315° está en IV, donde el seno es negativo.» 30 o 150 → «Corresponden a sen x = 1/2.» 60 o 120 → «Corresponden a sen x = √3/2.» Solo 45 bien → «La otra solución está en II: 180° − 45°.»\n- Explicación final: «Referencia: sen 45° = √2/2, α = 45°. El seno es positivo en I y II: x = 45° y x = 180° − 45° = 135°. S = {45°, 135°}.»\n\nPaso 5 · video3_ejemplo_resuelto.mp4 (46 s): ejemplo sen x = −√3/2. Indicación: «Intente adelantarse en su cuaderno al paso siguiente.»\n- Pausa en 0:16 · «Si sen α = √3/2 y α está en el primer cuadrante, ¿cuánto mide α?»\n  a) 30° → «sen 30° = 1/2.»  b) 60° ✓ → «sen 60° = √3/2: es el ángulo de referencia.»  c) 120° → «Está en el cuadrante II; la referencia está en el I.»\n  Pista: «Repase sen 30°, sen 45° y sen 60°.»\n- Pausa en 0:28 · «¿En qué cuadrantes el seno es negativo?»\n  a) I y II → «Ahí la altura es positiva.»  b) II y III → «En II la altura es positiva.»  c) III y IV ✓ → «Debajo del eje x la altura es negativa.»\n  Pista: «El seno es la altura: ¿dónde hay puntos con altura negativa?»\n- Subtítulos:\n  0:00 · Resolvamos sen x = −√3/2, con x en [0°, 360°[.\n  0:03,5 · −√3/2 es aproximadamente −0,87.\n  0:05,5 · Como está entre −1 y 1, hay dos soluciones.\n  0:10 · Paso 2: buscamos el ángulo de referencia con el valor positivo.\n  0:12 · sen α = √3/2, entonces α = 60°.\n  0:16 · Paso 3: ¿dónde es negativo el seno?\n  0:19 · El seno es la altura: es negativa debajo del eje x.\n  0:22 · Entonces las soluciones están en los cuadrantes III y IV.\n  0:28,5 · Paso 4: en el cuadrante III, x = 180° + 60° = 240°.\n  0:33 · En el cuadrante IV, x = 360° − 60° = 300°.\n  0:37 · La gráfica lo confirma: dos cruces, en 240° y 300°.\n  0:40 · El conjunto solución es S = {240°, 300°}.\n\nPaso 6 · Pregunta 3 (justificación)\n- «Sofía dice: “sen x = 1,2 tiene dos soluciones en [0°, 360°[, porque 1,2 es positivo y el seno es positivo en I y II”. ¿Tiene razón?»\n  a) Sí: con k positivo siempre hay dos soluciones → «El signo de k no basta: k debe estar entre −1 y 1.»\n  b) No: −1 ≤ sen x ≤ 1, así que no hay soluciones ✓\n  c) No: tiene una sola solución, en 90° → «Esa corresponde a k = 1; con 1,2 la recta queda por encima de la curva.»\n- Cuadro de texto opcional «Explique con sus palabras (no se guarda)». Pista: «¿Entre qué valores se mueve la altura de P?»\n- Explicación: «Sofía no tiene razón: −1 ≤ sen x ≤ 1 y 1,2 > 1, así que S = ∅.»\n\nPaso 7 · Práctica (el paso 8 se abre cuando los 4 estén resueltos; mostrar «n de 4 resueltos · m al primer intento»)\n1. ¿Cuántas soluciones tiene sen x = −1 en [0°, 360°[? Ninguna / Una: x = 270° ✓ / Dos: 270° y 90° (sen 90° = 1).\n2. Conjunto solución de sen x = 0: {0°, 180°, 360°} (360° no está en el intervalo) / {0°, 180°} ✓ / {90°, 270°} (ahí vale 1 y −1).\n3. Conjunto solución de sen x = −1/2: {30°, 150°} (son de 1/2) / {210°, 330°} ✓ / {150°, 330°} (sen 150° = +1/2) / {240°, 300°} (usan la referencia 60°).\n4. ¿En qué cuadrantes están las soluciones de sen x = 0,8? I y II ✓ / I y IV (en IV el seno es negativo) / Solo en I (también corta en II).\nCada ítem con su pista y la retroalimentación de cada opción.\n\nPaso 8 · Infografía (botón «Generar mi infografía»)\n- Encabezado azul «Ecuaciones sen x = k en [0°, 360°[».\n- Cuatro tarjetas: 1) El seno es una altura: −1 ≤ sen x ≤ 1. 2) Contar con la recta y = k: |k| > 1 → 0; k = ±1 → 1 (90° o 270°); −1 < k < 1 → 2. 3) Hallarlas: ángulo de referencia α con |k|; si k > 0, α y 180° − α; si k < 0, 180° + α y 360° − α. 4) Ejemplo clave: sen x = 1/2 → {30°, 150°}; sen x = −√3/2 → {240°, 300°}; 360° no pertenece a [0°, 360°[, con un pequeño círculo en SVG que marque 30° y 150°.\n- Recuadro amarillo «Lo que usted respondió»: tabla pregunta / usted / resultado correcto (predicción, pregunta 2, pregunta 3, práctica al primer intento) y una frase que compare la predicción con el resultado.\n\nFicha del proyecto (sección plegable): 1. Aprendizaje y grupo; 2. Qué probé (recorrido, qué ajusté, limitación); 3. Autoevaluación con los 7 criterios del Cuaderno (corrección matemática, propósito didáctico, preservación del razonamiento, retroalimentación, calidad técnica, transparencia y privacidad, trazabilidad) en columnas 2/1/0 y evidencia; 4. Reflexión ética (qué hace el estudiante sin IA; cuidados con menores de edad); 5. Declaración de uso de IA y las dos confirmaciones de privacidad y responsabilidad. Deje [corchetes] donde yo debo escribir.\n\nPie: «Página generada con apoyo de IA ([herramienta], [mes y año]) a partir del aprendizaje, las preguntas y las respuestas definidas por la persona tutora; revisada antes de publicarse. No pide ni guarda datos.»\n\n[REVISIÓN]\nAntes de entregar el código, compruebe:\n1. Que cada respuesta, pista y retroalimentación coincide con [RECURSOS] y que ninguna respuesta es visible antes de tiempo.\n2. Que ningún paso se abre antes de completar el anterior (salvo en la vista de la persona tutora).\n3. Que el video se detiene en cada pausa, no deja adelantar y ninguna frase de la narración se corta.\n4. Que la infografía no afirma nada fuera de [RECURSOS] y que el código no tiene errores de sintaxis.\nAl final, liste las cinco cosas que la persona tutora debe probar al abrir la página. No afirme que probó la página: eso lo hace la persona tutora.\n";
+const $ = s => document.querySelector(s), S = [...document.querySelectorAll('.slide')];
+$('#prompt').textContent = PROMPT;
+let cur = 0, all = false;
+const labels = ['Inicio', '1', '2', '3', '4', '5', '6', '7', 'Prompt'];
+$('#dots').innerHTML = labels.map((l, i) => `<button type="button" data-i="${i}" aria-label="Ir a ${i ? (i === 8 ? 'el prompt' : 'el paso ' + i) : 'el inicio'}">${l}</button>`).join('');
+const seen = new Set([0]);
+function go(i) {
+  cur = Math.max(0, Math.min(S.length - 1, i)); seen.add(cur);
+  if (!all) S.forEach((s, k) => s.hidden = k !== cur);
+  document.querySelectorAll('#dots button').forEach((b, k) => { b.toggleAttribute('aria-current', k === cur); if (k === cur) b.setAttribute('aria-current', 'step'); b.classList.toggle('seen', seen.has(k) && k !== cur); });
+  $('#prev').disabled = cur === 0; $('#next').disabled = cur === S.length - 1;
+  $('#next').textContent = cur === S.length - 2 ? 'Ver el prompt →' : 'Siguiente →';
+  $('#bar').style.width = (cur / (S.length - 1) * 100) + '%';
+  if (!all) window.scrollTo(0, 0); else S[cur].scrollIntoView({block:'start'});
+}
+$('#dots').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) go(+b.dataset.i); });
+$('#prev').addEventListener('click', () => go(cur - 1));
+$('#next').addEventListener('click', () => go(cur + 1));
+document.addEventListener('keydown', e => { if (e.target.closest('input,textarea')) return; if (e.key === 'ArrowRight' || e.key === 'PageDown') go(cur + 1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1); });
+$('#all').addEventListener('click', () => { all = !all; document.body.classList.toggle('all', all); $('#all').textContent = all ? 'Paso a paso' : 'Ver todo'; S.forEach((s, k) => s.hidden = all ? false : k !== cur); $('#nav').hidden = all; });
+let tt; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2200); }
+$('#copy').addEventListener('click', async () => {
+  try { if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(PROMPT); else { const ta = document.createElement('textarea'); ta.value = PROMPT; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); if (!document.execCommand('copy')) throw 0; ta.remove(); } toast('Prompt copiado al portapapeles'); }
+  catch (e) { toast('Seleccione el texto del prompt y cópielo.'); }
+});
+window.addEventListener('beforeprint', () => S.forEach(s => s.hidden = false));
+window.addEventListener('afterprint', () => { if (!all) S.forEach((s, k) => s.hidden = k !== cur); });
+go(0);
+</script>
+</body>
+</html>
