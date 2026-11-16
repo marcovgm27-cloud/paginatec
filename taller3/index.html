@@ -1,0 +1,1348 @@
+<!doctype html>
+<html lang="es-CR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sumar y multiplicar con sentido</title>
+<meta name="description" content="PRIMIA-MatIA · Tercer taller: la suma con canje y la multiplicación en columna, con videos, fichas interactivas y pizarra animada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0E8DF; --dots:#D8CDC2; --ink:#191716; --text:#37312E; --muted:#6B635C; --accent:#E94D2D; --accent-readable:#B7351B; --card:#FFFFFF;
+  --soft:#F7F2EC; --line:#E4DAD0; --ok:#1E6B34; --ok-bg:#E5F2E8; --bad:#A3271A; --bad-bg:#FBE6E2;
+  --c-u:#F28B82; --c-d:#4DB6AC; --c-c:#FDD663;
+  --font-display:'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+  --font-body:'Inter', Arial, sans-serif;
+  --font-mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --radius-card:28px; --radius-button:16px; --radius-number:18px;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px;
+  --ease:cubic-bezier(.2,.8,.2,1); --speed-fast:180ms; --speed-normal:350ms;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;color:var(--text);font-family:var(--font-body);font-size:18px;line-height:1.6;background-color:var(--bg);
+  background-image:radial-gradient(circle,var(--dots) 1.8px,transparent 2px);background-size:28px 28px}
+img,svg,video{max-width:100%}
+a{color:var(--accent-readable)}
+h1,h2,h3,h4{color:var(--ink);margin:0}
+p{margin:0 0 var(--space-3)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+.read{max-width:740px}
+.edu-title{font-family:var(--font-display);font-weight:400;line-height:1.02;text-transform:uppercase;letter-spacing:.2px}
+.edu-accent{color:var(--accent)}
+.edu-card{background:var(--card);border-radius:var(--radius-card);padding:clamp(20px,4vw,32px)}
+.kicker{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--accent-readable);text-transform:uppercase;letter-spacing:.6px}
+.small{font-size:16px}
+.muted{color:var(--muted)}
+.mono{font-family:var(--font-mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border:0;border-radius:var(--radius-button);padding:12px 24px;background:var(--accent);color:#fff;font:700 18px/1.2 var(--font-body);cursor:pointer;text-decoration:none;transition:transform var(--speed-fast) var(--ease),background var(--speed-fast)}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.sm{min-height:44px;padding:8px 16px;font-size:16px}
+.btn.sm:not(.sec):not(.ghost){background:var(--accent-readable)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.icon-btn{width:48px;height:48px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-size:18px;cursor:pointer;display:inline-grid;place-items:center;transition:transform var(--speed-fast) var(--ease)}
+.icon-btn:active{transform:scale(.98)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:16px;cursor:pointer;min-height:44px}
+.toggle input{width:22px;height:22px;accent-color:var(--accent-readable)}
+select,input[type=number],input[type=text],textarea{font:inherit;color:var(--ink)}
+.sel{min-height:44px;border:2px solid var(--line);border-radius:12px;padding:4px 10px;font:600 16px var(--font-body);background:#fff}
+.chip{display:inline-flex;align-items:center;min-height:32px;padding:4px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-size:15px;font-weight:600;color:var(--ink)}
+.chip.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.acc{background:var(--accent-readable);color:#fff;border-color:var(--accent-readable)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* nav */
+.nav{position:sticky;top:0;z-index:30;background:rgba(240,232,223,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:16px;min-height:60px}
+.brand{font-family:var(--font-display);font-size:24px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--accent)}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:600;font-size:16px;padding:8px 10px;border-radius:10px}
+.nav-links a:hover{background:#fff}
+/* hero */
+.hero{padding:48px 0 32px}
+.hero h1{font-size:clamp(46px,8.4vw,92px)}
+.hero .sub{font-size:clamp(19px,2.4vw,23px);color:var(--text);margin-top:16px;max-width:760px}
+.hero-grid{display:grid;gap:16px;margin-top:32px}
+@media(min-width:880px){.hero-grid{grid-template-columns:1.5fr 1fr}}
+.obj{border-left:5px solid var(--accent);padding-left:16px;margin:12px 0 0}
+.fac{display:grid;gap:12px}
+.fac .who{display:flex;gap:12px;align-items:center}
+.fac .av{width:52px;height:52px;border-radius:var(--radius-number);background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:22px;flex:none}
+.fac b{color:var(--ink)}
+/* secciones */
+section{padding:40px 0}
+.sec-head{margin-bottom:24px}
+.sec-head h2{font-size:clamp(32px,4.6vw,48px);margin-top:6px}
+.sec-head p{margin-top:12px}
+.part-banner{display:flex;align-items:center;gap:16px;margin:24px 0 8px}
+.part-banner .tag{background:var(--ink);color:#fff;font-family:var(--font-display);font-size:22px;padding:6px 16px;border-radius:14px;text-transform:uppercase}
+.part-banner .ln{flex:1;height:2px;background:var(--ink)}
+.grid2{display:grid;gap:16px}
+@media(min-width:880px){.grid2{grid-template-columns:1fr 1fr}}
+.grid3{display:grid;gap:16px}
+@media(min-width:880px){.grid3{grid-template-columns:repeat(3,1fr)}}
+.step-card{display:flex;gap:16px;align-items:flex-start}
+.step-card .num{flex:none;width:60px;height:60px;border-radius:var(--radius-number);background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:30px}
+.step-card h3{font-size:21px;margin-bottom:4px}
+.note{background:var(--soft);border-radius:16px;padding:12px 16px;font-size:16px}
+.note b{color:var(--ink)}
+.reveal{opacity:0;transform:translateY(12px);transition:opacity var(--speed-normal) var(--ease),transform var(--speed-normal) var(--ease)}
+.reveal.in{opacity:1;transform:none}
+/* agenda */
+.agenda{display:grid;gap:12px}
+@media(min-width:880px){.agenda{grid-template-columns:repeat(2,1fr)}}
+.ag{display:flex;gap:16px;align-items:flex-start;background:#fff;border-radius:22px;padding:16px 20px;border:2px solid transparent;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.ag .num{flex:none;width:56px;height:56px;border-radius:var(--radius-number);background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:26px}
+.ag h3{font-size:19px}
+.ag .min{font-family:var(--font-mono);font-size:15px;color:var(--accent-readable);font-weight:600}
+.ag[aria-pressed=true]{border-color:var(--accent)}
+.ag[aria-pressed=true] .num{background:var(--accent)}
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:16px}
+.timer .clock{font-family:var(--font-mono);font-size:34px;font-weight:600;color:var(--ink);min-width:120px}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;flex:1;min-width:160px}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .5s linear}
+/* situación */
+.case{display:grid;gap:16px}
+@media(min-width:880px){.case{grid-template-columns:1fr 1fr}}
+.nb{background:#FFFDF6;border-radius:20px;border:2px solid var(--line);padding:16px;background-image:repeating-linear-gradient(transparent,transparent 39px,#E7DED2 39px,#E7DED2 40px)}
+.nb svg{width:100%;height:auto;display:block}
+.data{display:grid;gap:8px;margin-top:16px}
+.data div{display:flex;gap:12px;align-items:baseline}
+.data dt{font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--accent-readable);min-width:96px;text-transform:uppercase}
+.data dd{margin:0}
+/* video */
+.vbox{display:grid;gap:16px;margin-top:16px}
+@media(min-width:960px){.vbox{grid-template-columns:minmax(0,1.75fr) minmax(0,1fr)}}
+.vframe{position:relative;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:16/9}
+.vframe video{width:100%;height:100%;display:block;background:#000}
+.vpause{position:absolute;inset:0;background:rgba(25,23,22,.86);color:#fff;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:clamp(16px,4vw,40px)}
+.vpause .kicker{color:#FFB3A3}
+.vpause p{font-size:clamp(18px,2.4vw,24px);line-height:1.4;color:#fff;max-width:640px}
+.vside{display:flex;flex-direction:column;gap:12px;min-width:0}
+.chap{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.chap button{display:flex;gap:10px;width:100%;text-align:left;background:var(--soft);border:2px solid transparent;border-radius:12px;padding:8px 12px;font:500 16px/1.35 var(--font-body);color:var(--text);cursor:pointer;min-height:44px;align-items:center}
+.chap button .t{font-family:var(--font-mono);font-size:14px;color:var(--accent-readable);font-weight:600;min-width:42px}
+.chap button[aria-current=true]{border-color:var(--accent);background:#fff;color:var(--ink);font-weight:700}
+.trans{max-height:260px;overflow:auto;border-radius:14px;background:var(--soft);padding:8px}
+.trans p{margin:0;padding:6px 8px;border-radius:10px;font-size:16px;line-height:1.45;cursor:pointer}
+.trans p.on{background:#fff;color:var(--ink);box-shadow:inset 4px 0 0 var(--accent)}
+.trans p .t{font-family:var(--font-mono);font-size:13px;color:var(--muted);margin-right:6px}
+details.fold{background:var(--soft);border-radius:16px;padding:0 16px}
+details.fold>summary{cursor:pointer;font-weight:700;color:var(--ink);min-height:48px;display:flex;align-items:center;list-style:none}
+details.fold>summary::before{content:'+';font-family:var(--font-mono);font-weight:600;margin-right:10px;color:var(--accent-readable)}
+details.fold[open]>summary::before{content:'−'}
+details.fold>div{padding-bottom:16px}
+.qs{display:grid;gap:12px;counter-reset:q}
+.qs li{list-style:none;position:relative;padding-left:44px}
+.qs li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:17px}
+.qs{padding:0;margin:0}
+/* fichas */
+.ficha-head{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.acts{display:grid;gap:8px;margin:16px 0 0;padding:0;list-style:none}
+@media(min-width:880px){.acts{grid-template-columns:1fr 1fr}}
+.acts li{display:flex;gap:12px;align-items:flex-start;background:var(--soft);border-radius:16px;padding:12px 14px}
+.acts .n{flex:none;width:36px;height:36px;border-radius:12px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:19px}
+.acts b{color:var(--ink)}
+.acts .m{font-family:var(--font-mono);font-size:14px;color:var(--accent-readable);font-weight:600;white-space:nowrap}
+.key{width:100%;border-collapse:collapse;font-size:16px}
+.key th,.key td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.key th{font-family:var(--font-mono);font-size:14px;color:var(--accent-readable);text-transform:uppercase}
+.key td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+.viewer{position:fixed;inset:0;z-index:60;background:rgba(25,23,22,.6);display:flex;flex-direction:column}
+.viewer .vh{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 12px;border-bottom:2px solid var(--ink)}
+.viewer .vh h2{font-family:var(--font-display);font-weight:400;font-size:24px;text-transform:uppercase;margin-right:auto}
+.viewer iframe{flex:1;border:0;width:100%;background:#fff}
+/* pizarra */
+.pz{display:grid;gap:16px}
+.pz-modes{display:flex;flex-wrap:wrap;gap:8px}
+.pz-modes button{min-height:44px;border-radius:12px;border:2px solid var(--ink);background:#fff;font:700 16px var(--font-body);color:var(--ink);padding:6px 14px;cursor:pointer}
+.pz-modes button[aria-pressed=true]{background:var(--ink);color:#fff}
+.pz-presets{display:flex;flex-wrap:wrap;gap:8px}
+.pz-presets button{min-height:44px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font:600 15px var(--font-body);color:var(--ink);padding:6px 12px;cursor:pointer;text-align:left}
+.pz-presets button[aria-pressed=true]{border-color:var(--accent);background:#fff}
+.pz-presets button .k{display:block;font-family:var(--font-mono);font-size:12.5px;color:var(--accent-readable);text-transform:uppercase}
+.pz-input{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pz-input input{width:96px;min-height:48px;border:2px solid var(--line);border-radius:12px;padding:6px 10px;font:600 22px var(--font-mono);text-align:center}
+.pz-input .op{font:600 26px var(--font-mono);color:var(--ink);min-width:24px;text-align:center}
+.pz-err{color:var(--bad);font-weight:600;font-size:16px}
+.stage{background:#fff;border-radius:20px;border:2px solid var(--line);overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.stage .nd{transition:transform 700ms var(--ease),opacity 450ms var(--ease)}
+.cap{background:var(--ink);color:#fff;padding:14px 18px;font-size:clamp(17px,2.2vw,20px);line-height:1.45;min-height:84px}
+.cap .k{font-family:var(--font-mono);font-size:13px;color:#FFB3A3;display:block;text-transform:uppercase;letter-spacing:.5px}
+.pz-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.dots{display:flex;flex-wrap:wrap;gap:6px}
+.dots button{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink);background:#fff;padding:0;cursor:pointer}
+.dots button[aria-current=true]{background:var(--accent);border-color:var(--accent)}
+.dots button.done{background:var(--ink)}
+/* práctica */
+.lv{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.lv button{min-height:48px;border-radius:14px;border:2px solid var(--ink);background:#fff;font:700 16px var(--font-body);color:var(--ink);padding:6px 16px;cursor:pointer;text-align:left}
+.lv button[aria-pressed=true]{background:var(--ink);color:#fff}
+.lv button small{display:block;font-weight:500;font-size:13px}
+.ex{display:grid;gap:16px}
+@media(min-width:880px){.ex{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.op-big{font-family:var(--font-mono);font-weight:600;font-size:clamp(34px,6vw,52px);color:var(--ink);line-height:1.1}
+.fld{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.fld label{font-weight:600;min-width:150px}
+.fld input{width:130px;min-height:48px;border:2px solid var(--line);border-radius:12px;padding:6px 10px;font:600 22px var(--font-mono);text-align:center}
+.fld input.ok{border-color:var(--ok);background:var(--ok-bg)}
+.fld input.bad{border-color:var(--bad);background:var(--bad-bg)}
+.fb{border-radius:14px;padding:12px 16px;font-size:16px;margin-top:12px}
+.fb.ok{background:var(--ok-bg);color:var(--ok)}
+.fb.bad{background:var(--bad-bg);color:var(--bad)}
+.fb b{color:inherit}
+.score{font-family:var(--font-mono);font-weight:600;color:var(--ink)}
+/* cierre */
+.chk{display:grid;gap:8px}
+.chk label{display:flex;gap:12px;align-items:flex-start;background:var(--soft);border-radius:14px;padding:10px 14px;cursor:pointer;font-size:17px}
+.chk input{width:22px;height:22px;margin-top:3px;accent-color:var(--accent-readable);flex:none}
+textarea.open{width:100%;min-height:96px;border:2px solid var(--line);border-radius:14px;padding:10px 12px;resize:vertical;font-size:17px;line-height:1.5}
+.dual{display:grid;gap:16px}
+@media(min-width:720px){.dual{grid-template-columns:1fr 1fr 1fr}}
+.dual .edu-card{border:2px solid var(--line)}
+.dual .big{font-family:var(--font-display);font-size:34px;color:var(--ink);line-height:1.05;text-transform:uppercase}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-weight:600;z-index:80;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.on{opacity:1}
+footer{padding:32px 0 56px;font-size:15px;color:var(--muted)}
+@media(max-width:600px){
+  body{font-size:17px}
+  .note{font-size:15.5px}
+  .step-card .num{width:48px;height:48px;font-size:24px}
+  .fld label{min-width:0;width:100%}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#main">Saltar al contenido</a>
+<nav class="nav" aria-label="Secciones">
+  <div class="wrap">
+    <a class="brand" href="#inicio">PRIMIA<span>·</span>MatIA</a>
+    <div class="nav-links">
+      <a href="#agenda">Agenda</a>
+      <a href="#situacion">Situación</a>
+      <a href="#suma">Suma</a>
+      <a href="#multiplicacion">Multiplicación</a>
+      <a href="#pizarra">Pizarra animada</a>
+      <a href="#practica">Práctica</a>
+      <a href="#cierre">Cierre</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+<!-- A. ENCABEZADO -->
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <p class="kicker">PRIMIA-MatIA · Tercer taller · I Ciclo · DRE Cartago</p>
+    <h1 class="edu-title">Sumar y multiplicar<br><span class="edu-accent">con sentido</span></h1>
+    <p class="sub">Lo que de verdad significan «llevo uno» y «la segunda línea se corre». Dos videos, dos fichas interactivas y una pizarra animada para explicar los algoritmos con el valor posicional.</p>
+    <div class="chips" style="margin-top:20px">
+      <span class="chip dark">120 minutos</span>
+      <span class="chip acc">2 videos</span>
+      <span class="chip">2 fichas en parejas</span>
+      <span class="chip">Programa MEP · 1.º a 3.º año</span>
+      <span class="chip">Para celular y computadora</span>
+    </div>
+    <div class="hero-grid">
+      <div class="edu-card reveal">
+        <p class="kicker">Objetivo de aprendizaje</p>
+        <p class="obj">Al terminar el bloque, cada docente explica con bloques, con el rectángulo y con el algoritmo <b>por qué</b> funcionan la suma con canje y la multiplicación en columna, y atiende los errores frecuentes del estudiantado con <b>preguntas y estimación</b>, no con recetas.</p>
+        <div class="controls" style="margin-top:20px">
+          <a class="btn" href="#agenda">Ver la agenda</a>
+          <a class="btn sec" href="#pizarra">Abrir la pizarra animada</a>
+        </div>
+      </div>
+      <div class="edu-card reveal fac">
+        <p class="kicker">Facilitan</p>
+        <div class="who"><span class="av" aria-hidden="true">MG</span><div><b>Marco Gutiérrez Montenegro</b><br><span class="small muted">Escuela de Matemática</span></div></div>
+        <div class="who"><span class="av" aria-hidden="true">MR</span><div><b>Melvin Ramírez Bogantes</b><br><span class="small muted">Escuela de Matemática</span></div></div>
+        <div class="who"><span class="av" aria-hidden="true">LM</span><div><b>Luis Fernando Mora Picado</b><br><span class="small muted">Escuela de Matemática</span></div></div>
+        <div class="note"><b>Tecnológico de Costa Rica</b><br>Dirección Regional de Educación de Cartago</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- AGENDA -->
+<section id="agenda">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Agenda · 120 minutos</p><h2 class="edu-title">Paso a paso</h2>
+      <p class="read">Toquen un bloque para marcarlo como actual y usen el temporizador para controlar el tiempo.</p></div>
+    <div class="agenda" id="agendaGrid"></div>
+    <div class="edu-card timer" style="margin-top:16px" aria-label="Temporizador">
+      <span class="clock" id="tClock" aria-live="polite">10:00</span>
+      <div class="bar" aria-hidden="true"><span id="tBar"></span></div>
+      <div class="controls">
+        <button class="btn sm" type="button" id="tPlay">Iniciar</button>
+        <button class="btn ghost sm" type="button" id="tReset">Reiniciar</button>
+      </div>
+      <p class="small muted" id="tLabel" style="width:100%;margin:0">Bloque actual: 01 · Bienvenida y puente con la resta</p>
+    </div>
+  </div>
+</section>
+
+<!-- B. SITUACIÓN PROBLEMA -->
+<section id="situacion">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Situación problema</p><h2 class="edu-title">Dos preguntas <span class="edu-accent">de la clase</span></h2></div>
+    <div class="case">
+      <div class="edu-card reveal">
+        <div class="nb" aria-hidden="true">
+          <svg viewBox="0 0 360 230">
+            <text x="20" y="34" font-family="Inter,Arial" font-size="16" fill="#6B635C">Cuaderno de 2.º año</text>
+            <text x="196" y="74" font-family="IBM Plex Mono,monospace" font-size="24" fill="#B7351B">1</text>
+            <g font-family="IBM Plex Mono,monospace" font-size="38" fill="#191716"><text x="190" y="112">4</text><text x="226" y="112">7</text><text x="148" y="154">+</text><text x="190" y="154">3</text><text x="226" y="154">8</text><text x="190" y="214">8</text><text x="226" y="214">5</text></g>
+            <line x1="146" y1="170" x2="262" y2="170" stroke="#191716" stroke-width="3"/>
+            <circle cx="203" cy="66" r="18" fill="none" stroke="#E94D2D" stroke-width="3"/>
+            <text x="20" y="80" font-family="Inter,Arial" font-size="17" fill="#B7351B" font-weight="700">¿Qué es</text><text x="20" y="102" font-family="Inter,Arial" font-size="17" fill="#B7351B" font-weight="700">este 1?</text>
+          </svg>
+        </div>
+        <p style="margin-top:16px">Una niña de 2.º año pregunta: <b>«Profe, ¿por qué el 1 se escribe arriba del 4 y no abajo?»</b> Ella sabe hacer la suma, pero no sabe qué cantidad representa ese 1.</p>
+      </div>
+      <div class="edu-card reveal">
+        <div class="nb" aria-hidden="true">
+          <svg viewBox="0 0 360 230">
+            <text x="20" y="34" font-family="Inter,Arial" font-size="16" fill="#6B635C">Cuaderno de 3.er año</text>
+            <g font-family="IBM Plex Mono,monospace" font-size="30" fill="#191716"><text x="226" y="62">3</text><text x="254" y="62">6</text><text x="192" y="96">×</text><text x="226" y="96">2</text><text x="254" y="96">4</text><text x="198" y="140">1</text><text x="226" y="140">4</text><text x="254" y="140">4</text><text x="198" y="176">7</text><text x="226" y="176">2</text><text x="198" y="220">8</text><text x="226" y="220">6</text><text x="254" y="220">4</text></g>
+            <line x1="190" y1="106" x2="276" y2="106" stroke="#191716" stroke-width="2.5"/>
+            <line x1="168" y1="186" x2="282" y2="186" stroke="#191716" stroke-width="2.5"/>
+            <rect x="250" y="152" width="28" height="30" fill="none" stroke="#E94D2D" stroke-width="3" stroke-dasharray="5 4" rx="4"/>
+            <text x="20" y="150" font-family="Inter,Arial" font-size="17" fill="#B7351B" font-weight="700">¿Por qué</text><text x="20" y="172" font-family="Inter,Arial" font-size="17" fill="#B7351B" font-weight="700">se corre?</text>
+          </svg>
+        </div>
+        <p style="margin-top:16px">Un niño de 3.er año pregunta: <b>«¿Por qué la segunda línea empieza más a la izquierda?»</b> Le dijeron que «se corre» o que «se pone un cero», pero nadie le dijo por qué.</p>
+      </div>
+    </div>
+    <div class="edu-card reveal" style="margin-top:16px">
+      <dl class="data">
+        <div><dt>Datos</dt><dd>47 + 38 = 85 y 36 × 24 = 864. Los dos cálculos están bien hechos.</dd></div>
+        <div><dt>Incógnita</dt><dd>Qué cantidad representa el 1 que se lleva y qué representa la segunda línea de la multiplicación.</dd></div>
+        <div><dt>Herramienta</dt><dd>El canje de la base 10: 10 unidades forman 1 decena y 10 decenas forman 1 centena. Es la misma idea que usamos en la resta del taller anterior, pero en sentido contrario.</dd></div>
+      </dl>
+      <div class="controls" style="margin-top:16px">
+        <button class="btn sm" type="button" data-load="r1">Puente: ver la resta 52 − 27 en la pizarra</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 1: SUMA -->
+<div class="wrap"><div class="part-banner"><span class="tag">Bloque 1</span><span class="ln"></span></div></div>
+<section id="suma" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Video 1 · 2:40 · Explicación paso a paso</p><h2 class="edu-title">¿Qué representa <span class="edu-accent">ese uno?</span></h2>
+      <p class="read">Con el <b>modo taller</b> activo, el video se detiene en tres momentos con una pregunta para el grupo. Los subtítulos están dentro del video y la transcripción completa aparece al lado.</p></div>
+    <div class="edu-card reveal" id="v1"></div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="edu-card reveal">
+        <p class="kicker">Después del video · 5 min</p>
+        <h3 style="font-size:22px;margin:6px 0 12px">Para conversar</h3>
+        <ol class="qs">
+          <li>¿Qué cambió con el canje y qué se conservó? (Cambió la agrupación; la cantidad sigue siendo 85.)</li>
+          <li>Lucía escribe 715 y Tomás escribe 75. ¿Cuál error descarta la estimación y cuál no?</li>
+          <li>¿Qué palabras usarían en lugar de «llevo uno»? Por ejemplo: «formo una decena nueva y la paso a su columna».</li>
+        </ol>
+      </div>
+      <div class="edu-card reveal">
+        <p class="kicker">Para la persona docente</p>
+        <h3 style="font-size:22px;margin:6px 0 12px">Una idea, dos registros</h3>
+        <p>En la suma, <b>10 unidades se juntan en 1 decena</b> del lugar siguiente. En la resta, <b>1 decena se desarma en 10 unidades</b> del lugar anterior. En los dos casos el número no cambia, solo su escritura.</p>
+        <div class="controls"><button class="btn sm" type="button" data-load="s1">Ver 47 + 38 en la pizarra</button><button class="btn ghost sm" type="button" data-load="s2">Ver 268 + 175</button></div>
+      </div>
+    </div>
+    <div class="edu-card reveal" id="fichaC" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<!-- BLOQUE 2: MULTIPLICACIÓN -->
+<div class="wrap"><div class="part-banner"><span class="tag">Bloque 2</span><span class="ln"></span></div></div>
+<section id="multiplicacion" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Video 2 · 6:51 · Explicación paso a paso</p><h2 class="edu-title">¿Por qué la segunda línea <span class="edu-accent">empieza en las decenas?</span></h2>
+      <p class="read">Grupos iguales, rectángulo, partes por valor posicional y algoritmo: la misma idea contada cuatro veces. El modo taller detiene el video en cuatro momentos.</p></div>
+    <div class="edu-card reveal" id="v2"></div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="edu-card reveal">
+        <p class="kicker">Después del video · 5 min</p>
+        <h3 style="font-size:22px;margin:6px 0 12px">Para conversar</h3>
+        <ol class="qs">
+          <li>«Se pone un cero» describe cómo se ve. ¿Cuál es la razón? (Esa línea es 36 × 20: son 72 decenas, no tiene unidades sueltas.)</li>
+          <li>Valentina obtuvo 216 para 36 × 24. ¿Qué pregunta la ayuda a descubrir su error sin decirle la respuesta?</li>
+          <li>¿En qué momento de su clase usarían el rectángulo: antes, durante o después del algoritmo?</li>
+        </ol>
+      </div>
+      <div class="edu-card reveal">
+        <p class="kicker">Para la persona docente</p>
+        <h3 style="font-size:22px;margin:6px 0 12px">Cada línea es un pedazo del rectángulo</h3>
+        <p>En 34 × 26, la primera línea (204) es la franja de altura 6 y la segunda (680) es la franja de altura 20. Escribir 680 completo antes de abreviar hace visible el valor posicional.</p>
+        <div class="controls"><button class="btn sm" type="button" data-load="m1">Ver 34 × 26 en la pizarra</button><button class="btn ghost sm" type="button" data-load="m2">Ver 23 × 4</button></div>
+      </div>
+    </div>
+    <div class="edu-card reveal" id="fichaD" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<!-- D. LABORATORIO -->
+<section id="pizarra">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Laboratorio · Cápsulas animadas</p><h2 class="edu-title">Pizarra <span class="edu-accent">animada</span></h2>
+      <p class="read">Seis cápsulas listas y la opción de escribir sus propios números. Cada paso mueve las piezas y escribe el algoritmo al mismo tiempo; la narración es opcional y el texto siempre está visible.</p></div>
+    <div class="edu-card pz">
+      <div class="pz-presets" id="pzPresets" role="group" aria-label="Cápsulas"></div>
+      <div class="pz-modes" id="pzModes" role="group" aria-label="Operación">
+        <button type="button" data-mode="suma" aria-pressed="true">Suma</button>
+        <button type="button" data-mode="resta" aria-pressed="false">Resta</button>
+        <button type="button" data-mode="mult" aria-pressed="false">Multiplicación</button>
+      </div>
+      <form class="pz-input" id="pzForm" autocomplete="off">
+        <label class="sr" for="pzA">Primer número</label><input id="pzA" type="text" inputmode="numeric" maxlength="3" value="47">
+        <span class="op" id="pzOp">+</span>
+        <label class="sr" for="pzB">Segundo número</label><input id="pzB" type="text" inputmode="numeric" maxlength="3" value="38">
+        <button class="btn sm" type="submit">Preparar</button>
+        <span class="small muted" id="pzRange">Suma: resultado menor que 1000.</span>
+        <span class="pz-err" id="pzErr" role="alert"></span>
+      </form>
+      <div class="stage" id="pzStage">
+        <svg viewBox="0 0 960 540" id="pzSvg" role="img" aria-labelledby="pzCapTxt"></svg>
+        <div class="cap" aria-live="polite"><span class="k" id="pzStep">Paso 1 de 1</span><span id="pzCapTxt"></span></div>
+      </div>
+      <div class="pz-ctl">
+        <div class="controls">
+          <button class="icon-btn" type="button" id="pzRestart" aria-label="Empezar de nuevo" title="Empezar de nuevo">&#8634;</button>
+          <button class="icon-btn" type="button" id="pzPrev" aria-label="Paso anterior" title="Paso anterior">&#9664;</button>
+          <button class="btn" type="button" id="pzPlay" aria-pressed="false">&#9654; Reproducir</button>
+          <button class="icon-btn" type="button" id="pzNext" aria-label="Paso siguiente" title="Paso siguiente">&#9654;</button>
+        </div>
+        <div class="controls">
+          <label class="toggle"><input type="checkbox" id="pzVoice"> Narración</label>
+          <label class="toggle" for="pzRate">Velocidad <select class="sel" id="pzRate"><option value="0.8">0.8</option><option value="0.9" selected>0.9</option><option value="1">1.0</option><option value="1.1">1.1</option><option value="1.25">1.25</option></select></label>
+        </div>
+      </div>
+      <div class="dots" id="pzDots" aria-label="Ir a un paso"></div>
+      <p class="small muted" style="margin:0">Las piezas respetan la proporción: una barra mide lo mismo que 10 cubitos juntos y una placa, lo mismo que 10 barras. En la multiplicación, el rectángulo está dibujado a escala.</p>
+    </div>
+  </div>
+</section>
+
+<!-- E. PRÁCTICA -->
+<section id="practica">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Práctica graduada · Tres niveles</p><h2 class="edu-title">¿Dónde está <span class="edu-accent">el error?</span></h2>
+      <p class="read">Cada ejercicio es nuevo. Si la respuesta coincide con un error típico (los de Lucía, Tomás, Valentina o Diego), la retroalimentación lo nombra y propone una pregunta para el aula.</p></div>
+    <div class="edu-card">
+      <div class="lv" id="lvBtns" role="group" aria-label="Nivel"></div>
+      <div class="ex">
+        <div>
+          <p class="kicker" id="exKind"></p>
+          <div class="op-big" id="exOp" aria-live="polite"></div>
+          <div id="exFields"></div>
+          <div class="controls" style="margin-top:16px">
+            <button class="btn" type="button" id="exCheck">Revisar</button>
+            <button class="btn sec sm" type="button" id="exNew">Otro ejercicio</button>
+            <button class="btn ghost sm" type="button" id="exShow">Verlo en la pizarra</button>
+          </div>
+          <div id="exFb" aria-live="polite"></div>
+        </div>
+        <div class="note">
+          <p class="kicker" style="margin-bottom:8px">Cómo usarlo</p>
+          <p><b>Nivel 1.</b> Suma de dos cifras con un canje.</p>
+          <p><b>Nivel 2.</b> Suma con canjes en cadena o resta con un cero en el minuendo.</p>
+          <p><b>Nivel 3.</b> Multiplicación de dos cifras: cada línea por separado y luego el total.</p>
+          <p style="margin:0">Aciertos en esta sesión: <span class="score" id="exScore">0 de 0</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- F. CIERRE -->
+<section id="cierre">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker">Cierre · Síntesis, verificación y reflexión</p><h2 class="edu-title">La receta se convierte <span class="edu-accent">en explicación</span></h2></div>
+    <div class="dual">
+      <div class="edu-card reveal"><p class="kicker">Suma</p><p class="big">Juntar 10 → 1</p><p>Diez piezas de un lugar forman una del lugar siguiente. El 1 que se lleva es esa pieza nueva.</p></div>
+      <div class="edu-card reveal"><p class="kicker">Resta</p><p class="big">Desarmar 1 → 10</p><p>Una pieza de un lugar se desarma en diez del lugar anterior. La cantidad no cambia.</p></div>
+      <div class="edu-card reveal"><p class="kicker">Multiplicación</p><p class="big">Cada línea, un pedazo</p><p>La segunda línea empieza en las decenas porque representa decenas: es la franja de altura 20.</p></div>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="edu-card reveal">
+        <p class="kicker">Verificación</p>
+        <h3 style="font-size:22px;margin:6px 0 12px">Hoy puedo explicar…</h3>
+        <div class="chk" id="chkList"></div>
+        <p class="small muted" id="chkMsg" style="margin-top:12px"></p>
+      </div>
+      <div class="edu-card reveal">
+        <p class="kicker">Reflexión en pareja</p>
+        <label for="refl1"><b>1.</b> ¿Qué palabras van a dejar de usar con sus estudiantes y cuáles van a usar en su lugar?</label>
+        <textarea class="open" id="refl1" style="margin:8px 0 12px"></textarea>
+        <label for="refl2"><b>2.</b> ¿Qué error de esta sesión han visto en su aula? ¿Qué pregunta harían ahora?</label>
+        <textarea class="open" id="refl2" style="margin:8px 0 12px"></textarea>
+        <div class="controls"><button class="btn sm" type="button" id="reflCopy">Copiar mis respuestas</button><span class="small muted">Se guardan en este navegador.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--ink)">PRIMIA-MatIA</b> · Escuela de Matemática, Tecnológico de Costa Rica · Dirección Regional de Educación de Cartago · 2026</p>
+    <p>Habilidades del Programa de Estudio de Matemáticas del MEP citadas en las fichas: 1.er año, habilidad 14; 2.º año, habilidades 9 a 18; 3.er año, habilidades 7, 8, 12 y 13; 4.º año, Relaciones y Álgebra, habilidad 7.</p>
+    <p>Los videos se descargan solo cuando se reproducen. El avance de las fichas y las respuestas se guardan únicamente en el dispositivo de cada docente.</p>
+  </div>
+</footer>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+  <div class="vh">
+    <h2 id="viewerTitle">Ficha</h2>
+    <a class="btn sm" id="viewerTab" href="#" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+    <a class="btn ghost sm" id="viewerDl" href="#" download>Descargar</a>
+    <button class="icon-btn" type="button" id="viewerClose" aria-label="Cerrar la ficha">&#10005;</button>
+  </div>
+  <iframe id="viewerFrame" title="Ficha interactiva"></iframe>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>window.__WEB={v1:'vids/video1_suma.mp4',v1p:'vids/video1.jpg',v2:'vids/video2_multiplicacion.mp4',v2p:'vids/video2.jpg',C:'fichas/Ficha_C_Suma_interactiva.html',D:'fichas/Ficha_D_Multiplicacion_interactiva.html'};</script>
+<script>
+(() => {
+'use strict';
+/* ============================================================
+   Utilidades
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store = {
+  get(k) { try { return localStorage.getItem('primia3_' + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('primia3_' + k, v); } catch (e) {} }
+};
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let toastT = null;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
+async function copyText(text, msg) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e2) {} ta.remove(); }
+  toast(msg || 'Copiado');
+}
+function bytesOf(id) {
+  const el = document.getElementById(id); if (!el) return null;
+  const bin = atob(el.textContent.replace(/\s+/g, '')); const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  return u;
+}
+const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const vs = speechSynthesis.getVoices();
+  return ['es-CR', 'es-MX', 'es-US', 'es-419', 'es-CO', 'es-ES'].map(l => vs.find(v => v.lang.replace('_', '-') === l)).find(Boolean) || vs.find(v => /^es/i.test(v.lang)) || null;
+}
+if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+const spoken = t => t.replace(/ × /g, ' por ').replace(/ − /g, ' menos ').replace(/ \+ /g, ' más ').replace(/ = /g, ' es igual a ').replace(/ ≈ /g, ' aproximadamente ').replace(/«|»/g, '');
+
+/* ============================================================
+   Agenda y temporizador
+   ============================================================ */
+const AGENDA = [
+  {n:'01', min:10, t:'Bienvenida y puente con la resta', d:'Del «pedir prestado» al canje: lo que trabajamos en el taller anterior, en la pizarra animada.'},
+  {n:'02', min:12, t:'Video 1 · ¿Qué representa ese uno?', d:'Video de 2:40 con tres pausas para el grupo y preguntas de cierre.'},
+  {n:'03', min:33, t:'Ficha C en parejas', d:'La suma con canje: bloques, algoritmo, detectives de errores y la IA.'},
+  {n:'04', min:5, t:'Puesta en común', d:'¿Qué cambió con el canje y qué se conservó? Llevar y pedir prestado.'},
+  {n:'05', min:15, t:'Video 2 · La multiplicación en columna', d:'Video de 6:51 con cuatro pausas: grupos, rectángulo, valor posicional y algoritmo.'},
+  {n:'06', min:38, t:'Ficha D en parejas', d:'Rectángulos, multiplicar por 10, el rectángulo de 34 × 26 y los detectives.'},
+  {n:'07', min:7, t:'Cierre', d:'Síntesis, verificación y reflexión en pareja.'}
+];
+(() => {
+  const grid = $('#agendaGrid');
+  grid.innerHTML = AGENDA.map((a, i) => `<button type="button" class="ag" data-i="${i}" aria-pressed="${i === 0}"><span class="num">${a.n}</span><span><span class="min">${a.min} min</span><h3>${esc(a.t)}</h3><span class="small">${esc(a.d)}</span></span></button>`).join('');
+  let cur = 0, left = AGENDA[0].min * 60, total = left, tick = null;
+  const paint = () => { $('#tClock').textContent = mmss(left); $('#tBar').style.width = (100 * (1 - left / total)) + '%'; $('#tLabel').textContent = `Bloque actual: ${AGENDA[cur].n} · ${AGENDA[cur].t}`; };
+  const stop = () => { clearInterval(tick); tick = null; $('#tPlay').textContent = 'Iniciar'; };
+  const select = i => { cur = i; stop(); left = total = AGENDA[i].min * 60; $$('.ag', grid).forEach((b, k) => b.setAttribute('aria-pressed', String(k === i))); paint(); };
+  grid.addEventListener('click', e => { const b = e.target.closest('.ag'); if (b) select(+b.dataset.i); });
+  $('#tPlay').addEventListener('click', () => {
+    if (tick) { stop(); return; }
+    if (left <= 0) left = total;
+    $('#tPlay').textContent = 'Pausar';
+    tick = setInterval(() => { left = Math.max(0, left - 1); paint(); if (left === 0) { stop(); toast('Terminó el tiempo de este bloque'); } }, 1000);
+  });
+  $('#tReset').addEventListener('click', () => { stop(); left = total; paint(); });
+  paint();
+})();
+
+/* ============================================================
+   Videos con capítulos, transcripción y pausas del modo taller
+   ============================================================ */
+const VIDEOS = {
+  v1: {
+    data:'b64v1', poster:'b64p1', dur:'2:40', title:'¿Qué representa ese uno?',
+    chapters:[[0, '¿Qué representa ese uno?'], [13, 'Dos sumandos, dos colecciones'], [33, 'Reunir las unidades'], [53, 'Un canje, dos registros'], [79, 'Contar también la nueva decena'], [93, 'Estimar y comprobar'], [109, 'Cuando un canje provoca otro'], [139, 'Un mismo canje en dos direcciones']],
+    pauses:[
+      [46, 'En la columna de las unidades solo cabe una cifra. Con 15 unidades, ¿qué harían sus estudiantes? ¿Qué harían ustedes con los bloques?'],
+      [92, 'Antes de seguir: anoten dos resultados equivocados que esperarían para 47 + 38 y la regla que llevaría a cada uno.'],
+      [120, '8 + 5 = 13 unidades: ya se formó una decena nueva. ¿Qué va a pasar ahora en la columna de las decenas?']
+    ],
+    end:'Fin del video. Conversen las preguntas de abajo y luego abran la Ficha C.',
+    trans:[
+      [0, 'Hola estimados maestros y maestras.'], [4, 'Al sumar 47 y 38, solemos decir: «Llevo uno».'], [9, '¿Qué representa ese uno y en qué columna lo escribimos?'],
+      [13, 'Representemos los dos sumandos con bloques de base diez.'], [19, '47 son 4 decenas y 7 unidades.'], [27, '38 son 3 decenas y 8 unidades.'],
+      [33, 'Reunamos las siete unidades del primer sumando y las ocho del segundo.'], [41, 'Al juntar las unidades tenemos 15.'],
+      [47, 'Para registrar 15 unidades, canjeamos diez y dejamos cinco en esta columna.'], [53, 'Separemos diez de las quince unidades.'],
+      [59, 'Diez unidades se canjean por una decena.'], [67, 'Ese es el uno que llevamos: una decena nueva.'],
+      [73, 'Quedan cinco unidades. Por eso escribimos un 5 debajo de las unidades.'], [79, 'En la columna de las decenas también contamos la barra que acabamos de formar.'],
+      [83, 'Cuatro más tres más una son ocho decenas.'], [89, 'Ocho decenas y cinco unidades: 85.'],
+      [93, 'Al redondear, 50 más 40 da 90: 715 es demasiado grande.'], [101, 'La estimación sola no descarta 75. Falta la decena del canje: el resultado exacto es 85.'],
+      [109, 'Veamos dos canjes al sumar 268 y 175.'], [113, 'Ocho y cinco son trece unidades: canjeamos diez y quedan tres.'],
+      [121, 'A veces un canje provoca otro: la decena nueva hace que haya 14 decenas.'], [127, 'Diez de ellas forman una centena y quedan cuatro decenas.'],
+      [133, 'Dos centenas más una, más la nueva, dan cuatro. El resultado es 443.'],
+      [139, 'Al sumar, diez unidades forman una decena. Al restar, podemos desarmar esa decena en diez unidades.'],
+      [145, 'Pregunten al grupo: ¿qué cambió con el canje? Cambió la agrupación; la cantidad sigue siendo la misma.']
+    ]
+  },
+  v2: {
+    data:'b64v2', poster:'b64p2', dur:'6:51', title:'¿Por qué funciona la multiplicación en columna?',
+    chapters:[[0, 'La pregunta'], [25, 'Grupos iguales'], [59, 'De las bolsas a las filas'], [95, 'El producto como área'], [125, 'Multiplicar por diez'], [169, 'Partir sin perder área'], [229, 'Del rectángulo al algoritmo'], [289, 'Leer el razonamiento'], [349, 'Estimar para validar'], [375, 'Una idea, cuatro registros']],
+    pauses:[
+      [23, '¿Cómo le responderían hoy a ese niño? Anoten su explicación para compararla al final del video.'],
+      [152, '36 × 10 = 360. ¿«Agregar un cero» es la razón o solo la forma en que se ve?'],
+      [288, 'Antes de ver a Valentina, Diego y Mariana: ¿qué errores han visto en su aula con la multiplicación en columna?'],
+      [348, '¿Cómo estimarían 36 × 24 con sus estudiantes antes de calcular?']
+    ],
+    end:'Fin del video. Comparen su explicación inicial con la del video y luego abran la Ficha D.',
+    trans:[
+      [0, 'Hola estimados maestros y maestras. Hoy vamos a mirar una multiplicación conocida con ojos de docentes.'],
+      [7, 'Al multiplicar 36 por 24, solemos decir que la segunda línea «se corre» o que «se pone un cero».'],
+      [15, '¿Qué representa ese espacio? Busquemos una explicación que podamos construir en el aula.'],
+      [25, 'Multiplicar es juntar grupos del mismo tamaño. Tomemos cuatro bolsas, cada una con seis semillas.'],
+      [33, 'Contemos de seis en seis: seis, doce, dieciocho, veinticuatro.'], [43, 'Seis más seis más seis más seis es veinticuatro.'],
+      [51, 'Cuatro por seis significa cuatro grupos de seis. La igualdad de los grupos es lo que permite multiplicar.'],
+      [59, 'Conservemos las cuatro bolsas. Vamos a mover las semillas sin quitar ni agregar ninguna.'],
+      [67, 'Si cada bolsa forma una fila, obtenemos cuatro filas de seis. Aparece un arreglo rectangular.'],
+      [79, 'Giremos el arreglo un cuarto de vuelta. Ahora leemos seis filas de cuatro.'], [87, 'El total sigue siendo veinticuatro. Esta es la propiedad conmutativa.'],
+      [95, 'Demos un paso más: sustituyamos cada punto por un cuadradito de lado uno.'],
+      [103, 'Hay seis unidades de ancho y cuatro de alto. Los cuadrados cubren la superficie sin huecos ni traslapes.'],
+      [115, 'Seis por cuatro son veinticuatro unidades cuadradas. El área nos permitirá explicar el algoritmo.'],
+      [125, 'Representemos treinta y seis: tres barras de decena y seis unidades.'],
+      [133, 'Multiplicar por diez hace que cada unidad valga una decena. Seis unidades pasan a ser seis decenas.'],
+      [143, 'Cada decena pasa a valer una centena. Tres centenas y seis decenas representan trescientos sesenta.'],
+      [153, 'El cero describe la escritura; la razón es el valor posicional. Usemos esta idea para multiplicar por veinte.'],
+      [161, 'Treinta y seis por dos son setenta y dos. Son setenta y dos decenas: setecientos veinte.'],
+      [169, 'Volvamos a treinta y seis por veinticuatro. Cada cuadrito vale una unidad cuadrada.'],
+      [177, 'Contarlos uno por uno sería lento. Separemos el ancho en treinta y seis unidades: treinta más seis.'],
+      [187, 'Separemos la altura en veinte más cuatro. Quedan cuatro regiones, sin huecos ni superposiciones.'],
+      [197, 'La región de treinta por veinte tiene seiscientos cuadrados. La de seis por veinte tiene ciento veinte.'],
+      [207, 'Abajo, treinta por cuatro da ciento veinte. Seis por cuatro da veinticuatro.'],
+      [215, 'Al reunir las cuatro áreas, seiscientos más ciento veinte más ciento veinte más veinticuatro dan ochocientos sesenta y cuatro.'],
+      [223, 'Estamos distribuyendo la multiplicación sobre la suma. El área total se conserva.'],
+      [229, 'Pongamos el rectángulo junto al cálculo en columna. Sus colores nos ayudarán a seguir cada producto parcial.'],
+      [239, 'La franja inferior tiene altura cuatro. Sus dos partes, ciento veinte y veinticuatro, suman ciento cuarenta y cuatro.'],
+      [249, 'La primera línea registra treinta y seis por cuatro unidades.'],
+      [259, 'La franja superior tiene altura veinte. Seiscientos más ciento veinte dan setecientos veinte.'],
+      [269, 'La segunda línea registra treinta y seis por dos decenas. Setenta y dos decenas son setecientas veinte unidades.'],
+      [279, 'Al abreviar, dejamos vacío el lugar de las unidades. El dos de setenta y dos queda en las decenas.'],
+      [285, 'Sumamos ambos productos parciales y obtenemos ochocientos sesenta y cuatro.'],
+      [289, 'Valentina obtiene doscientos dieciséis. Suma ciento cuarenta y cuatro más setenta y dos, como si el dos de veinticuatro valiera dos unidades.'],
+      [299, 'Preguntemos: ¿cuánto vale el dos de veinticuatro? Ella calculó treinta y seis por seis, no por veinticuatro.'],
+      [309, 'Diego escribe ochocientos doce para veintitrés por cuatro. Anota ocho y doce juntos, sin reagrupar las doce unidades.'],
+      [319, 'Veinte por cuatro son ochenta. ¿Puede el resultado superar ochocientos? Canjear diez unidades da nueve decenas y dos unidades.'],
+      [329, 'Mariana obtiene treinta y ocho al multiplicar treinta y cuatro por doce. Solo usa el tres por uno y el cuatro por dos; además pierde el valor posicional.'],
+      [339, '¿Cuánto es treinta y cuatro por diez? El producto por doce debe ser mayor. ¿Qué dos regiones no contó?'],
+      [349, 'Antes de multiplicar, estimemos. Treinta y seis está cerca de cuarenta, y veinticuatro está cerca de veinte.'],
+      [357, 'Cuarenta por veinte da ochocientos. En la recta, ochocientos sesenta y cuatro queda cerca; doscientos dieciséis queda muy lejos.'],
+      [367, 'Estimar no prueba el valor exacto. Sí nos ayuda a detectar resultados poco razonables, incluso si los propone una inteligencia artificial.'],
+      [375, 'Grupos iguales, rectángulo, partes por valor posicional y algoritmo: es la misma idea contada cuatro veces.'],
+      [385, 'En cada paso, pidamos a las y los estudiantes que señalen dónde están las unidades y dónde están las decenas.'],
+      [395, 'La segunda línea no se corre por costumbre: empieza en las decenas porque representa decenas. Así, la receta se convierte en explicación.']
+    ]
+  }
+};
+function mountVideo(key) {
+  const V = VIDEOS[key], host = $('#' + key);
+  host.innerHTML = `<div class="vbox">
+    <div>
+      <div class="vframe"><video id="${key}vid" controls preload="metadata" playsinline aria-label="Video: ${esc(V.title)}"></video>
+        <div class="vpause" hidden><span class="kicker" data-pk>Pausa para el grupo</span><p data-pq></p><div class="controls"><button class="btn" type="button" data-pgo>&#9654; Continuar el video</button><button class="btn ghost sm" type="button" data-pback style="color:#fff;box-shadow:inset 0 0 0 2px #fff">Repetir 10 segundos</button></div></div></div>
+      <div class="controls" style="margin-top:12px;justify-content:space-between">
+        <label class="toggle"><input type="checkbox" data-wm checked> Modo taller: pausas con preguntas</label>
+        <label class="toggle">Velocidad <select class="sel" data-rate><option value="0.75">0.75</option><option value="1" selected>1.0</option><option value="1.25">1.25</option></select></label>
+      </div>
+      <p class="small muted" data-vmsg style="margin:8px 0 0"></p>
+    </div>
+    <div class="vside">
+      <p class="kicker" style="margin:0">Capítulos</p>
+      <ol class="chap">${V.chapters.map(([t, n]) => `<li><button type="button" data-t="${t}"><span class="t">${mmss(t)}</span><span>${esc(n)}</span></button></li>`).join('')}</ol>
+      <details class="fold"><summary>Transcripción completa</summary><div><div class="trans">${V.trans.map(([t, x]) => `<p data-t="${t}"><span class="t">${mmss(t)}</span>${esc(x)}</p>`).join('')}</div></div></details>
+    </div></div>`;
+  const v = $('video', host), ov = $('.vpause', host), wm = $('[data-wm]', host);
+  const WEB = window.__WEB;
+  if (WEB) { v.src = WEB[key]; v.poster = WEB[key + 'p']; }
+  else try {
+    const bytes = bytesOf(V.data);
+    if (bytes) v.src = URL.createObjectURL(new Blob([bytes], {type:'video/mp4'}));
+    const pb = bytesOf(V.poster);
+    if (pb) v.poster = URL.createObjectURL(new Blob([pb], {type:'image/jpeg'}));
+    if (!bytes) $('[data-vmsg]', host).textContent = 'No se encontró el video dentro del archivo.';
+  } catch (e) { $('[data-vmsg]', host).textContent = 'Este navegador no pudo preparar el video. Prueben con Chrome, Edge o Firefox actualizados.'; }
+  v.addEventListener('error', () => { $('[data-vmsg]', host).textContent = 'El video no se pudo reproducir en este navegador. Prueben con Chrome, Edge o Firefox actualizados.'; });
+  const done = new Set(); let last = 0;
+  const showPause = (label, q, end) => { $('[data-pk]', ov).textContent = label; $('[data-pq]', ov).textContent = q; $('[data-pgo]', ov).hidden = !!end; ov.hidden = false; $(end ? '[data-pback]' : '[data-pgo]', ov).focus({preventScroll:true}); };
+  $('[data-pgo]', ov).addEventListener('click', () => { ov.hidden = true; v.play(); });
+  $('[data-pback]', ov).addEventListener('click', () => { ov.hidden = true; v.currentTime = Math.max(0, v.currentTime - 10); v.play(); });
+  const chapBtns = $$('.chap button', host), lines = $$('.trans p', host);
+  function sync(t) {
+    let ci = 0; V.chapters.forEach(([s], i) => { if (t >= s) ci = i; });
+    chapBtns.forEach((b, i) => b.setAttribute('aria-current', String(i === ci)));
+    let li = 0; V.trans.forEach(([s], i) => { if (t >= s) li = i; });
+    lines.forEach((p, i) => p.classList.toggle('on', i === li));
+  }
+  v.addEventListener('timeupdate', () => {
+    const t = v.currentTime;
+    if (wm.checked && !v.paused) {
+      for (const [pt, q] of V.pauses) {
+        if (!done.has(pt) && last < pt && t >= pt && t - pt < 2) { done.add(pt); v.pause(); showPause(`Pausa para el grupo · ${mmss(pt)}`, q); break; }
+      }
+    }
+    last = t; sync(t);
+  });
+  v.addEventListener('seeked', () => { last = v.currentTime; V.pauses.forEach(([pt]) => { if (pt > v.currentTime) done.delete(pt); }); sync(v.currentTime); });
+  v.addEventListener('play', () => { ov.hidden = true; });
+  v.addEventListener('ended', () => { if (wm.checked) showPause('Fin del video', V.end, true); });
+  $('[data-rate]', host).addEventListener('change', e => { v.playbackRate = +e.target.value; });
+  const jump = t => { ov.hidden = true; v.currentTime = t; last = t; done.forEach(pt => { if (pt >= t) done.delete(pt); }); sync(t); };
+  chapBtns.forEach(b => b.addEventListener('click', () => { jump(+b.dataset.t); v.play().catch(() => {}); }));
+  lines.forEach(p => p.addEventListener('click', () => { jump(+p.dataset.t); }));
+  sync(0);
+}
+mountVideo('v1'); mountVideo('v2');
+
+/* ============================================================
+   Fichas C y D: tarjeta, clave y visor
+   ============================================================ */
+const FICHAS = {
+  C: {
+    data:'b64fc', file:'Ficha_C_Suma_interactiva.html', title:'Ficha C · La suma con canje', min:33,
+    sub:'Lo que de verdad pasa cuando «llevamos 1». Seis actividades con estrellas de avance; el progreso se guarda en el navegador.',
+    acts:[
+      ['1', 'Sumo con bloques', '7 min', 'Juntar y canjear en el tapete: 47 + 38 y 268 + 175.'],
+      ['2', 'Del bloque al algoritmo', '5 min', 'Anotar lo que se lleva y decidir qué representa cada 1.'],
+      ['3', 'Detectives de errores', '8 min', 'Lucía, Tomás y Sofía: su regla, la mejor pregunta y el resultado. Incluye prompts para que la IA haga de niño.'],
+      ['4', 'Los pasos de 268 + 175', '4 min', 'Ordenar una explicación que no dice «llevo».'],
+      ['5', 'Sumar de otras formas', '5 min', 'Completar la decena, por partes, redondear y compensar, descomponer.'],
+      ['6', '¿La IA tiene razón?', '5 min', 'Comprobar restando cuatro sumas hechas por una IA.'],
+      ['★', 'Para conversar en pareja', 'cierre', '¿En qué se parecen «llevar» y «pedir prestado»?']
+    ],
+    key:[
+      ['1', '47 + 38 = 85 (forma usual: 8 decenas y 5 unidades). 268 + 175 = 443, con dos canjes: 13 unidades dan 1 decena y quedan 3; esa decena hace 14 decenas, que dan 1 centena y quedan 4.'],
+      ['2', 'Se lleva 1 a las decenas y 1 a las centenas; resultado 4 4 3. Primer 1: «una decena nueva, formada al juntar 10 de las 13 unidades». Segundo 1: «una centena nueva, formada con 10 de las 14 decenas».'],
+      ['3', 'Lucía (47 + 38 = 715) escribe completo el resultado de cada columna; mejor pregunta: estimar con 50 y 40; correcto 85. Tomás (75) deja botado el 1; mejor pregunta: con bloques, ¿qué forman 7 y 8 unidades?; correcto 85. Sofía (56 + 7 = 126) alinea por la izquierda; mejor pregunta: ¿son 7 unidades o 7 decenas?; correcto 63.'],
+      ['4', 'Juntar unidades (13) → formar 1 decena, quedan 3 → juntar decenas con la nueva (14) → formar 1 centena, quedan 4 → juntar centenas con la nueva (4) → 443.'],
+      ['5', 'a) 45 y 85 · b) 77 y 85 · c) 468 y 443 · d) 300, 130, 13 y 443.'],
+      ['6', '356 + 268 = 624: bien (624 − 268 = 356). 479 + 146 = 615: mal, es 625 (615 − 146 = 469). 609 + 295 = 904: bien. 1248 + 763 = 2011: bien.']
+    ],
+    load:[['s1', 'Ver 47 + 38'], ['s2', 'Ver 268 + 175']]
+  },
+  D: {
+    data:'b64fd', file:'Ficha_D_Multiplicacion_interactiva.html', title:'Ficha D · La multiplicación en columna', min:38,
+    sub:'Por qué la segunda línea «se corre». Seis actividades que van de los grupos iguales al algoritmo.',
+    acts:[
+      ['1', 'Grupos iguales y rectángulos', '5 min', 'Armar 3 filas de 7 y girar el rectángulo: 3 × 7 = 7 × 3.'],
+      ['2', '¿Qué pasa al multiplicar por 10?', '5 min', '34 en bloques: cada pieza pasa al lugar siguiente.'],
+      ['3', 'El rectángulo de 34 × 26', '8 min', 'Mover los cortes por valor posicional y calcular cada pedazo.'],
+      ['4', 'Del rectángulo al algoritmo', '6 min', 'Escribir cada línea completa: 204 y 680.'],
+      ['5', 'Detectives de errores', '8 min', 'Valentina, Diego y Mariana, con prompts para que la IA haga de niño.'],
+      ['6', '¿La IA tiene razón?', '5 min', 'Comprobar cuatro productos descomponiendo el segundo factor.'],
+      ['★', 'Para conversar en pareja', 'cierre', 'Explicar la segunda línea sin decir «se corre» ni «se pone un cero».']
+    ],
+    key:[
+      ['1', '7 + 7 + 7 = 21; 3 × 7 = 21; 7 × 3 = 21. Opción correcta: el orden de los factores no cambia el producto, es el mismo rectángulo girado.'],
+      ['2', '34 × 10 = 340 · 34 × 100 = 3400 · 26 × 10 = 260 · 68 × 10 = 680 · 34 × 20 = 680. Opción correcta: cada pieza se convierte en una del lugar siguiente.'],
+      ['3', 'Cortes en 30 | 4 y 20 | 6: 30 × 20 = 600, 4 × 20 = 80, 30 × 6 = 180, 4 × 6 = 24. Total: 34 × 26 = 884.'],
+      ['4', '34 × 6 = 204 · 34 × 20 = 680 · total 884. La primera línea son los dos pedazos de la fila de 6 (180 + 24). La segunda empieza en las decenas porque es 680: 68 decenas sin unidades sueltas.'],
+      ['5', 'Valentina (34 × 26 = 272) trata el 2 como 2 unidades (204 + 68); mejor pregunta: en 26, ¿cuánto vale el 2?; correcto 884. Diego (27 × 3 = 621) escribe completo el 21 sin canjear; mejor pregunta: 27 es casi 30 y 30 × 3 = 90, ¿puede dar más de 600?; correcto 81. Mariana (23 × 13 = 29) multiplica unidades con unidades y decenas con decenas; mejor pregunta: ¿cuánto es 23 × 10?; correcto 299.'],
+      ['6', '23 × 15 = 345: bien. 48 × 12 = 144: mal, es 576 (480 + 96); es el error de Valentina. 35 × 21 = 735: bien. 62 × 13 = 806: bien.']
+    ],
+    load:[['m1', 'Ver 34 × 26'], ['m2', 'Ver 23 × 4']]
+  }
+};
+const fichaHtml = {}, fichaUrl = {};
+function fichaReady(k) {
+  if (fichaHtml[k] || fichaUrl[k]) return true;
+  if (window.__WEB) { fichaUrl[k] = window.__WEB[k]; return true; }
+  const bytes = bytesOf(FICHAS[k].data); if (!bytes) return false;
+  fichaHtml[k] = new TextDecoder('utf-8').decode(bytes);
+  fichaUrl[k] = URL.createObjectURL(new Blob([bytes], {type:'text/html'}));
+  return true;
+}
+function mountFicha(k) {
+  const F = FICHAS[k], host = $('#ficha' + k);
+  host.innerHTML = `<div class="ficha-head"><div><p class="kicker">Práctica en parejas · ${F.min} min</p><h3 class="edu-title" style="font-size:clamp(28px,3.6vw,40px);margin-top:6px">${esc(F.title)}</h3></div>
+    <div class="controls"><button class="btn" type="button" data-open>Abrir la ficha aquí</button><a class="btn sec sm" data-tab href="#" target="_blank" rel="noopener">Pestaña nueva</a><a class="btn ghost sm" data-dl href="#" download="${F.file}">Descargar</a></div></div>
+    <p class="read" style="margin-top:12px">${esc(F.sub)}</p>
+    <ul class="acts">${F.acts.map(([n, t, m, d]) => `<li><span class="n">${n}</span><span><b>${esc(t)}</b> <span class="m">${esc(m)}</span><br><span class="small">${esc(d)}</span></span></li>`).join('')}</ul>
+    <details class="fold" style="margin-top:16px"><summary>Clave para la persona facilitadora</summary><div>
+      <table class="key"><thead><tr><th>Act.</th><th>Respuestas esperadas</th></tr></thead><tbody>${F.key.map(([a, r]) => `<tr><td>${a}</td><td>${esc(r)}</td></tr>`).join('')}</tbody></table>
+      <div class="controls" style="margin-top:12px">${F.load.map(([id, l]) => `<button class="btn ghost sm" type="button" data-load="${id}">${esc(l)} en la pizarra</button>`).join('')}</div>
+    </div></details>`;
+  const ok = fichaReady(k);
+  const tab = $('[data-tab]', host), dl = $('[data-dl]', host);
+  if (ok) { tab.href = fichaUrl[k]; dl.href = fichaUrl[k]; }
+  else { $('[data-open]', host).disabled = true; tab.hidden = true; dl.hidden = true; host.insertAdjacentHTML('beforeend', '<p class="pz-err">No se encontró la ficha dentro del archivo.</p>'); }
+  $('[data-open]', host).addEventListener('click', () => openViewer(k));
+}
+let viewerLast = null;
+function openViewer(k) {
+  if (!fichaReady(k)) return;
+  viewerLast = document.activeElement;
+  $('#viewerTitle').textContent = FICHAS[k].title;
+  $('#viewerTab').href = fichaUrl[k]; $('#viewerDl').href = fichaUrl[k]; $('#viewerDl').setAttribute('download', FICHAS[k].file);
+  const fr = $('#viewerFrame'); if (fr.dataset.k !== k) { if (fichaHtml[k]) fr.srcdoc = fichaHtml[k]; else fr.src = fichaUrl[k]; fr.dataset.k = k; }
+  $('#viewer').hidden = false; document.body.style.overflow = 'hidden';
+  $('#viewerClose').focus();
+}
+function closeViewer() { $('#viewer').hidden = true; document.body.style.overflow = ''; if (viewerLast) viewerLast.focus(); }
+$('#viewerClose').addEventListener('click', closeViewer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#viewer').hidden) closeViewer(); });
+mountFicha('C'); mountFicha('D');
+
+/* ============================================================
+   Pizarra animada
+   ============================================================ */
+const PZ = (() => {
+  const NS = 'http://www.w3.org/2000/svg', svg = $('#pzSvg');
+  /* dos paneles: tapete o rectángulo (izquierda) y registro escrito (derecha); en pantallas angostas el registro pasa abajo */
+  const panels = {}, layers = {tap:{}, alg:{}};
+  ['tap', 'alg'].forEach(pn => { const P = document.createElementNS(NS, 'g'); svg.appendChild(P); panels[pn] = P; ['bg', 'mid', 'fg'].forEach(n => { const g = document.createElementNS(NS, 'g'); P.appendChild(g); layers[pn][n] = g; }); });
+  const narrowMQ = window.matchMedia('(max-width: 700px)');
+  function fitPanels() {
+    if (narrowMQ.matches) { svg.setAttribute('viewBox', '0 0 616 1150'); panels.alg.setAttribute('transform', 'translate(-935,530) scale(1.5)'); }
+    else { svg.setAttribute('viewBox', '0 0 960 540'); panels.alg.removeAttribute('transform'); }
+  }
+  fitPanels();
+  if (narrowMQ.addEventListener) narrowMQ.addEventListener('change', fitPanels); else if (narrowMQ.addListener) narrowMQ.addListener(fitPanels);
+  const nodes = new Map();
+  const INK = '#191716', ACC = '#E94D2D', ACCR = '#B7351B', MUT = '#6B635C';
+  const COLOR = {u:'#F28B82', d:'#4DB6AC', c:'#FDD663'};
+  const F_MONO = "font-family=\"IBM Plex Mono, ui-monospace, Menlo, monospace\"", F_BODY = "font-family=\"Inter, Arial, sans-serif\"";
+  function render(list) {
+    const keep = new Set();
+    list.forEach(n => {
+      keep.add(n.id);
+      const op = n.op == null ? 1 : n.op, tf = `translate(${n.x}px, ${n.y}px)`;
+      let r = nodes.get(n.id);
+      if (!r) {
+        const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'nd'); g.innerHTML = n.html;
+        const f = n.from || n;
+        g.style.transform = `translate(${f.x}px, ${f.y}px)`; g.style.opacity = n.from ? String(op) : '0';
+        layers[n.x >= 618 ? 'alg' : 'tap'][n.layer || 'mid'].appendChild(g);
+        r = {g, html:n.html}; nodes.set(n.id, r);
+        g.getBoundingClientRect();
+        requestAnimationFrame(() => { g.style.transform = tf; g.style.opacity = String(op); });
+      } else {
+        if (r.dying) { clearTimeout(r.dying); r.dying = null; }
+        if (r.html !== n.html) { r.g.innerHTML = n.html; r.html = n.html; }
+        r.g.style.transform = tf; r.g.style.opacity = String(op);
+      }
+    });
+    nodes.forEach((r, id) => {
+      if (!keep.has(id) && !r.dying) { r.g.style.opacity = '0'; r.dying = setTimeout(() => { r.g.remove(); nodes.delete(id); }, reduceMotion ? 0 : 480); }
+    });
+  }
+  function clear() { nodes.forEach(r => { clearTimeout(r.dying); r.g.remove(); }); nodes.clear(); }
+  const T = (txt, o = {}) => `<text ${o.mono ? F_MONO : F_BODY} font-size="${o.size || 16}" fill="${o.fill || INK}" font-weight="${o.w || 600}" text-anchor="${o.anchor || 'middle'}">${esc(txt)}</text>`;
+  /* --- piezas de base 10 --- */
+  function pieceHtml(kind, hl, cross) {
+    let s = '';
+    if (kind === 'u') s = `<rect width="7" height="7" fill="${COLOR.u}" stroke="${INK}" stroke-width=".8"/>`;
+    else if (kind === 'd') { s = `<rect width="7" height="70" fill="${COLOR.d}" stroke="${INK}" stroke-width=".8"/>`; for (let i = 1; i < 10; i++) s += `<line x1="0" y1="${i * 7}" x2="7" y2="${i * 7}" stroke="${INK}" stroke-width=".5"/>`; }
+    else { s = `<rect width="70" height="70" fill="${COLOR.c}" stroke="${INK}" stroke-width=".9"/>`; let p = ''; for (let i = 1; i < 10; i++) p += `M${i * 7} 0V70M0 ${i * 7}H70`; s += `<path d="${p}" stroke="${INK}" stroke-width=".4" fill="none"/>`; }
+    const w = kind === 'c' ? 70 : 7, h = kind === 'u' ? 7 : 70;
+    if (hl) s += `<rect x="-2.5" y="-2.5" width="${w + 5}" height="${h + 5}" fill="none" stroke="${ACC}" stroke-width="2.2" rx="2"/>`;
+    if (cross) s += `<path d="M-2 -2L${w + 2} ${h + 2}M${w + 2} -2L-2 ${h + 2}" stroke="${ACCR}" stroke-width="2.4"/>`;
+    return s;
+  }
+  const COLS = {c:{x:10, w:238}, d:{x:252, w:192}, u:{x:448, w:150}};
+  const NAME = {u:['unidad', 'unidades'], d:['decena', 'decenas'], c:['centena', 'centenas']};
+  const nm = (n, k) => `${n} ${NAME[k][n === 1 ? 0 : 1]}`;
+  const NEXT = {u:'d', d:'c'}, PREV = {d:'u', c:'d'};
+  function placeList(kind, items, x0, y0, out) {
+    items.forEach((p, i) => {
+      if (kind === 'c') out[p.id] = {x:x0 + 8 + (i % 3) * 76, y:y0 + Math.floor(i / 3) * 76};
+      else if (kind === 'd') out[p.id] = {x:x0 + 10 + (i % 16) * 11, y:y0 + Math.floor(i / 16) * 80};
+      else out[p.id] = {x:x0 + 10 + (i % 10) * 10, y:y0 + Math.floor(i / 10) * 11};
+    });
+  }
+  function layout(st) {
+    const pos = {};
+    ['c', 'd', 'u'].forEach(k => {
+      const col = COLS[k], all = st.cols[k].filter(p => !p.stack);
+      if (st.mode[k] === 'split') {
+        placeList(k, all.filter(p => p.g !== 'B'), col.x, 70, pos);
+        placeList(k, all.filter(p => p.g === 'B'), col.x, 306, pos);
+      } else placeList(k, all, col.x, 70, pos);
+      st.cols[k].filter(p => p.stack).forEach(p => { pos[p.id] = {x:p.stack.x, y:p.stack.y}; });
+    });
+    return pos;
+  }
+  /* registro escrito (suma y resta) */
+  const AX = {c:808, d:854, u:900};
+  const digitsOf = n => { const s = String(n); return {c:s.length >= 3 ? s[s.length - 3] : '', d:s.length >= 2 ? s[s.length - 2] : '', u:s[s.length - 1]}; };
+  function tapNodes(st) {
+    const out = [], pos = layout(st);
+    out.push({id:'frame', layer:'bg', x:6, y:6, html:`<rect width="596" height="528" rx="16" fill="#FCFAF7" stroke="#E4DAD0" stroke-width="2"/><line x1="244" y1="10" x2="244" y2="530" stroke="#D8CDC2" stroke-width="2" stroke-dasharray="6 6"/><line x1="440" y1="10" x2="440" y2="530" stroke="#D8CDC2" stroke-width="2" stroke-dasharray="6 6"/>`});
+    if (st.focus) { const c = COLS[st.focus]; out.push({id:'focus-tap', layer:'bg', x:c.x - 2, y:8, html:`<rect width="${c.w}" height="524" rx="12" fill="#FBE3DB" opacity=".75"/>`}); }
+    ['c', 'd', 'u'].forEach(k => {
+      const c = COLS[k], cx = c.x + c.w / 2 - 4;
+      out.push({id:'hd-' + k, layer:'fg', x:cx, y:30, html:T(NAME[k][1].toUpperCase(), {size:14, fill:MUT, w:700})});
+      const n = st.cols[k].filter(p => !p.cross).length;
+      out.push({id:'cnt-' + k, layer:'fg', x:cx, y:52, html:T(n ? nm(n, k) : '', {size:14, mono:true, fill:ACCR})});
+      if (st.mode[k] === 'split' && st.cols[k].some(p => p.g === 'B')) out.push({id:'band-' + k, layer:'bg', x:c.x + 6, y:296, html:`<line x1="0" y1="0" x2="${c.w - 16}" y2="0" stroke="#CFC4B8" stroke-width="1.5" stroke-dasharray="3 5"/>`});
+      st.cols[k].forEach(p => out.push({id:p.id, x:pos[p.id].x, y:pos[p.id].y, from:p.from, op:p.cross ? .4 : 1, html:pieceHtml(k, p.hl, p.cross)}));
+    });
+    if (st.bandLabels) {
+      out.push({id:'lbA', layer:'fg', x:594, y:288, html:T(st.bandLabels[0], {size:15, mono:true, fill:MUT, anchor:'end'})});
+      if (st.bandLabels[1]) out.push({id:'lbB', layer:'fg', x:594, y:524, html:T(st.bandLabels[1], {size:15, mono:true, fill:MUT, anchor:'end'})});
+    }
+    return out;
+  }
+  function algAddSub(st) {
+    const out = [], A = st.alg;
+    out.push({id:'alg-h', layer:'fg', x:636, y:28, html:T('REGISTRO ESCRITO', {size:14, fill:MUT, w:700, anchor:'start', mono:true})});
+    ['c', 'd', 'u'].forEach(k => out.push({id:'al-' + k, layer:'fg', x:AX[k], y:52, html:T(k.toUpperCase(), {size:14, fill:MUT, w:700, mono:true})}));
+    if (st.focus) out.push({id:'focus-alg', layer:'bg', x:AX[st.focus] - 22, y:64, html:`<rect width="44" height="208" rx="10" fill="#FBE3DB"/>`});
+    const da = digitsOf(A.a), db = digitsOf(A.b);
+    ['c', 'd', 'u'].forEach(k => {
+      if (da[k]) out.push({id:'a-' + k, layer:'fg', x:AX[k], y:140, html:T(da[k], {size:40, mono:true, w:600})});
+      if (db[k]) out.push({id:'b-' + k, layer:'fg', x:AX[k], y:192, html:T(db[k], {size:40, mono:true, w:600})});
+      if (A.top && A.top[k]) out.push({id:'top-' + k, layer:'fg', x:AX[k], y:94, html:T(A.top[k], {size:A.top[k].length > 1 ? 22 : 26, mono:true, fill:ACCR, w:600})});
+      if (A.cross && A.cross[k]) out.push({id:'x-' + k, layer:'fg', x:AX[k], y:126, html:`<line x1="-15" y1="12" x2="15" y2="-22" stroke="${ACCR}" stroke-width="3"/>`});
+      if (A.res && A.res[k] !== undefined && A.res[k] !== '') out.push({id:'r-' + k, layer:'fg', x:AX[k], y:258, html:T(A.res[k], {size:40, mono:true, w:600, fill:A.done ? ACCR : INK})});
+    });
+    out.push({id:'sign', layer:'fg', x:764, y:190, html:T(A.sign, {size:36, mono:true})});
+    out.push({id:'line', layer:'fg', x:750, y:208, html:`<line x1="0" y1="0" x2="176" y2="0" stroke="${INK}" stroke-width="3"/>`});
+    if (A.est) out.push({id:'est', layer:'fg', x:636, y:318, html:T(A.est, {size:20, fill:ACCR, w:600, anchor:'start'})});
+    if (A.est2) out.push({id:'est2', layer:'fg', x:636, y:348, html:T(A.est2, {size:16, fill:MUT, w:500, anchor:'start'})});
+    return out;
+  }
+  const clone = o => JSON.parse(JSON.stringify(o));
+  function makePieces(n, g, start) {
+    const d = digitsOf(n), cols = {c:[], d:[], u:[]};
+    ['c', 'd', 'u'].forEach(k => { const m = +d[k] || 0; for (let i = 0; i < m; i++) cols[k].push({id:`${k}${g}${start + i}`, g}); });
+    return cols;
+  }
+  const round = n => n < 100 ? Math.round(n / 10) * 10 : Math.round(n / 100) * 100;
+  /* ---------------- SUMA ---------------- */
+  function buildSuma(a, b) {
+    const steps = []; let uid = 0;
+    const pa = makePieces(a, 'A', 0), pb = makePieces(b, 'B', 0);
+    const st = {cols:{c:[], d:[], u:[]}, mode:{c:'split', d:'split', u:'split'}, focus:null, bandLabels:[String(a), String(b)], alg:{a, b, sign:'+', top:{}, res:{}}};
+    const push = cap => { steps.push({st:clone(st), cap}); ['c', 'd', 'u'].forEach(k => st.cols[k].forEach(p => { delete p.from; })); };
+    const desc = n => { const d = digitsOf(n); return [d.c && +d.c ? nm(+d.c, 'c') : '', d.d && +d.d ? nm(+d.d, 'd') : '', +d.u ? nm(+d.u, 'u') : ''].filter(Boolean).join(', ').replace(/, ([^,]*)$/, ' y $1') || 'cero'; };
+    ['c', 'd', 'u'].forEach(k => { st.cols[k] = pa[k].slice(); });
+    push(`Representamos ${a} con bloques de base 10: ${desc(a)}.`);
+    ['c', 'd', 'u'].forEach(k => { st.cols[k] = st.cols[k].concat(pb[k]); });
+    push(`Debajo representamos ${b}: ${desc(b)}.`);
+    const total = a + b, hi = total >= 100 ? 'c' : total >= 10 ? 'd' : 'u';
+    for (const k of ['u', 'd', 'c']) {
+      const hasA = pa[k].length, hasB = pb[k].length, hasN = st.cols[k].filter(p => p.g === 'N').length;
+      if (!hasA && !hasB && !hasN && ['u', 'd', 'c'].indexOf(k) > ['u', 'd', 'c'].indexOf(hi)) continue;
+      st.focus = k; st.mode[k] = 'join';
+      if (['c', 'd', 'u'].every(q => st.mode[q] === 'join' || !st.cols[q].some(p => p.g === 'B'))) st.bandLabels = null;
+      const n = st.cols[k].length;
+      let cap = `Juntamos las ${NAME[k][1]}: `;
+      const parts = [hasA, hasB].filter(x => x > 0).map(String); if (hasN) parts.push(`${hasN} (la ${k === 'd' ? 'decena nueva' : 'centena nueva'})`);
+      cap += parts.length > 1 ? `${parts.join(' + ')} = ${nm(n, k)}.` : `hay ${nm(n, k)}.`;
+      if (!n) cap = `No hay ${NAME[k][1]} que juntar.`;
+      push(cap);
+      if (n >= 10) {
+        const grp = st.cols[k].slice(0, 10), x0 = COLS[k].x;
+        if (k === 'u') grp.forEach((p, i) => { p.stack = {x:x0 + 130, y:70 + i * 7}; p.hl = true; });
+        else { const rest = n - 10, rows = Math.ceil(rest / 16) || 0; grp.forEach((p, i) => { p.stack = {x:x0 + 10 + i * 7, y:70 + rows * 80 + 12}; p.hl = true; }); }
+        push(`Con 10 ${NAME[k][1]} formamos ${k === 'u' ? 'una decena: diez cubitos en fila miden lo mismo que una barra' : 'una centena: diez barras juntas forman una placa'}.`);
+        const s0 = grp[0].stack, nk = NEXT[k];
+        st.cols[k] = st.cols[k].slice(10);
+        st.cols[nk].push({id:`${nk}N${uid++}`, g:'N', from:{x:s0.x, y:s0.y}});
+        st.alg.top[nk] = '1';
+        push(`Canjeamos 10 ${NAME[k][1]} por 1 ${NAME[nk][0]} y la pasamos a su columna. Ese es el 1 que se escribe arriba: una ${NAME[nk][0]} nueva, no un 1 suelto.`);
+      }
+      const left = st.cols[k].length;
+      st.alg.res[k] = String(left);
+      push(left ? `Quedan ${nm(left, k)}: escribimos ${left} en la columna de las ${NAME[k][1]}.` : `No quedan ${NAME[k][1]} sueltas: escribimos 0 en esa columna.`);
+    }
+    st.focus = null; st.alg.done = true;
+    st.alg.est = `≈ ${round(a)} + ${round(b)} = ${round(a) + round(b)}`;
+    st.alg.est2 = `El resultado exacto es ${total}.`;
+    push(`Resultado: ${a} + ${b} = ${total}. Estimamos para comprobar: ${round(a)} + ${round(b)} = ${round(a) + round(b)}, que está cerca de ${total}.`);
+    return steps.map(s => ({cap:s.cap, nodes:() => tapNodes(s.st).concat(algAddSub(s.st))}));
+  }
+  /* ---------------- RESTA ---------------- */
+  function buildResta(a, b) {
+    const steps = []; let uid = 0;
+    const st = {cols:makePieces(a, 'A', 0), mode:{c:'join', d:'join', u:'join'}, focus:null, alg:{a, b, sign:'−', top:{}, res:{}, cross:{}}};
+    const push = cap => { steps.push({st:clone(st), cap}); ['c', 'd', 'u'].forEach(k => st.cols[k].forEach(p => { delete p.from; })); };
+    const desc = n => { const d = digitsOf(n); return [d.c && +d.c ? nm(+d.c, 'c') : '', d.d && +d.d ? nm(+d.d, 'd') : '', +d.u ? nm(+d.u, 'u') : ''].filter(Boolean).join(', ').replace(/, ([^,]*)$/, ' y $1') || 'cero'; };
+    push(`Representamos ${a} con bloques: ${desc(a)}. Vamos a quitarle ${b}.`);
+    const db = digitsOf(b), res = a - b, hi = res >= 100 ? 'c' : res >= 10 ? 'd' : 'u';
+    const have = k => st.cols[k].filter(p => !p.cross).length;
+    function desarmar(k) {
+      const h = NEXT[k];
+      if (have(h) === 0) desarmar(h);
+      const pos = layout(st), piece = st.cols[h].pop(), p0 = pos[piece.id];
+      for (let i = 0; i < 10; i++) st.cols[k].push({id:`${k}N${uid++}`, g:'A', from:k === 'u' ? {x:p0.x, y:p0.y + i * 7} : {x:p0.x + i * 7, y:p0.y}});
+      st.alg.cross[h] = true; st.alg.top[h] = String(have(h));
+      st.alg.cross[k] = true; st.alg.top[k] = String(have(k));
+      st.focus = k;
+      push(`Desarmamos 1 ${NAME[h][0]} en 10 ${NAME[k][1]}: ahora hay ${nm(have(h), h)} y ${nm(have(k), k)}. La cantidad total no cambió.`);
+    }
+    for (const k of ['u', 'd', 'c']) {
+      const need = +db[k] || 0;
+      if (['u', 'd', 'c'].indexOf(k) > ['u', 'd', 'c'].indexOf(hi) && need === 0) break;
+      st.focus = k;
+      if (have(k) < need) {
+        push(`En las ${NAME[k][1]} hay ${have(k)} y hay que quitar ${need}: no alcanzan.`);
+        desarmar(k);
+      }
+      if (need > 0) {
+        const live = st.cols[k].filter(p => !p.cross);
+        live.slice(live.length - need).forEach(p => { p.cross = true; });
+        push(`Quitamos ${nm(need, k)}.`);
+        st.cols[k] = st.cols[k].filter(p => !p.cross);
+      }
+      const left = have(k);
+      if (!(left === 0 && ['u', 'd', 'c'].indexOf(k) > ['u', 'd', 'c'].indexOf(hi))) {
+        st.alg.res[k] = String(left);
+        push(left ? `Quedan ${nm(left, k)}: escribimos ${left}.` : `No quedan ${NAME[k][1]}: escribimos 0.`);
+      }
+    }
+    st.focus = null; st.alg.done = true;
+    st.alg.est = `${res} + ${b} = ${a}`; st.alg.est2 = 'Comprobamos con la suma.';
+    push(`Resultado: ${a} − ${b} = ${res}. Comprobamos sumando: ${res} + ${b} = ${a}.`);
+    return steps.map(s => ({cap:s.cap, nodes:() => tapNodes(s.st).concat(algAddSub(s.st))}));
+  }
+  /* ---------------- MULTIPLICACIÓN ---------------- */
+  const RC = {TT:'#FDE7A6', UT:'#F8C9C4', TU:'#BFE5E0', UU:'#D8CDEB'};
+  function buildMult(a, b) {
+    const aT = Math.floor(a / 10) * 10, aU = a % 10, bT = Math.floor(b / 10) * 10, bU = b % 10;
+    const cell = Math.min(540 / a, 400 / b), W = a * cell, H = b * cell, x0 = 50, y0 = 78;
+    const xc = x0 + aT * cell, yc = y0 + bT * cell;
+    const MX = {m:762, c:808, d:854, u:900};
+    const steps = [];
+    const S = {grid:false, cutA:false, cutB:false, regions:[], hl:null, alg:{}, est:''};
+    const push = cap => steps.push({s:clone(S), cap});
+    function gridHtml() {
+      let p = '', q = '';
+      for (let i = 0; i <= a; i++) (i % 10 === 0 ? q += `M${i * cell} 0V${H}` : p += `M${i * cell} 0V${H}`);
+      for (let j = 0; j <= b; j++) (j % 10 === 0 ? q += `M0 ${j * cell}H${W}` : p += `M0 ${j * cell}H${W}`);
+      return `<rect width="${W}" height="${H}" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/><path d="${p}" stroke="#D8CDC2" stroke-width=".7" fill="none"/><path d="${q}" stroke="#A89C90" stroke-width="1.3" fill="none"/>`;
+    }
+    const regs = bT ? [['TT', 0, 0, aT, bT], ['UT', aT, 0, aU, bT], ['TU', 0, bT, aT, bU], ['UU', aT, bT, aU, bU]] : [['TU', 0, 0, aT, bU], ['UU', aT, 0, aU, bU]];
+    function regNode(r, op) {
+      const [id, cx, cy, w, h] = r, pw = w * cell, ph = h * cell, prod = w * h;
+      let lab = '';
+      if (pw >= 120 && ph >= 34) lab = `${w} × ${h} = ${prod}`; else if (pw >= 38 && ph >= 20) lab = String(prod);
+      const fs = pw >= 120 && ph >= 34 ? 16 : 13;
+      return {id:'reg-' + id, x:x0 + cx * cell, y:y0 + cy * cell, op, html:`<rect width="${pw}" height="${ph}" fill="${RC[id]}" fill-opacity=".9"/><path d="M0 0H${pw}V${ph}H0Z" fill="none" stroke="${INK}" stroke-width="1.2"/>${lab ? `<g transform="translate(${pw / 2},${ph / 2 + fs / 3})">${T(lab, {size:fs, mono:true, w:600})}</g>` : ''}`};
+    }
+    function nodesOf(s) {
+      const out = [];
+      out.push({id:'m-frame', layer:'bg', x:6, y:6, html:`<rect width="610" height="528" rx="16" fill="#FCFAF7" stroke="#E4DAD0" stroke-width="2"/>`});
+      if (s.grid) out.push({id:'m-grid', layer:'bg', x:x0, y:y0, html:gridHtml()});
+      s.regions.forEach(id => { const r = regs.find(q => q[0] === id); const dim = s.hl && !s.hl.includes(id); out.push(regNode(r, dim ? .28 : 1)); });
+      if (s.grid) {
+        if (!s.cutA) out.push({id:'m-wA', layer:'fg', x:x0 + W / 2, y:y0 - 12, html:T(String(a), {size:18, mono:true})});
+        else { out.push({id:'m-w1', layer:'fg', x:x0 + aT * cell / 2, y:y0 - 12, html:T(String(aT), {size:18, mono:true, fill:ACCR})}); out.push({id:'m-w2', layer:'fg', x:xc + aU * cell / 2, y:y0 - 12, html:T(String(aU), {size:18, mono:true, fill:ACCR})});
+          out.push({id:'m-cutA', layer:'fg', x:xc, y:y0 - 6, html:`<line x1="0" y1="0" x2="0" y2="${H + 12}" stroke="${ACCR}" stroke-width="2.5" stroke-dasharray="7 5"/>`}); }
+        if (!s.cutB) out.push({id:'m-hA', layer:'fg', x:x0 - 26, y:y0 + H / 2 + 6, html:T(String(b), {size:18, mono:true})});
+        else { out.push({id:'m-h1', layer:'fg', x:x0 - 26, y:y0 + bT * cell / 2 + 6, html:T(String(bT), {size:18, mono:true, fill:ACCR})}); out.push({id:'m-h2', layer:'fg', x:x0 - 26, y:yc + bU * cell / 2 + 6, html:T(String(bU), {size:18, mono:true, fill:ACCR})});
+          out.push({id:'m-cutB', layer:'fg', x:x0 - 6, y:yc, html:`<line x1="0" y1="0" x2="${W + 12}" y2="0" stroke="${ACCR}" stroke-width="2.5" stroke-dasharray="7 5"/>`}); }
+      }
+      /* registro escrito */
+      const A = s.alg;
+      out.push({id:'alg-h', layer:'fg', x:636, y:28, html:T('REGISTRO ESCRITO', {size:14, fill:MUT, w:700, anchor:'start', mono:true})});
+      const put = (id, n, y, o = {}) => { const str = String(n), ks = ['m', 'c', 'd', 'u'].slice(4 - str.length); str.split('').forEach((ch, i) => out.push({id:`${id}-${ks[i]}`, layer:'fg', x:MX[ks[i]], y, html:T(ch, {size:38, mono:true, w:600, fill:o.fill || INK})})); };
+      put('ma', a, 116); put('mb', b, 162);
+      out.push({id:'m-x', layer:'fg', x:722, y:160, html:T('×', {size:34, mono:true})});
+      out.push({id:'m-l1', layer:'fg', x:700, y:178, html:`<line x1="0" y1="0" x2="226" y2="0" stroke="${INK}" stroke-width="3"/>`});
+      if (A.carry) out.push({id:'m-carry', layer:'fg', x:MX.d, y:78, html:T(A.carry, {size:24, mono:true, fill:ACCR})});
+      if (A.r1) { put('r1', A.r1.v, 222, {fill:A.r1.fill}); out.push({id:'m-lab1', layer:'fg', x:636, y:218, html:T(A.r1.lab, {size:15, mono:true, fill:MUT, anchor:'start', w:500})}); }
+      if (A.r2) {
+        const str = String(A.r2.v), ks = ['m', 'c', 'd', 'u'].slice(4 - str.length);
+        str.split('').forEach((ch, i) => {
+          const k = ks[i], isZero = k === 'u';
+          if (isZero && A.r2.short) out.push({id:'r2-u', layer:'fg', x:MX.u - 14, y:240, op:.9, html:`<rect width="28" height="34" rx="5" fill="none" stroke="${ACCR}" stroke-width="2" stroke-dasharray="5 4"/>`});
+          else out.push({id:'r2-' + k, layer:'fg', x:MX[k], y:270, html:T(ch, {size:38, mono:true, w:600, fill:isZero ? '#A89C90' : INK})});
+        });
+        out.push({id:'m-lab2', layer:'fg', x:636, y:266, html:T(A.r2.lab, {size:15, mono:true, fill:MUT, anchor:'start', w:500})});
+        out.push({id:'m-plus', layer:'fg', x:722, y:268, html:T('+', {size:34, mono:true})});
+        out.push({id:'m-l2', layer:'fg', x:700, y:286, html:`<line x1="0" y1="0" x2="226" y2="0" stroke="${INK}" stroke-width="3"/>`});
+      }
+      if (A.tot) put('tot', A.tot, 332, {fill:ACCR});
+      if (A.one) { const str = String(A.one.v), ks = ['m', 'c', 'd', 'u'].slice(4 - str.length); str.split('').forEach((ch, i) => { if (A.one.show.includes(ks[i])) out.push({id:'one-' + ks[i], layer:'fg', x:MX[ks[i]], y:222, html:T(ch, {size:38, mono:true, w:600, fill:A.one.done ? ACCR : INK})}); }); }
+      if (s.est) out.push({id:'m-est', layer:'fg', x:636, y:392, html:T(s.est, {size:20, fill:ACCR, w:600, anchor:'start'})});
+      return out;
+    }
+    S.grid = true;
+    push(`${a} × ${b}: un rectángulo de ${a} cuadritos de ancho y ${b} de alto, dibujado a escala. Cada cuadrito es una unidad cuadrada.`);
+    S.cutA = true;
+    push(`Partimos el ancho por valor posicional: ${a} = ${aT} + ${aU}. No se pierde ningún cuadrito.`);
+    if (bT) { S.cutB = true; push(`Partimos también la altura: ${b} = ${bT} + ${bU}. Quedan cuatro regiones, sin huecos ni superposiciones.`); }
+    regs.forEach(r => { S.regions.push(r[0]); push(`Región de ${r[3]} por ${r[4]}: ${r[3]} × ${r[4]} = ${r[3] * r[4]}.`); });
+    const prods = regs.map(r => r[3] * r[4]);
+    push(`Juntamos las regiones: ${prods.join(' + ')} = ${a * b}. El área total se conserva.`);
+    if (bT) {
+      const l1 = a * bU, l2 = a * bT;
+      S.hl = ['TU', 'UU']; S.alg.r1 = {v:l1, lab:`${a} × ${bU}`};
+      push(`Primera línea: ${a} × ${bU} = ${l1}. Es la franja de abajo, de altura ${bU}: ${aT * bU} + ${aU * bU} = ${l1}.`);
+      S.hl = ['TT', 'UT']; S.alg.r2 = {v:l2, lab:`${a} × ${bT}`};
+      push(`Segunda línea: ${a} × ${bT} = ${l2}. Es la franja de arriba, de altura ${bT}. Son ${l2 / 10} decenas: no tiene unidades sueltas.`);
+      S.alg.r2.short = true;
+      push(`Al abreviar no escribimos el 0: el lugar de las unidades queda vacío porque esa línea representa decenas. Por eso la segunda línea empieza en las decenas.`);
+      S.hl = null; S.alg.tot = a * b;
+      push(`Sumamos las dos líneas: ${l1} + ${l2} = ${a * b}. Es todo el rectángulo.`);
+    } else {
+      const pu = aU * b, carry = Math.floor(pu / 10), pt = (aT / 10) * b + carry;
+      S.hl = ['UU']; S.alg.one = {v:a * b, show:['u']}; if (carry) S.alg.carry = String(carry);
+      push(`En columna: ${b} × ${aU} unidades = ${pu} unidades${carry ? `: ${nm(carry, 'd')} y ${nm(pu % 10, 'u')}. Escribimos ${pu % 10} y ${carry === 1 ? 'la decena va' : `las ${carry} decenas van`} arriba` : `: escribimos ${pu}`}.`);
+      S.hl = ['TU']; S.alg.one = {v:a * b, show:['m', 'c', 'd', 'u'], done:true};
+      push(`${b} × ${aT / 10} decenas = ${(aT / 10) * b} decenas${carry ? `, más ${carry === 1 ? 'la que llegó' : `las ${carry} que llegaron`}, son ${pt} decenas` : ''}${pt >= 10 ? `: ${nm(Math.floor(pt / 10), 'c')} y ${nm(pt % 10, 'd')}` : ''}. Resultado: ${a * b}.`);
+      S.hl = null;
+    }
+    const ea = Math.round(a / 10) * 10, eb = b >= 10 ? Math.round(b / 10) * 10 : b;
+    S.est = `≈ ${ea} × ${eb} = ${ea * eb}`;
+    push(`Estimamos para validar: ${ea} × ${eb} = ${ea * eb}. ${a * b} queda cerca, así que el resultado es razonable.`);
+    return steps.map(s => ({cap:s.cap, nodes:() => nodesOf(s.s)}));
+  }
+  /* ---------------- control ---------------- */
+  const PRESETS = {
+    s1:{mode:'suma', a:47, b:38, k:'Suma · un canje', t:'47 + 38'},
+    s2:{mode:'suma', a:268, b:175, k:'Suma · dos canjes', t:'268 + 175'},
+    r1:{mode:'resta', a:52, b:27, k:'Puente · resta', t:'52 − 27'},
+    r2:{mode:'resta', a:503, b:128, k:'Resta · un cero', t:'503 − 128'},
+    m1:{mode:'mult', a:34, b:26, k:'Ficha D', t:'34 × 26'},
+    m2:{mode:'mult', a:23, b:4, k:'El error de Diego', t:'23 × 4'}
+  };
+  let mode = 'suma', steps = [], cur = 0, playing = false, token = 0, curPreset = 's1';
+  const OPS = {suma:'+', resta:'−', mult:'×'}, RANGE = {suma:'Suma: números hasta 999 y resultado menor que 1000.', resta:'Resta: el primer número es mayor o igual que el segundo, hasta 999.', mult:'Multiplicación: primer factor de 11 a 99 y segundo de 2 a 99, sin 0 en las unidades.'};
+  $('#pzPresets').innerHTML = Object.entries(PRESETS).map(([id, p]) => `<button type="button" data-p="${id}" aria-pressed="false"><span class="k">${esc(p.k)}</span>${esc(p.t)}</button>`).join('');
+  function validate(m, a, b) {
+    if (!Number.isInteger(a) || !Number.isInteger(b)) return 'Escriban dos números enteros.';
+    if (m === 'suma') { if (a < 1 || b < 1 || a > 999 || b > 999) return 'Usen números entre 1 y 999.'; if (a + b > 999) return `La suma da ${a + b}: debe ser menor que 1000 para que quepa en el tapete.`; }
+    if (m === 'resta') { if (a < 1 || a > 999 || b < 1) return 'Usen números entre 1 y 999.'; if (b > a) return 'El primer número debe ser mayor o igual que el segundo.'; }
+    if (m === 'mult') { if (a < 11 || a > 99) return 'El primer factor debe estar entre 11 y 99.'; if (b < 2 || b > 99) return 'El segundo factor debe estar entre 2 y 99.'; if (a % 10 === 0 || (b >= 10 && b % 10 === 0)) return 'Usen factores sin 0 en las unidades, para que el rectángulo se parta en dos o cuatro regiones.'; }
+    return '';
+  }
+  function setMode(m) {
+    mode = m; $$('#pzModes button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
+    $('#pzOp').textContent = OPS[m]; $('#pzRange').textContent = RANGE[m];
+    $('#pzA').maxLength = m === 'mult' ? 2 : 3; $('#pzB').maxLength = m === 'mult' ? 2 : 3;
+  }
+  function prepare(m, a, b, presetId) {
+    const err = validate(m, a, b);
+    $('#pzErr').textContent = err;
+    if (err) return false;
+    stop(); setMode(m); $('#pzA').value = a; $('#pzB').value = b;
+    curPreset = presetId || null;
+    $$('#pzPresets button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.p === curPreset)));
+    clear();
+    steps = m === 'suma' ? buildSuma(a, b) : m === 'resta' ? buildResta(a, b) : buildMult(a, b);
+    $('#pzDots').innerHTML = steps.map((s, i) => `<button type="button" data-i="${i}" aria-label="Paso ${i + 1}"></button>`).join('');
+    show(0);
+    return true;
+  }
+  function show(i) {
+    cur = Math.max(0, Math.min(steps.length - 1, i));
+    render(steps[cur].nodes());
+    $('#pzCapTxt').textContent = steps[cur].cap;
+    $('#pzStep').textContent = `Paso ${cur + 1} de ${steps.length}`;
+    $$('#pzDots button').forEach((b, k) => { b.setAttribute('aria-current', String(k === cur)); b.classList.toggle('done', k < cur); });
+    $('#pzPrev').disabled = cur === 0; $('#pzNext').disabled = cur === steps.length - 1;
+  }
+  function say(text, my) {
+    const voiceOn = $('#pzVoice').checked && 'speechSynthesis' in window, rate = +$('#pzRate').value;
+    const wait = Math.max(2600, text.length * 62 / rate);
+    if (!voiceOn) return new Promise(r => setTimeout(r, wait));
+    return new Promise(res => {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(spoken(text)), v = pickVoice();
+      if (v) u.voice = v; u.lang = v ? v.lang : 'es-CR'; u.rate = rate;
+      let fin = false; const end = () => { if (fin) return; fin = true; setTimeout(res, 600); };
+      u.onend = end; u.onerror = end; setTimeout(end, text.length * 110 / rate + 4000);
+      if (my === token) speechSynthesis.speak(u); else end();
+    });
+  }
+  async function loop(my) {
+    while (playing && my === token) {
+      show(cur);
+      await say(steps[cur].cap, my);
+      if (!playing || my !== token) return;
+      if (cur >= steps.length - 1) { stop(); return; }
+      cur++;
+    }
+  }
+  function play() { if (cur >= steps.length - 1) cur = 0; playing = true; const b = $('#pzPlay'); b.innerHTML = '&#10074;&#10074; Pausar'; b.setAttribute('aria-pressed', 'true'); loop(++token); }
+  function stop() { playing = false; token++; if ('speechSynthesis' in window) speechSynthesis.cancel(); const b = $('#pzPlay'); b.innerHTML = '&#9654; Reproducir'; b.setAttribute('aria-pressed', 'false'); }
+  $('#pzPlay').addEventListener('click', () => (playing ? stop() : play()));
+  $('#pzNext').addEventListener('click', () => { stop(); show(cur + 1); });
+  $('#pzPrev').addEventListener('click', () => { stop(); show(cur - 1); });
+  $('#pzRestart').addEventListener('click', () => { stop(); clear(); show(0); });
+  $('#pzDots').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { stop(); show(+b.dataset.i); } });
+  $('#pzVoice').addEventListener('change', e => { if (!e.target.checked && 'speechSynthesis' in window) speechSynthesis.cancel(); });
+  if (!('speechSynthesis' in window)) { $('#pzVoice').disabled = true; $('#pzVoice').closest('label').title = 'Este navegador no tiene voz sintetizada'; }
+  $('#pzModes').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const m = b.dataset.mode, def = {suma:[47, 38], resta:[52, 27], mult:[34, 26]}[m];
+    prepare(m, def[0], def[1], {suma:'s1', resta:'r1', mult:'m1'}[m]);
+  });
+  $('#pzPresets').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const p = PRESETS[b.dataset.p]; prepare(p.mode, p.a, p.b, b.dataset.p); });
+  $('#pzForm').addEventListener('submit', e => { e.preventDefault(); const a = parseInt($('#pzA').value.trim(), 10), b = parseInt($('#pzB').value.trim(), 10); prepare(mode, a, b, null); });
+  document.addEventListener('keydown', e => {
+    const r = $('#pzStage').getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    if (/input|textarea|select/i.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowRight') { stop(); show(cur + 1); } else if (e.key === 'ArrowLeft') { stop(); show(cur - 1); }
+  });
+  function load(id) { const p = PRESETS[id]; if (!p) return; prepare(p.mode, p.a, p.b, id); $('#pizarra').scrollIntoView({behavior:reduceMotion ? 'auto' : 'smooth'}); }
+  function loadCustom(m, a, b) { if (prepare(m, a, b, null)) $('#pizarra').scrollIntoView({behavior:reduceMotion ? 'auto' : 'smooth'}); }
+  prepare('suma', 47, 38, 's1');
+  return {load, loadCustom, buildSuma, buildResta, buildMult, get steps() { return steps; }};
+})();
+document.addEventListener('click', e => { const b = e.target.closest('[data-load]'); if (b) PZ.load(b.dataset.load); });
+
+/* ============================================================
+   Práctica graduada
+   ============================================================ */
+const PR = (() => {
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const dig = n => String(n).padStart(3, '0').split('').map(Number);
+  let level = 1, ex = null, right = 0, tries = 0;
+  const LV = [[1, 'Nivel 1', 'Suma con un canje'], [2, 'Nivel 2', 'Canjes en cadena'], [3, 'Nivel 3', 'Multiplicación 2 × 2']];
+  $('#lvBtns').innerHTML = LV.map(([n, t, d]) => `<button type="button" data-l="${n}" aria-pressed="${n === 1}">${t}<small>${d}</small></button>`).join('');
+  function gen() {
+    if (level === 1) {
+      let a, b; do { a = rnd(15, 79); b = rnd(12, 69); } while (a % 10 + b % 10 < 10 || Math.floor(a / 10) + Math.floor(b / 10) + 1 > 9 || a % 10 === 0 || b % 10 === 0);
+      return {mode:'suma', a, b, kind:'Nivel 1 · Suma con un canje', fields:[['r', 'Resultado', a + b]]};
+    }
+    if (level === 2) {
+      if (Math.random() < .5) {
+        let a, b; do { a = rnd(105, 689); b = rnd(105, 389); } while (a % 10 + b % 10 < 10 || Math.floor(a / 10) % 10 + Math.floor(b / 10) % 10 + 1 < 10 || a + b > 999);
+        return {mode:'suma', a, b, kind:'Nivel 2 · Suma con dos canjes', fields:[['r', 'Resultado', a + b]]};
+      }
+      let a, b; do { a = rnd(2, 9) * 100 + rnd(1, 8); b = rnd(1, 4) * 100 + rnd(1, 8) * 10 + rnd(2, 9); } while (a % 10 >= b % 10 || b >= a);
+      return {mode:'resta', a, b, kind:'Nivel 2 · Resta con un cero en el minuendo', fields:[['r', 'Resultado', a - b]]};
+    }
+    let a, b; do { a = rnd(12, 98); b = rnd(12, 39); } while (a % 10 === 0 || b % 10 === 0);
+    const bU = b % 10, bT = b - bU;
+    return {mode:'mult', a, b, kind:'Nivel 3 · Multiplicación en columna', fields:[['l1', `Primera línea (${a} × ${bU})`, a * bU], ['l2', `Segunda línea completa (${a} × ${bT})`, a * bT], ['r', 'Total', a * b]]};
+  }
+  function render() {
+    ex = gen();
+    $('#exKind').textContent = ex.kind;
+    $('#exOp').textContent = `${ex.a} ${ex.mode === 'suma' ? '+' : ex.mode === 'resta' ? '−' : '×'} ${ex.b}`;
+    $('#exFields').innerHTML = ex.fields.map(([id, l]) => `<div class="fld"><label for="f_${id}">${esc(l)}</label><input id="f_${id}" type="text" inputmode="numeric" autocomplete="off"></div>`).join('');
+    $('#exFb').innerHTML = '';
+  }
+  function diag(n) {
+    const {a, b, mode} = ex;
+    if (mode === 'suma') {
+      const A = dig(a), B = dig(b);
+      const noCarry = +A.map((x, i) => (x + B[i]) % 10).join('');
+      const cols = A.map((x, i) => x + B[i]); const concat = +cols.map(String).join('');
+      const su = A[2] + B[2], c1 = Math.floor(su / 10), st2 = A[1] + B[1] + c1, firstOnly = (A[0] + B[0]) * 100 + (st2 % 10) * 10 + su % 10;
+      if (n === noCarry) return '<b>Error de Tomás:</b> se perdió la decena (o la centena) que se formó con el canje. Pregunta para el aula: «Si juntas esas unidades con bloques, ¿qué puedes formar? ¿Dónde quedó en tu suma?»';
+      if (n === concat) return '<b>Error de Lucía:</b> se escribió completo el resultado de cada columna. Pregunta para el aula: «Estima: ¿más o menos cuánto debería dar?»';
+      if (firstOnly !== a + b && n === firstOnly) return '<b>Faltó el segundo canje:</b> la decena nueva hizo que hubiera 10 o más decenas, y esas también se canjean por una centena.';
+    }
+    if (mode === 'resta') {
+      const A = dig(a), B = dig(b);
+      const small = +A.map((x, i) => Math.abs(x - B[i])).join('');
+      const noDec = +A.map((x, i) => (x < B[i] ? x + 10 : x) - B[i]).join('');
+      if (n === small) return '<b>Se restó el menor del mayor en cada columna,</b> sin desarmar. Pregunta para el aula: «¿Puedes quitar esas unidades de las que tienes? ¿De dónde puedes conseguir más?»';
+      if (n === noDec) return '<b>Se desarmó sin descontar:</b> se agregaron 10 unidades, pero no se quitó la pieza que se desarmó. Pregunta: «Si desarmaste una decena, ¿cuántas decenas te quedan?»';
+    }
+    if (mode === 'mult') {
+      const bU = b % 10, bTd = Math.floor(b / 10);
+      if (n === a * bU + a * bTd) return '<b>Error de Valentina:</b> la segunda línea se sumó como si el ' + bTd + ' valiera ' + bTd + (bTd === 1 ? ' unidad.' : ' unidades.') + ' Pregunta para el aula: «En ' + b + ', ¿cuánto vale el ' + bTd + '?»';
+      if (n === +`${Math.floor(a / 10) * bTd}${(a % 10) * bU}`) return '<b>Error de Mariana:</b> se multiplicó unidades por unidades y decenas por decenas. Pregunta: «¿Cuánto es ' + a + ' × 10? ¿Tu resultado puede ser menor que eso?»';
+    }
+    return '';
+  }
+  function check() {
+    let all = true, msgs = [];
+    ex.fields.forEach(([id, l, ans]) => {
+      const inp = $('#f_' + id), v = inp.value.replace(/[\s.,]/g, ''), n = /^\d+$/.test(v) ? +v : null;
+      const ok = n === ans; inp.classList.toggle('ok', ok); inp.classList.toggle('bad', !ok); if (!ok) all = false;
+      if (!ok) {
+        if (n === null) { msgs.push(`Falta escribir: ${l.toLowerCase()}.`); return; }
+        if (id === 'l2' && n === ans / 10) { msgs.push(`<b>La segunda línea vale decenas:</b> es ${ex.a} × ${ex.b - ex.b % 10} = ${ans}, no ${ex.a} × ${Math.floor(ex.b / 10)}. Escríbanla completa, con su 0.`); return; }
+        if (id === 'l1' && ex.a % 10 * (ex.b % 10) >= 10 && n === +`${Math.floor(ex.a / 10) * (ex.b % 10)}${(ex.a % 10) * (ex.b % 10)}`) { msgs.push('<b>Error de Diego en la primera línea:</b> se escribió completo el producto de las unidades sin canjear.'); return; }
+        const d = id === 'r' ? diag(n) : '';
+        if (d) msgs.push(d);
+        else {
+          const ea = ex.a < 100 ? Math.round(ex.a / 10) * 10 : Math.round(ex.a / 100) * 100, eb = ex.mode === 'mult' ? Math.round(ex.b / 10) * 10 : ex.b < 100 ? Math.round(ex.b / 10) * 10 : Math.round(ex.b / 100) * 100;
+          const est = ex.mode === 'suma' ? ea + eb : ex.mode === 'resta' ? ea - eb : ea * eb;
+          msgs.push(`Revisen ${l.toLowerCase()}. Una estimación ayuda: ${ea} ${ex.mode === 'suma' ? '+' : ex.mode === 'resta' ? '−' : '×'} ${eb} = ${est}.`);
+        }
+      }
+    });
+    tries++; if (all) right++;
+    $('#exScore').textContent = `${right} de ${tries}`;
+    $('#exFb').innerHTML = all
+      ? `<div class="fb ok"><b>¡Correcto!</b> ${ex.mode === 'mult' ? 'Cada línea es una franja del rectángulo y el total es todo el rectángulo.' : ex.mode === 'resta' ? `Comprobación: ${ex.a - ex.b} + ${ex.b} = ${ex.a}.` : 'Cada 1 que se lleva es una pieza nueva del lugar siguiente.'} Pidan «Otro ejercicio» o véanlo en la pizarra.</div>`
+      : `<div class="fb bad">${msgs.join('<br>')}</div>`;
+  }
+  $('#lvBtns').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; level = +b.dataset.l; $$('#lvBtns button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); render(); });
+  $('#exCheck').addEventListener('click', check);
+  $('#exNew').addEventListener('click', render);
+  $('#exShow').addEventListener('click', () => PZ.loadCustom(ex.mode, ex.a, ex.b));
+  $('#exFields').addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+  render();
+  return {get ex() { return ex; }, check, diag};
+})();
+
+/* ============================================================
+   Cierre
+   ============================================================ */
+(() => {
+  const CH = [
+    'Qué cantidad representa el 1 que se lleva en la suma.',
+    'Por qué 268 + 175 tiene dos canjes seguidos.',
+    'Que «llevar» y «pedir prestado» son el mismo canje en sentidos contrarios.',
+    'Por qué al multiplicar por 10 «aparece un cero».',
+    'Qué pedazo del rectángulo es cada línea de la multiplicación.',
+    'Cómo usar la estimación para detectar errores, incluso los de una IA.'
+  ];
+  let saved = []; try { saved = JSON.parse(store.get('chk') || '[]'); } catch (e) {}
+  $('#chkList').innerHTML = CH.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${saved[i] ? 'checked' : ''}><span>${esc(c)}</span></label>`).join('');
+  const msg = () => { const n = $$('#chkList input').filter(x => x.checked).length; $('#chkMsg').textContent = n === CH.length ? '¡Listo! Pueden explicar los dos algoritmos con sentido.' : `${n} de ${CH.length} marcadas. Lo que falte, búsquenlo en los videos o en la pizarra.`; };
+  $('#chkList').addEventListener('change', () => { store.set('chk', JSON.stringify($$('#chkList input').map(x => x.checked))); msg(); });
+  msg();
+  ['refl1', 'refl2'].forEach(id => { const t = $('#' + id); t.value = store.get(id) || ''; t.addEventListener('input', () => store.set(id, t.value)); });
+  $('#reflCopy').addEventListener('click', () => copyText(`PRIMIA-MatIA · Tercer taller\n\n1. Palabras que dejo y palabras que uso:\n${$('#refl1').value}\n\n2. Un error de mi aula y mi pregunta:\n${$('#refl2').value}`, 'Respuestas copiadas'));
+})();
+
+/* ============================================================
+   Aparición de tarjetas
+   ============================================================ */
+if ('IntersectionObserver' in window && !reduceMotion) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {rootMargin:'0px 0px -40px 0px'});
+  $$('.reveal').forEach(el => io.observe(el));
+} else $$('.reveal').forEach(el => el.classList.add('in'));
+window.__TALLER = {PZ, PR};
+})();
+
+</script>
+</body>
+</html>
