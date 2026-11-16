@@ -532,6 +532,7 @@ html.mp-showrep #mpreport .rp-mod{border-top:2px solid #CFE2DC;padding-top:12px;
 html.mp-showrep #mpreport .rp-fig svg{width:120px}
 @media print{#mpreport .rp-bar{display:none}}
 .mp-btn.danger{background:#B3261E!important;color:#fff!important;border-color:#7A1A14!important}
+.mp-revbanner{background:#FFE08A;color:#1D3832;text-align:center;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));font-size:16px;border-bottom:2px solid #1D3832}
 
 </style>
 </head>
@@ -4587,11 +4588,12 @@ function setupLocks(){
   var u=$('#mpunlock'),r=$('#mprelock'),code=$('#mpcode'),msg=$('#mpunlockmsg');
   if(u)u.addEventListener('click',function(){if(strip(code.value)===strip(FCODE)){store.set('mp4:unlockall','1');msg.textContent='Listo: todos los niveles están abiertos en este navegador.';code.value='';updateLocks();}else msg.textContent='Ese código no es correcto.';});
   if(r)r.addEventListener('click',function(){store.set('mp4:unlockall','0');msg.textContent='Los candados volvieron a activarse.';updateLocks();});
+  if(window.MP_NOLOCK){var un=$('.mp-unlock');if(un)un.hidden=true;var bn=el('div','mp-revbanner');bn.setAttribute('role','note');bn.innerHTML='<strong>Versión de revisión:</strong> todos los niveles están abiertos.';document.body.insertBefore(bn,document.body.firstChild);}
   updateLocks();LOCKREADY=true;
 }
 function showToast(h){var t=$('#mptoast');if(!t)return;t.innerHTML=h;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},6500);}
 function updateLocks(){
-  var all=store.get('mp4:unlockall')==='1',firstPending=null;
+  var all=!!window.MP_NOLOCK||store.get('mp4:unlockall')==='1',firstPending=null;
   LEVELS.forEach(function(id,i){var L=lvlInfo(id);if(!L.m)return;
     var locked=!all&&firstPending!==null;
     if(!L.done&&firstPending===null)firstPending=id;
