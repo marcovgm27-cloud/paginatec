@@ -29,6 +29,7 @@
   --btn:#1F2A44; --btn-text:#FFFFFF; --ctrl:#1F2A44; --ctrl-text:#FFFFFF;
   --shadow:0 1px 0 rgba(31,42,68,.05), 0 10px 26px rgba(31,42,68,.07);
   --fig-ink:#1F2A44; --fig-acc:#D9622B; --fig-deep:#B24A17; --fig-blue:#3F72B5; --fig-muted:#5E6578; --fig-grid:#B8BCC8; --fig-paper:#FFFFFF; --fig-mint:#2E8B75; --fig-viol:#6E5CC4; --fig-yel:#C9961A;
+  --hero-disc:#E7EEF8; --hero-dot:#C9D6EA; --hero-p1:#BFE5DC; --hero-p1s:#2E8B75; --hero-p2:#F8CBAE; --hero-p2s:#D9622B; --hero-n1:#2E8B75; --hero-n2:#D9622B; --hero-d:#3F72B5;
   --font-display:'Poppins','Segoe UI',system-ui,sans-serif;
   --font-body:'Nunito','Segoe UI',system-ui,sans-serif;
   --r-card:22px; --r-panel:16px; --r-btn:14px;
@@ -42,6 +43,7 @@
   --btn:#F28C52; --btn-text:#1F2A44; --ctrl:#F4F1E8; --ctrl-text:#1F2A44;
   --shadow:0 1px 0 rgba(0,0,0,.3);
   --fig-ink:#E9ECF4; --fig-acc:#F5A06E; --fig-deep:#F7B48A; --fig-blue:#8DB4E8; --fig-muted:#A9B0C2; --fig-grid:#4A5470; --fig-paper:#172031; --fig-mint:#7FD3C0; --fig-viol:#C3B9F0; --fig-yel:#F2CB62;
+  --hero-disc:#1A2540; --hero-dot:#2C3958; --hero-p1:#21564B; --hero-p1s:#7FD3C0; --hero-p2:#6B3B22; --hero-p2s:#F5A06E; --hero-n1:#7FD3C0; --hero-n2:#F5A06E; --hero-d:#8DB4E8;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111726; --card:#1A2234; --stage:#172031; --soft:#212A3F; --line:#2E3850;
@@ -51,6 +53,7 @@
   --btn:#F28C52; --btn-text:#1F2A44; --ctrl:#F4F1E8; --ctrl-text:#1F2A44;
   --shadow:0 1px 0 rgba(0,0,0,.3);
   --fig-ink:#E9ECF4; --fig-acc:#F5A06E; --fig-deep:#F7B48A; --fig-blue:#8DB4E8; --fig-muted:#A9B0C2; --fig-grid:#4A5470; --fig-paper:#172031; --fig-mint:#7FD3C0; --fig-viol:#C3B9F0; --fig-yel:#F2CB62;
+  --hero-disc:#1A2540; --hero-dot:#2C3958; --hero-p1:#21564B; --hero-p1s:#7FD3C0; --hero-p2:#6B3B22; --hero-p2s:#F5A06E; --hero-n1:#7FD3C0; --hero-n2:#F5A06E; --hero-d:#8DB4E8;
   color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -87,34 +90,26 @@ p{margin:.4em 0}
 .tb-go{min-height:40px;border:0;border-radius:12px;padding:6px 16px;background:var(--btn);color:var(--btn-text);font:600 15px var(--font-display);cursor:pointer;white-space:nowrap}
 
 /* ---------- portada ---------- */
-.cover-band{position:relative;overflow:hidden;border-bottom:2px solid var(--line)}
-.cover-band .deco{position:absolute;inset:0;pointer-events:none}
-.cover-band .deco svg{position:absolute;right:-60px;top:-40px;width:min(760px,70vw);height:auto;opacity:.9}
-.hero{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:center;padding-block:clamp(36px,6vw,72px)}
-.hero-txt{grid-column:span 7;min-width:0}
-.hero-art{grid-column:span 5;min-width:0}
-.kicker{display:inline-flex;align-items:center;gap:10px;font:600 15px var(--font-display);color:var(--ink);background:var(--card);border:2px solid var(--struct-line);border-radius:999px;padding:5px 14px 5px 6px}
+.cover-band{position:relative;overflow:hidden;border-bottom:2px solid var(--line);background:var(--bg)}
+.hero{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:40px;align-items:center;padding-block:clamp(52px,8vw,108px)}
+.hero-txt{grid-column:span 6;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.hero-art{grid-column:7/-1;min-width:0;display:flex;justify-content:center}
+.hero-svg{width:100%;max-width:600px;height:auto;display:block;overflow:visible}
+.kicker{display:inline-flex;align-items:center;gap:10px;font:600 15px var(--font-display);color:var(--ink);background:var(--card);border:2px solid var(--struct-line);border-radius:999px;padding:6px 16px 6px 7px;margin:0 0 28px;letter-spacing:.01em}
 .kicker i{width:22px;height:22px;border-radius:50%;background:var(--yel);display:inline-block}
-.hero h1{font-weight:800;font-size:clamp(36px,5.2vw,58px);line-height:1.08;letter-spacing:-.015em;margin:18px 0 14px}
-.hero h1 .mk{background:linear-gradient(transparent 62%, var(--yel) 62%, var(--yel) 92%, transparent 92%);padding:0 .08em}
-:root[data-theme="dark"] .hero h1 .mk{background:linear-gradient(transparent 62%, #6B5718 62%, #6B5718 92%, transparent 92%)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero h1 .mk{background:linear-gradient(transparent 62%, #6B5718 62%, #6B5718 92%, transparent 92%)}}
-.hero .sub{font-size:19px;max-width:620px;margin:0 0 20px}
-.tags{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-.tag{display:inline-flex;align-items:stretch;border-radius:10px;overflow:hidden;border:2px solid var(--struct-line);background:var(--card);font:500 15px var(--font-display);color:var(--ink)}
-.tag b{display:grid;place-items:center;min-width:30px;background:var(--c,var(--sky));color:var(--on-color);font-weight:800}
-.tag span{padding:5px 10px}
-.facts{display:flex;flex-wrap:wrap;gap:12px;list-style:none;margin:0;padding:0}
-.facts li{display:flex;align-items:baseline;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 14px;font-size:16px}
-.facts b{font:800 24px var(--font-display);color:var(--ink)}
-.art{position:relative}
-.art .sh{position:absolute;z-index:0}
-.art .s1{width:96px;height:96px;border-radius:50%;background:var(--yel);right:-18px;top:-30px}
-.art .s2{width:140px;height:70px;border-radius:140px 140px 0 0;background:var(--mint);left:-26px;bottom:-22px}
-.art .s3{width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:68px solid var(--viol);right:30px;bottom:-26px}
-.art .card{position:relative;z-index:1;background:var(--stage);border:2px solid var(--struct-line);border-radius:var(--r-card);padding:16px 16px 10px;box-shadow:var(--shadow)}
-.art .card svg{width:100%;height:auto;display:block}
-.art .cap{margin:6px 4px 0;font:500 14px var(--font-display);color:var(--muted)}
+.hero h1{font-weight:800;font-size:clamp(38px,4.9vw,62px);line-height:1.12;letter-spacing:-.018em;margin:0 0 26px}
+.hero h1 .mk{background:linear-gradient(transparent 64%, var(--yel) 64%, var(--yel) 92%, transparent 92%);padding:0 .06em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+:root[data-theme="dark"] .hero h1 .mk{background:linear-gradient(transparent 64%, #6B5718 64%, #6B5718 92%, transparent 92%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero h1 .mk{background:linear-gradient(transparent 64%, #6B5718 64%, #6B5718 92%, transparent 92%)}}
+.hero .sub{font-size:20px;line-height:1.65;max-width:540px;margin:0 0 36px;color:var(--text)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 44px}
+.hero-cta .btn{text-decoration:none;min-height:54px;padding:14px 26px;font-size:17.5px}
+.stats{display:grid;grid-template-columns:repeat(4,auto);gap:0;margin:0;padding-top:24px;border-top:2px solid var(--line);width:100%;max-width:560px}
+.stats div{padding:0 18px;border-left:2px solid var(--line)}
+.stats div:first-child{padding-left:0;border-left:0}
+.stats dt{font:800 30px/1.1 var(--font-display);color:var(--ink)}
+.stats dd{margin:4px 0 0;font:500 15px var(--font-display);color:var(--muted)}
+.hero-meta{margin:26px 0 0;font:500 15px var(--font-display);color:var(--muted)}
 
 /* ---------- bloques generales ---------- */
 .block{margin-block:clamp(36px,6vw,64px)}
@@ -364,8 +359,9 @@ footer button{background:transparent;color:var(--on-struct);border:2px solid cur
 .confirm{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 
 @media (max-width:960px){
+  .hero{gap:28px}
   .hero-txt,.hero-art{grid-column:1/-1}
-  .hero-art{max-width:540px}
+  .hero-svg{max-width:500px}
   .how{grid-template-columns:repeat(2,minmax(0,1fr))}
   .map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .map-node::before,.map-grid::before{display:none}
@@ -392,6 +388,10 @@ footer button{background:transparent;color:var(--on-struct);border:2px solid cur
   .th-b{padding:4px 9px}
   .tb-go{padding:6px 10px;font-size:14px}
   .how,.map-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:18px}
+  .stats div:nth-child(3){padding-left:0;border-left:0}
+  .hero .sub{font-size:18px}
+  .hero-cta .btn{flex:1 1 auto;justify-content:center}
   .map-node::before,.map-grid::before{display:none}
   .map-core::after{display:none}
   .map-grid{border-top:0;padding-top:0}
@@ -553,212 +553,47 @@ body.rep-only{padding-block:24px}
 </div></div>
 
 <header class="cover-band">
-  <div class="deco"><svg viewBox="0 0 760 560" aria-hidden="true">
-  <defs><pattern id="dg" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" style="fill:var(--line)"/></pattern></defs>
-  <rect x="300" y="250" width="330" height="250" style="fill:url(#dg)"/>
-  <circle cx="560" cy="170" r="150" style="fill:none;stroke:var(--sky);stroke-width:3;stroke-dasharray:2 10;stroke-linecap:round"/>
-  <path d="M440 70a110 110 0 0 1 220 0z" style="fill:var(--yel)" transform="rotate(180 550 70)"/>
-  <circle cx="700" cy="330" r="46" style="fill:var(--orange)"/>
-  <path d="M250 520l70-120 70 120z" style="fill:var(--mint)"/>
-  <path d="M120 180L360 60" style="stroke:var(--struct-line);stroke-width:2.5;stroke-dasharray:3 9;stroke-linecap:round;fill:none"/>
-  <rect x="660" y="430" width="54" height="54" rx="10" style="fill:none;stroke:var(--viol);stroke-width:3"/>
-  <path transform="translate(400 120) scale(1.4)" d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" style="fill:var(--orange)"/><path transform="translate(690 520) scale(1)" d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" style="fill:var(--sky)"/><path transform="translate(290 300) scale(0.8)" d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" style="fill:var(--viol)"/>
-</svg></div>
   <div class="wrap hero">
     <div class="hero-txt">
-      <p class="kicker"><i aria-hidden="true"></i>Guía de repaso · Semana 16 · 23 al 27 de noviembre</p>
+      <p class="kicker"><i aria-hidden="true"></i>Guía de repaso · Semana 16</p>
       <h1>Posición relativa de <span class="mk">rectas y planos</span> en ℝ<sup>3</sup></h1>
-      <p class="sub">MA-1103 Cálculo y Álgebra Lineal. Cada concepto y cada ejemplo tiene su video narrado, con figuras y gráficos. Los videos se detienen para hacerle preguntas, cada bloque cierra con un ejercicio de práctica y todo queda en un reporte con nota para entregar.</p>
-      <ul class="tags"><li class="tag" style="--c:var(--sky)"><b>1</b><span>Planos paralelos y perpendiculares</span></li><li class="tag" style="--c:var(--orange)"><b>2</b><span>Recta y plano</span></li><li class="tag" style="--c:var(--mint)"><b>3</b><span>Intersección de planos</span></li><li class="tag" style="--c:var(--viol)"><b>4</b><span>Recta y plano: intersección</span></li><li class="tag" style="--c:var(--yel)"><b>5</b><span>Ángulo entre planos</span></li><li class="tag" style="--c:var(--sky)"><b>6</b><span>Planos con condiciones</span></li></ul>
-      <ul class="facts"><li><b>18</b>videos</li><li><b>12</b>ejemplos resueltos</li><li><b>41</b>preguntas en video</li><li><b>18</b>ejercicios de práctica</li></ul>
+      <p class="sub">Videos narrados con figuras y gráficos, preguntas dentro de cada video y un ejercicio de práctica al cerrar cada bloque. Todo queda en un reporte con nota para entregar.</p>
+      <div class="hero-cta"><a class="btn" href="#s1"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>Empezar la guía</a><a class="btn ghost" href="#reporte">Ver mi reporte</a></div>
+      <dl class="stats">
+        <div><dt>18</dt><dd>videos</dd></div>
+        <div><dt>41</dt><dd>preguntas</dd></div>
+        <div><dt>18</dt><dd>ejercicios</dd></div>
+        <div><dt>1–100</dt><dd>nota de repaso</dd></div>
+      </dl>
+      <p class="hero-meta">MA-1103 Cálculo y Álgebra Lineal · 23 al 27 de noviembre de 2026</p>
     </div>
-    <div class="hero-art"><div class="art"><span class="sh s1"></span><span class="sh s2"></span><span class="sh s3"></span>
-      <div class="card"><svg class="fig" role="img" aria-label="Dos planos que se cortan en una recta L con director d igual a n1 cruz n2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 214.23 166.03">
-<defs>
-<g>
-<g id="c3-glyph-0-0">
-<path d="M 3.07 -4.48 L 4.42 -4.48 C 4.10 -3.15 3.90 -2.28 3.90 -1.32 C 3.90 -1.17 3.90 0.12 4.39 0.12 C 4.64 0.12 4.84 -0.10 4.84 -0.31 C 4.84 -0.37 4.84 -0.39 4.76 -0.57 C 4.45 -1.39 4.45 -2.40 4.45 -2.5 C 4.45 -2.56 4.45 -3.40 4.70 -4.48 L 6.03 -4.48 C 6.18 -4.48 6.57 -4.48 6.57 -4.85 C 6.57 -5.12 6.34 -5.12 6.14 -5.12 L 2.21 -5.12 C 1.95 -5.12 1.54 -5.12 1 -4.54 C 0.68 -4.20 0.31 -3.56 0.31 -3.5 C 0.31 -3.42 0.37 -3.40 0.43 -3.40 C 0.51 -3.40 0.53 -3.43 0.59 -3.5 C 1.21 -4.48 1.82 -4.48 2.12 -4.48 L 2.81 -4.48 C 2.54 -3.59 2.25 -2.56 1.26 -0.46 C 1.17 -0.28 1.17 -0.26 1.17 -0.18 C 1.17 0.06 1.39 0.12 1.5 0.12 C 1.84 0.12 1.93 -0.18 2.07 -0.68 C 2.26 -1.29 2.26 -1.31 2.39 -1.79 Z M 3.07 -4.48 "/>
-</g>
-<g id="c3-glyph-0-1">
-<path d="M 6.35 -7.09 C 6.21 -6.96 5.78 -6.54 5.78 -6.39 C 5.78 -6.26 5.89 -6.15 6 -6.15 C 6.10 -6.15 6.15 -6.23 6.25 -6.34 C 6.53 -6.70 6.84 -6.93 7.12 -7.09 C 7.23 -7.15 7.32 -7.18 7.32 -7.32 C 7.32 -7.43 7.23 -7.48 7.15 -7.54 C 6.82 -7.78 6.73 -8.09 6.70 -8.23 C 6.67 -8.32 6.64 -8.48 6.46 -8.48 C 6.39 -8.48 6.25 -8.43 6.25 -8.25 C 6.25 -8.14 6.32 -7.85 6.54 -7.53 L 2.56 -7.53 C 2.35 -7.53 2.15 -7.53 2.15 -7.31 C 2.15 -7.09 2.35 -7.09 2.56 -7.09 Z M 6.35 -7.09 "/>
-</g>
-<g id="c3-glyph-0-2">
-<path d="M 2.45 -3.48 C 2.46 -3.56 2.76 -4.15 3.20 -4.53 C 3.51 -4.81 3.92 -5 4.39 -5 C 4.85 -5 5.03 -4.65 5.03 -4.17 C 5.03 -3.5 4.54 -2.14 4.29 -1.5 C 4.20 -1.21 4.14 -1.06 4.14 -0.84 C 4.14 -0.31 4.5 0.12 5.07 0.12 C 6.18 0.12 6.59 -1.62 6.59 -1.70 C 6.59 -1.76 6.54 -1.81 6.48 -1.81 C 6.37 -1.81 6.35 -1.76 6.29 -1.56 C 6.03 -0.59 5.57 -0.12 5.10 -0.12 C 5 -0.12 4.79 -0.12 4.79 -0.51 C 4.79 -0.81 4.93 -1.17 5 -1.32 C 5.25 -1.98 5.75 -3.31 5.75 -4 C 5.75 -4.70 5.32 -5.25 4.42 -5.25 C 3.35 -5.25 2.81 -4.5 2.59 -4.20 C 2.56 -4.87 2.06 -5.25 1.54 -5.25 C 1.17 -5.25 0.90 -5.01 0.70 -4.60 C 0.48 -4.18 0.32 -3.46 0.32 -3.42 C 0.32 -3.37 0.37 -3.31 0.45 -3.31 C 0.54 -3.31 0.56 -3.32 0.62 -3.60 C 0.82 -4.32 1.03 -5 1.51 -5 C 1.78 -5 1.87 -4.81 1.87 -4.45 C 1.87 -4.20 1.76 -3.73 1.67 -3.35 L 1.34 -2.07 C 1.29 -1.85 1.17 -1.31 1.10 -1.10 C 1.01 -0.79 0.89 -0.23 0.89 -0.17 C 0.89 -0.01 1.01 0.12 1.20 0.12 C 1.34 0.12 1.51 0.04 1.60 -0.12 C 1.62 -0.18 1.73 -0.60 1.79 -0.84 L 2.06 -1.92 Z M 2.45 -3.48 "/>
-</g>
-<g id="c3-glyph-0-3">
-<path d="M 4.35 -7.20 C 4.46 -7.65 4.5 -7.78 5.54 -7.78 C 5.87 -7.78 5.95 -7.78 5.95 -8 C 5.95 -8.12 5.82 -8.12 5.78 -8.12 C 5.54 -8.12 5.26 -8.09 5.03 -8.09 L 3.43 -8.09 C 3.20 -8.09 2.95 -8.12 2.71 -8.12 C 2.62 -8.12 2.5 -8.12 2.5 -7.89 C 2.5 -7.78 2.60 -7.78 2.78 -7.78 C 3.5 -7.78 3.5 -7.68 3.5 -7.54 C 3.5 -7.53 3.5 -7.45 3.45 -7.28 L 1.85 -0.87 C 1.75 -0.46 1.71 -0.34 0.89 -0.34 C 0.67 -0.34 0.54 -0.34 0.54 -0.12 C 0.54 0 0.62 0 0.85 0 L 6.18 0 C 6.43 0 6.45 -0.01 6.54 -0.21 L 7.45 -2.76 C 7.48 -2.81 7.5 -2.89 7.5 -2.92 C 7.5 -3 7.43 -3.04 7.39 -3.04 C 7.37 -3.04 7.31 -3.04 7.28 -3 C 7.26 -2.98 7.26 -2.95 7.17 -2.73 C 6.79 -1.68 6.25 -0.34 4.25 -0.34 L 3.10 -0.34 C 2.93 -0.34 2.90 -0.34 2.84 -0.35 C 2.71 -0.37 2.70 -0.39 2.70 -0.48 C 2.70 -0.57 2.71 -0.64 2.75 -0.75 Z M 4.35 -7.20 "/>
-</g>
-<g id="c3-glyph-0-4">
-<path d="M 5.98 -7.95 C 6 -8 6.01 -8.07 6.01 -8.14 C 6.01 -8.25 5.89 -8.25 5.87 -8.25 C 5.85 -8.25 5.28 -8.20 5.21 -8.18 C 5.01 -8.18 4.84 -8.15 4.62 -8.14 C 4.32 -8.12 4.25 -8.10 4.25 -7.89 C 4.25 -7.78 4.34 -7.78 4.5 -7.78 C 5.09 -7.78 5.09 -7.67 5.09 -7.54 C 5.09 -7.48 5.07 -7.39 5.06 -7.34 L 4.34 -4.45 C 4.20 -4.76 3.89 -5.25 3.26 -5.25 C 1.92 -5.25 0.46 -3.5 0.46 -1.75 C 0.46 -0.57 1.17 0.12 1.96 0.12 C 2.62 0.12 3.18 -0.39 3.51 -0.78 C 3.64 -0.07 4.20 0.12 4.54 0.12 C 4.90 0.12 5.20 -0.09 5.40 -0.51 C 5.59 -0.92 5.76 -1.65 5.76 -1.70 C 5.76 -1.76 5.71 -1.81 5.64 -1.81 C 5.54 -1.81 5.53 -1.75 5.48 -1.56 C 5.29 -0.87 5.07 -0.12 4.59 -0.12 C 4.25 -0.12 4.21 -0.42 4.21 -0.67 C 4.21 -0.71 4.21 -0.96 4.29 -1.29 Z M 3.57 -1.42 C 3.51 -1.21 3.51 -1.18 3.35 -0.96 C 3.09 -0.62 2.56 -0.12 2.01 -0.12 C 1.51 -0.12 1.25 -0.56 1.25 -1.26 C 1.25 -1.92 1.60 -3.25 1.84 -3.75 C 2.25 -4.57 2.81 -5 3.26 -5 C 4.06 -5 4.20 -4.03 4.20 -3.93 C 4.20 -3.92 4.17 -3.76 4.15 -3.75 Z M 3.57 -1.42 "/>
-</g>
-<g id="c3-glyph-1-0">
-<path d="M 2.48 -5.04 C 2.48 -5.26 2.46 -5.26 2.25 -5.26 C 1.93 -4.95 1.51 -4.76 0.76 -4.76 L 0.76 -4.5 C 0.96 -4.5 1.40 -4.5 1.85 -4.71 L 1.85 -0.65 C 1.85 -0.35 1.84 -0.26 1.07 -0.26 L 0.81 -0.26 L 0.81 0 C 1.14 -0.03 1.81 -0.03 2.17 -0.03 C 2.53 -0.03 3.21 -0.03 3.54 0 L 3.54 -0.26 L 3.26 -0.26 C 2.51 -0.26 2.48 -0.35 2.48 -0.65 Z M 2.48 -5.04 "/>
-</g>
-<g id="c3-glyph-1-1">
-<path d="M 2.23 -1.60 C 2.35 -1.73 2.68 -2 2.81 -2.10 C 3.31 -2.56 3.78 -3 3.78 -3.71 C 3.78 -4.65 2.98 -5.26 2 -5.26 C 1.04 -5.26 0.42 -4.54 0.42 -3.84 C 0.42 -3.45 0.73 -3.40 0.84 -3.40 C 1 -3.40 1.25 -3.51 1.25 -3.81 C 1.25 -4.23 0.85 -4.23 0.76 -4.23 C 0.98 -4.81 1.51 -5 1.90 -5 C 2.64 -5 3.03 -4.37 3.03 -3.71 C 3.03 -2.89 2.45 -2.29 1.51 -1.32 L 0.51 -0.29 C 0.42 -0.21 0.42 -0.20 0.42 0 L 3.54 0 L 3.78 -1.42 L 3.53 -1.42 C 3.51 -1.26 3.45 -0.85 3.34 -0.71 C 3.29 -0.65 2.70 -0.65 2.57 -0.65 L 1.17 -0.65 Z M 2.23 -1.60 "/>
-</g>
-<g id="c3-glyph-2-0">
-<path d="M 3.70 -6 C 3.79 -6.34 3.82 -6.45 4.75 -6.45 C 5.04 -6.45 5.12 -6.45 5.12 -6.64 C 5.12 -6.76 5.01 -6.76 4.96 -6.76 C 4.64 -6.76 3.82 -6.73 3.5 -6.73 C 3.20 -6.73 2.48 -6.76 2.18 -6.76 C 2.12 -6.76 2 -6.76 2 -6.56 C 2 -6.45 2.09 -6.45 2.28 -6.45 C 2.29 -6.45 2.48 -6.45 2.65 -6.43 C 2.82 -6.42 2.92 -6.40 2.92 -6.28 C 2.92 -6.23 2.90 -6.21 2.87 -6.09 L 1.56 -0.76 C 1.45 -0.39 1.43 -0.31 0.65 -0.31 C 0.48 -0.31 0.39 -0.31 0.39 -0.10 C 0.39 0 0.46 0 0.65 0 L 5.23 0 C 5.48 0 5.48 0 5.54 -0.17 L 6.32 -2.31 C 6.37 -2.42 6.37 -2.43 6.37 -2.45 C 6.37 -2.48 6.34 -2.56 6.25 -2.56 C 6.15 -2.56 6.15 -2.5 6.07 -2.34 C 5.75 -1.43 5.31 -0.31 3.59 -0.31 L 2.67 -0.31 C 2.53 -0.31 2.5 -0.31 2.45 -0.31 C 2.34 -0.32 2.31 -0.34 2.31 -0.42 C 2.31 -0.45 2.31 -0.46 2.37 -0.64 Z M 3.70 -6 "/>
-</g>
-<g id="c3-glyph-2-1">
-<path d="M 2.62 -3.68 L 3.75 -3.68 C 3.42 -2.23 3.32 -1.79 3.32 -1.14 C 3.32 -0.98 3.32 -0.71 3.40 -0.39 C 3.5 0.04 3.60 0.10 3.76 0.10 C 3.96 0.10 4.17 -0.06 4.17 -0.26 C 4.17 -0.32 4.17 -0.34 4.10 -0.48 C 3.82 -1.20 3.82 -1.84 3.82 -2.12 C 3.82 -2.64 3.89 -3.18 4 -3.68 L 5.12 -3.68 C 5.26 -3.68 5.60 -3.68 5.60 -4.03 C 5.60 -4.26 5.40 -4.26 5.21 -4.26 L 1.90 -4.26 C 1.68 -4.26 1.31 -4.26 0.87 -3.79 C 0.53 -3.42 0.26 -2.96 0.26 -2.90 C 0.26 -2.90 0.26 -2.81 0.39 -2.81 C 0.46 -2.81 0.48 -2.85 0.54 -2.93 C 1.03 -3.68 1.60 -3.68 1.79 -3.68 L 2.37 -3.68 C 2.04 -2.5 1.51 -1.29 1.09 -0.39 C 1.01 -0.25 1.01 -0.23 1.01 -0.15 C 1.01 0.03 1.17 0.10 1.31 0.10 C 1.60 0.10 1.68 -0.17 1.79 -0.53 C 1.93 -0.98 1.93 -1.01 2.07 -1.5 Z M 2.62 -3.68 "/>
-</g>
-<g id="c3-glyph-2-2">
-<path d="M 2.01 -0.01 C 2.01 -0.65 1.76 -1.04 1.37 -1.04 C 1.04 -1.04 0.85 -0.79 0.85 -0.53 C 0.85 -0.25 1.04 0 1.37 0 C 1.5 0 1.62 -0.04 1.71 -0.12 C 1.75 -0.15 1.76 -0.15 1.76 -0.15 C 1.78 -0.15 1.79 -0.15 1.79 -0.01 C 1.79 0.71 1.45 1.31 1.12 1.64 C 1.01 1.75 1.01 1.76 1.01 1.79 C 1.01 1.87 1.06 1.90 1.10 1.90 C 1.21 1.90 2.01 1.15 2.01 -0.01 Z M 2.01 -0.01 "/>
-</g>
-<g id="c3-glyph-2-3">
-<path d="M 5.31 -5.89 C 5.18 -5.76 4.85 -5.48 4.85 -5.31 C 4.85 -5.20 4.95 -5.10 5.04 -5.10 C 5.14 -5.10 5.18 -5.18 5.23 -5.23 C 5.35 -5.39 5.59 -5.67 6.01 -5.89 C 6.09 -5.92 6.18 -5.96 6.18 -6.09 C 6.18 -6.18 6.12 -6.23 6.04 -6.29 C 5.82 -6.43 5.71 -6.62 5.64 -6.85 C 5.62 -6.93 5.59 -7.07 5.45 -7.07 C 5.31 -7.07 5.25 -6.93 5.25 -6.85 C 5.25 -6.81 5.32 -6.5 5.48 -6.29 L 2.15 -6.29 C 1.98 -6.29 1.79 -6.29 1.79 -6.09 C 1.79 -5.89 1.98 -5.89 2.15 -5.89 Z M 5.31 -5.89 "/>
-</g>
-<g id="c3-glyph-2-4">
-<path d="M 5.10 -6.76 C 5.10 -6.78 5.10 -6.87 4.98 -6.87 C 4.82 -6.87 3.89 -6.78 3.71 -6.76 C 3.64 -6.75 3.59 -6.70 3.59 -6.57 C 3.59 -6.45 3.67 -6.45 3.82 -6.45 C 4.29 -6.45 4.31 -6.39 4.31 -6.29 L 4.29 -6.09 L 3.68 -3.75 C 3.51 -4.10 3.23 -4.37 2.78 -4.37 C 1.62 -4.37 0.39 -2.92 0.39 -1.46 C 0.39 -0.54 0.93 0.10 1.71 0.10 C 1.90 0.10 2.40 0.06 3 -0.64 C 3.07 -0.21 3.42 0.10 3.90 0.10 C 4.25 0.10 4.48 -0.12 4.64 -0.43 C 4.79 -0.79 4.93 -1.39 4.93 -1.42 C 4.93 -1.51 4.84 -1.51 4.81 -1.51 C 4.71 -1.51 4.70 -1.46 4.67 -1.34 C 4.5 -0.68 4.32 -0.10 3.92 -0.10 C 3.65 -0.10 3.62 -0.35 3.62 -0.56 C 3.62 -0.79 3.64 -0.87 3.68 -1.04 Z M 3.04 -1.17 C 3 -1 3 -0.98 2.85 -0.81 C 2.42 -0.26 2.01 -0.10 1.73 -0.10 C 1.23 -0.10 1.09 -0.65 1.09 -1.04 C 1.09 -1.53 1.42 -2.75 1.64 -3.20 C 1.95 -3.79 2.39 -4.15 2.79 -4.15 C 3.43 -4.15 3.57 -3.34 3.57 -3.28 C 3.57 -3.23 3.56 -3.17 3.54 -3.12 Z M 3.04 -1.17 "/>
-</g>
-<g id="c3-glyph-2-5">
-<path d="M 0.87 -0.57 C 0.84 -0.43 0.78 -0.20 0.78 -0.15 C 0.78 0.01 0.92 0.10 1.06 0.10 C 1.18 0.10 1.35 0.03 1.43 -0.17 C 1.45 -0.18 1.56 -0.65 1.62 -0.90 L 1.84 -1.79 C 1.90 -2.01 1.96 -2.23 2.01 -2.45 C 2.04 -2.62 2.12 -2.90 2.14 -2.95 C 2.28 -3.26 2.81 -4.15 3.75 -4.15 C 4.20 -4.15 4.29 -3.79 4.29 -3.46 C 4.29 -2.85 3.79 -1.57 3.64 -1.15 C 3.56 -0.93 3.54 -0.81 3.54 -0.70 C 3.54 -0.23 3.89 0.10 4.35 0.10 C 5.29 0.10 5.65 -1.34 5.65 -1.42 C 5.65 -1.51 5.56 -1.51 5.53 -1.51 C 5.43 -1.51 5.43 -1.48 5.39 -1.34 C 5.18 -0.65 4.85 -0.10 4.37 -0.10 C 4.20 -0.10 4.14 -0.20 4.14 -0.43 C 4.14 -0.68 4.23 -0.92 4.31 -1.14 C 4.5 -1.67 4.92 -2.75 4.92 -3.31 C 4.92 -3.98 4.5 -4.37 3.78 -4.37 C 2.89 -4.37 2.40 -3.75 2.23 -3.51 C 2.18 -4.07 1.78 -4.37 1.32 -4.37 C 0.87 -4.37 0.68 -4 0.57 -3.81 C 0.42 -3.48 0.28 -2.89 0.28 -2.85 C 0.28 -2.75 0.39 -2.75 0.40 -2.75 C 0.5 -2.75 0.51 -2.76 0.57 -2.98 C 0.75 -3.68 0.93 -4.15 1.29 -4.15 C 1.5 -4.15 1.60 -4.03 1.60 -3.70 C 1.60 -3.5 1.57 -3.39 1.45 -2.87 Z M 0.87 -0.57 "/>
-</g>
-<g id="c3-glyph-3-0">
-<path d="M 6.81 -3.23 C 6.95 -3.23 7.14 -3.23 7.14 -3.43 C 7.14 -3.64 6.95 -3.64 6.81 -3.64 L 0.87 -3.64 C 0.75 -3.64 0.56 -3.64 0.56 -3.43 C 0.56 -3.23 0.75 -3.23 0.89 -3.23 Z M 6.81 -1.31 C 6.95 -1.31 7.14 -1.31 7.14 -1.51 C 7.14 -1.71 6.95 -1.71 6.81 -1.71 L 0.89 -1.71 C 0.75 -1.71 0.56 -1.71 0.56 -1.51 C 0.56 -1.31 0.75 -1.31 0.87 -1.31 Z M 6.81 -1.31 "/>
-</g>
-<g id="c3-glyph-4-0">
-<path d="M 2.32 -4.40 C 2.32 -4.59 2.31 -4.60 2.10 -4.60 C 1.67 -4.17 1.04 -4.15 0.75 -4.15 L 0.75 -3.90 C 0.92 -3.90 1.37 -3.90 1.76 -4.10 L 1.76 -0.56 C 1.76 -0.34 1.76 -0.25 1.06 -0.25 L 0.81 -0.25 L 0.81 0 C 0.92 0 1.78 -0.03 2.04 -0.03 C 2.25 -0.03 3.12 0 3.28 0 L 3.28 -0.25 L 3.01 -0.25 C 2.32 -0.25 2.32 -0.34 2.32 -0.56 Z M 2.32 -4.40 "/>
-</g>
-<g id="c3-glyph-4-1">
-<path d="M 3.5 -1.26 L 3.26 -1.26 C 3.25 -1.10 3.17 -0.70 3.09 -0.62 C 3.03 -0.59 2.5 -0.59 2.40 -0.59 L 1.12 -0.59 C 1.85 -1.23 2.09 -1.42 2.51 -1.75 C 3.03 -2.17 3.5 -2.59 3.5 -3.25 C 3.5 -4.09 2.76 -4.60 1.87 -4.60 C 1.01 -4.60 0.43 -4 0.43 -3.35 C 0.43 -3.01 0.73 -2.96 0.81 -2.96 C 0.96 -2.96 1.17 -3.09 1.17 -3.34 C 1.17 -3.46 1.12 -3.71 0.76 -3.71 C 0.98 -4.20 1.45 -4.35 1.78 -4.35 C 2.46 -4.35 2.82 -3.81 2.82 -3.25 C 2.82 -2.65 2.40 -2.17 2.17 -1.92 L 0.5 -0.26 C 0.43 -0.20 0.43 -0.18 0.43 0 L 3.29 0 Z M 3.5 -1.26 "/>
-</g>
-<g id="c3-glyph-5-0">
-<path d="M 6.04 -3.76 C 6.04 -5.26 4.53 -5.92 3.29 -5.92 C 2.01 -5.92 0.54 -5.23 0.54 -3.78 L 0.54 -0.14 C 0.54 0.04 0.54 0.21 0.75 0.21 C 0.93 0.21 0.93 0.04 0.93 -0.14 L 0.93 -3.71 C 0.93 -5.20 2.56 -5.53 3.29 -5.53 C 3.75 -5.53 4.37 -5.43 4.89 -5.10 C 5.65 -4.60 5.65 -3.98 5.65 -3.71 L 5.65 -0.14 C 5.65 0.04 5.65 0.21 5.85 0.21 C 6.04 0.21 6.04 0.04 6.04 -0.14 Z M 6.04 -3.76 "/>
-</g>
-<g id="c3-glyph-5-1">
-<path d="M 3.85 -2.75 L 1.87 -4.71 C 1.75 -4.84 1.73 -4.85 1.65 -4.85 C 1.56 -4.85 1.45 -4.78 1.45 -4.67 C 1.45 -4.59 1.46 -4.57 1.57 -4.46 L 3.56 -2.48 L 1.57 -0.48 C 1.46 -0.37 1.45 -0.35 1.45 -0.28 C 1.45 -0.17 1.56 -0.09 1.65 -0.09 C 1.73 -0.09 1.75 -0.10 1.87 -0.23 L 3.84 -2.20 L 5.89 -0.15 C 5.90 -0.14 5.98 -0.09 6.04 -0.09 C 6.15 -0.09 6.23 -0.17 6.23 -0.28 C 6.23 -0.31 6.23 -0.34 6.21 -0.39 C 6.20 -0.42 4.62 -1.96 4.12 -2.48 L 5.93 -4.29 C 6 -4.34 6.14 -4.48 6.18 -4.53 C 6.20 -4.56 6.23 -4.59 6.23 -4.67 C 6.23 -4.78 6.15 -4.85 6.04 -4.85 C 5.96 -4.85 5.92 -4.82 5.81 -4.71 Z M 3.85 -2.75 "/>
-</g>
-</g>
-<clipPath id="c3-clip-0">
-<path clip-rule="nonzero" d="M 7 50 L 213.23 50 L 213.23 117 L 7 117 Z M 7 50 "/>
-</clipPath>
-</defs>
-<path class="f-mint L1" fill-rule="nonzero" fill="#2E8B75" fill-opacity="0.22" d="M 21.21 102.39 L 157.62 102.39 L 208.77 64.88 L 72.36 64.88 Z M 21.21 102.39 "/>
-<g clip-path="url(#c3-clip-0)">
-<path class="s-mint L1" fill="none" stroke-width="0.99" stroke-linecap="butt" stroke-linejoin="miter" stroke="#2E8B75" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00 -0.00 L 137.19 -0.00 L 188.65 37.72 L 51.44 37.72 Z M 0.00 -0.00 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-</g>
-<g class="f-mint L1" fill="#2E8B75" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-0" x="6.17" y="97.86"/>
-</g>
-<g class="f-mint L1" fill="#2E8B75" fill-opacity="1">
-<use xlink:href="#c3-glyph-1-0" x="12.78" y="99.64"/>
-</g>
-<path class="s-mint L1" fill="none" stroke-width="1.49" stroke-linecap="butt" stroke-linejoin="miter" stroke="#2E8B75" stroke-opacity="1" stroke-miterlimit="10" d="M 24.94 23.38 L 24.94 48.34 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-<path class="f-mint L1" fill-rule="nonzero" fill="#2E8B75" fill-opacity="1" d="M 46.01 48.14 L 42.89 56.56 L 46.01 54.33 L 49.13 56.56 Z M 46.01 48.14 "/>
-<g class="f-mint L1" fill="#2E8B75" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-1" x="31.28" y="51.49"/>
-</g>
-<g class="f-mint L1" fill="#2E8B75" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-2" x="31.64" y="51.49"/>
-</g>
-<g class="f-mint L1" fill="#2E8B75" fill-opacity="1">
-<use xlink:href="#c3-glyph-1-0" x="38.58" y="53.27"/>
-</g>
-<path class="f-acc s-acc L2" fill-rule="nonzero" fill="#D9622B" fill-opacity="0.22" stroke-width="0.99" stroke-linecap="butt" stroke-linejoin="miter" stroke="#D9622B" stroke-opacity="1" stroke-miterlimit="10" d="M 49.88 -18.70 L 101.34 19.01 L 101.34 93.54 L 49.88 55.81 Z M 49.88 -18.70 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-<g class="f-acc L2" fill="#D9622B" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-0" x="124.06" y="11.06"/>
-</g>
-<g class="f-acc L2" fill="#D9622B" fill-opacity="1">
-<use xlink:href="#c3-glyph-1-1" x="130.66" y="12.84"/>
-</g>
-<path class="s-acc L2" fill="none" stroke-width="1.49" stroke-linecap="butt" stroke-linejoin="miter" stroke="#D9622B" stroke-opacity="1" stroke-miterlimit="10" d="M 75.45 65.48 L 50.50 65.48 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-<path class="f-acc L2" fill-rule="nonzero" fill="#D9622B" fill-opacity="1" d="M 65.23 37.29 L 73.65 40.41 L 71.42 37.29 L 73.65 34.17 Z M 65.23 37.29 "/>
-<g class="f-acc L2" fill="#D9622B" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-1" x="50.51" y="40.63"/>
-</g>
-<g class="f-acc L2" fill="#D9622B" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-2" x="50.86" y="40.63"/>
-</g>
-<g class="f-acc L2" fill="#D9622B" fill-opacity="1">
-<use xlink:href="#c3-glyph-1-1" x="57.80" y="42.42"/>
-</g>
-<path class="s-ink L3" fill="none" stroke-width="1.99" stroke-linecap="butt" stroke-linejoin="miter" stroke="#1F2A44" stroke-opacity="1" stroke-miterlimit="10" d="M 31.17 -32.42 L 124.72 36.16 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-<g class="f-ink L3" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-3" x="148.19" y="63.46"/>
-</g>
-<path class="s-blue L4" fill="none" stroke-width="1.89" stroke-linecap="butt" stroke-linejoin="miter" stroke="#3F72B5" stroke-opacity="1" stroke-miterlimit="10" d="M 102.89 20.26 L 115.84 29.76 " transform="matrix(0.99, 0, 0, -0.99, 21.21, 102.39)"/>
-<path class="f-blue L4" fill-rule="nonzero" fill="#3F72B5" fill-opacity="1" d="M 142.12 68.60 L 132.26 71.42 L 136.39 72.80 L 136.47 77.15 Z M 142.12 68.60 "/>
-<g class="f-blue L4" fill="#3F72B5" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-1" x="141.77" y="87.68"/>
-</g>
-<g class="f-blue L4" fill="#3F72B5" fill-opacity="1">
-<use xlink:href="#c3-glyph-0-4" x="140.64" y="90.82"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-0" x="37.27" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-3-0" x="46.76" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-1" x="57.22" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-4-0" x="62.86" y="157.37"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-5-0" x="69.51" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-1" x="78.31" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-4-1" x="83.96" y="157.37"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-2" x="88.40" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-3" x="103.70" y="153.27"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-4" x="102.71" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-3-0" x="110.62" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-3" x="120.81" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-5" x="121.07" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-4-0" x="127.02" y="157.37"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-5-1" x="133.66" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-3" x="143.30" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-2-5" x="143.57" y="155.88"/>
-</g>
-<g class="f-ink L4" fill="#1F2A44" fill-opacity="1">
-<use xlink:href="#c3-glyph-4-1" x="149.51" y="157.37"/>
-</g>
-</svg><p class="cap">Dos planos se cortan en la recta <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span>, con director <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>d</mi><mo>⃗</mo></mover><mo>=</mo><msub><mover accent="true"><mi>n</mi><mo>⃗</mo></mover><mn>1</mn></msub><mo>×</mo><msub><mover accent="true"><mi>n</mi><mo>⃗</mo></mover><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\vv d=\vv n_1\times\vv n_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9774em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9774em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">d</span></span><span style="top:-3.2634em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0688em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.471em" height="0.714em" style="width:0.471em" viewBox="0 0 471 714" preserveAspectRatio="xMinYMin"><path d="M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
-3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
-10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
--1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
--7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
-H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
-c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.864em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">n</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.471em" height="0.714em" style="width:0.471em" viewBox="0 0 471 714" preserveAspectRatio="xMinYMin"><path d="M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
-3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
-10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
--1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
--7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
-H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
-c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.864em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">n</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.471em" height="0.714em" style="width:0.471em" viewBox="0 0 471 714" preserveAspectRatio="xMinYMin"><path d="M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
-3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
-10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
--1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
--7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
-H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
-c-16-25.333-24-45-24-59z"/></svg></span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.</p></div></div></div>
+    <div class="hero-art"><svg class="hero-svg" viewBox="0 0 600 520" role="img" aria-label="Ilustración: dos planos que se cortan en la recta L; el director de L es el producto cruz de las normales">
+  <defs><pattern id="hdg" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.8" style="fill:var(--hero-dot)"/></pattern>
+  <clipPath id="hcl"><circle cx="318" cy="258" r="232"/></clipPath></defs>
+  <circle cx="318" cy="258" r="232" style="fill:var(--hero-disc)"/>
+  <rect x="86" y="26" width="464" height="464" clip-path="url(#hcl)" style="fill:url(#hdg);opacity:.9"/>
+  <path d="M470 24a70 70 0 0 1 120 0z" transform="rotate(180 530 24)" style="fill:var(--yel)"/>
+  <path d="M18 506l34-58 34 58z" style="fill:var(--viol)"/>
+  <circle cx="560" cy="440" r="22" style="fill:var(--orange)"/>
+  <path transform="translate(70 110) scale(1.6)" d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" style="fill:var(--orange)"/><path transform="translate(560 150) scale(1)" d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" style="fill:var(--sky)"/>
+  <!-- mitad inferior de π2 (detrás de π1) -->
+  <path d="M120 340L500 302L500 397L120 435Z" style="fill:var(--hero-p2);stroke:var(--hero-p2s);stroke-width:3;stroke-linejoin:round"/>
+  <path d="M40 380L420 380L560 262L180 262Z" style="fill:var(--hero-p1);stroke:var(--hero-p1s);stroke-width:3;stroke-linejoin:round"/>
+  <!-- mitad superior de π2 (delante) -->
+  <path d="M120 340L500 302L500 97L120 135Z" style="fill:var(--hero-p2);fill-opacity:.88;stroke:var(--hero-p2s);stroke-width:3;stroke-linejoin:round"/>
+  <!-- recta L -->
+  <path d="M51.6 346.8L545.6 297.4" style="stroke:var(--ink);stroke-width:6;stroke-linecap:round"/>
+  <circle cx="310" cy="321" r="7" style="fill:var(--ink)"/>
+  <path d="M310 321L397.6 312.2" style="stroke:var(--hero-d);stroke-width:6;stroke-linecap:round;fill:none"/><path d="M416.4 310.4L392.1 330.7L397.6 312.2L388.6 295.3Z" style="fill:var(--hero-d)"/>
+  <path d="M96 368L96 264.6" style="stroke:var(--hero-n1);stroke-width:5;stroke-linecap:round;fill:none"/><path d="M96 248L111.5 271L96 264.6L80.5 271Z" style="fill:var(--hero-n1)"/>
+  <path d="M380 190L435 146.3" style="stroke:var(--hero-n2);stroke-width:5;stroke-linecap:round;fill:none"/><path d="M448 136L439.6 162.4L435 146.3L420.3 138.2Z" style="fill:var(--hero-n2)"/>
+  <g style="fill:var(--hero-d)"><text x="355.6" y="360.4" style="font:italic 30px KaTeX_Math,'Times New Roman',serif">d</text><path d="M357.6 334.59999999999997h15m-4.2 -3l4.2 3l-4.2 3" style="stroke:var(--hero-d);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round"/></g>
+  <g style="fill:var(--hero-n1)"><text x="52" y="250" style="font:italic 30px KaTeX_Math,'Times New Roman',serif">n<tspan dy="6.6" style="font:19.8px KaTeX_Main,'Times New Roman',serif">1</tspan></text><path d="M54 231.4h15m-4.2 -3l4.2 3l-4.2 3" style="stroke:var(--hero-n1);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round"/></g>
+  <g style="fill:var(--hero-n2)"><text x="454" y="132" style="font:italic 30px KaTeX_Math,'Times New Roman',serif">n<tspan dy="6.6" style="font:19.8px KaTeX_Main,'Times New Roman',serif">2</tspan></text><path d="M456 113.4h15m-4.2 -3l4.2 3l-4.2 3" style="stroke:var(--hero-n2);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round"/></g>
+  <g style="fill:var(--ink)"><text x="557.4" y="287.1" style="font:italic 32px KaTeX_Math,'Times New Roman',serif">L</text></g>
+  <g style="fill:var(--hero-p1s)"><text x="56" y="424" style="font:italic 30px KaTeX_Math,'Times New Roman',serif">π<tspan dy="6.6" style="font:19.8px KaTeX_Main,'Times New Roman',serif">1</tspan></text></g>
+  <g style="fill:var(--hero-p2s)"><text x="510" y="88" style="font:italic 30px KaTeX_Math,'Times New Roman',serif">π<tspan dy="6.6" style="font:19.8px KaTeX_Main,'Times New Roman',serif">2</tspan></text></g>
+</svg></div>
   </div>
 </header>
 
