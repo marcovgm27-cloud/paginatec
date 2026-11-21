@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es-CR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guion · Tema 3 · Gestión del conocimiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Misma familia visual de la presentación: rosa claro de fondo, azul para títulos, verde para acciones. */
+  --bg:#FCEFEE; --paper:#FFFFFF; --ink:#22264A; --muted:#5C6080; --line:#F1D3D1;
+  --blue:#2E54B0; --blue-soft:#E7EDFA; --green:#127A55; --green-soft:#E2F4EC; --pink:#F3A9A2; --pink-soft:#FBE1DE;
+  --font:"Open Sans","Segoe UI",Arial,sans-serif;
+  --read:30px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:20px;padding:14px 28px;background:var(--paper);border-bottom:2px solid var(--line);flex-wrap:wrap}
+header .t{flex:1;min-width:260px}
+header .t b{display:block;color:var(--blue);font-size:20px;font-weight:800;letter-spacing:.01em}
+header .t span{font-size:15px;color:var(--muted)}
+.tabs{display:flex;gap:6px}
+.tabs button{font:700 15px var(--font);padding:9px 16px;border-radius:999px;border:2px solid transparent;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--blue);color:#fff}
+.tabs button:hover{border-color:var(--line)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+main{flex:1;min-height:0;display:flex}
+.panel{display:none;flex:1;min-height:0}
+.panel.on{display:flex}
+
+/* Pestaña Guion */
+#guion aside{width:300px;flex:none;overflow:auto;background:var(--paper);border-right:2px solid var(--line);padding:14px 10px}
+#guion aside button{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;width:100%;text-align:left;font:600 15px var(--font);color:var(--ink);background:transparent;border:0;border-radius:10px;padding:9px 10px;cursor:pointer}
+#guion aside button .n{font-weight:800;color:var(--blue)}
+#guion aside button .d{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+#guion aside button[aria-current="true"]{background:var(--blue-soft)}
+#guion aside button:hover{background:var(--pink-soft)}
+.reader{flex:1;min-width:0;display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:10px;padding:12px 28px;flex-wrap:wrap}
+.bar button{font:700 15px var(--font);padding:8px 14px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.bar button[aria-pressed="true"]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.bar .sp{flex:1}
+.clock{font:800 18px var(--font);font-variant-numeric:tabular-nums}
+.pace{font:700 14px var(--font);padding:4px 12px;border-radius:999px;background:var(--blue-soft);color:var(--blue)}
+.pace.late{background:#FBE3DC;color:#A2402A}.pace.ok{background:var(--green-soft);color:var(--green)}
+.scroll{flex:1;overflow:auto;padding:8px 28px 60px}
+.card{max-width:980px;margin:0 auto 28px;background:var(--paper);border-radius:22px;padding:34px 44px 38px;box-shadow:0 2px 0 var(--line)}
+.card .head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--pink-soft);padding-bottom:14px;margin-bottom:22px}
+.card .num{font-size:15px;font-weight:800;color:#fff;background:var(--blue);border-radius:999px;padding:3px 12px}
+.card h2{margin:0;font-size:28px;font-weight:800;color:var(--blue);flex:1;text-wrap:balance}
+.card .when{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card .see{font-size:16px;color:var(--muted);margin:-8px 0 22px;font-style:italic}
+.say{font-size:var(--read);line-height:1.62;margin:0 0 .75em}
+.say strong{color:var(--blue);font-weight:700}
+.pz{display:inline-block;width:.42em;height:.42em;vertical-align:.12em;margin:0 .18em;border-radius:50%;background:var(--pink)}
+.do{display:flex;gap:12px;align-items:flex-start;font-size:calc(var(--read) * .62);line-height:1.45;color:var(--green);background:var(--green-soft);border-radius:12px;padding:10px 16px;margin:4px 0 18px;font-weight:600}
+.do:before{content:"▶";font-size:.8em;margin-top:.2em}
+.next{font-size:calc(var(--read) * .62);color:var(--muted);margin-top:22px;border-top:2px dashed var(--line);padding-top:14px}
+.next b{color:var(--ink)}
+.single .card:not(.cur){display:none}
+.reading #guion aside,.reading header{display:none}
+.reading .scroll{padding-top:20px}
+.reading .card{box-shadow:none}
+
+/* Pestaña Vista general */
+#general .wrap,#consejos .wrap{flex:1;overflow:auto;padding:28px}
+table{border-collapse:collapse;width:100%;max-width:1100px;margin:0 auto;background:var(--paper);border-radius:16px;overflow:hidden}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);font-size:16px;vertical-align:top}
+th{background:var(--blue);color:#fff;font-weight:700}
+td.tm{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+td.k{font-weight:600}
+tr:hover td{background:var(--pink-soft);cursor:pointer}
+.tot{max-width:1100px;margin:16px auto 0;font-size:16px;color:var(--muted)}
+
+/* Pestaña Consejos */
+.tips{max-width:900px;margin:0 auto;display:grid;gap:16px}
+.tip{background:var(--paper);border-radius:18px;padding:22px 26px}
+.tip h3{margin:0 0 6px;color:var(--blue);font-size:20px}
+.tip p{margin:0;font-size:17px;line-height:1.55}
+
+@media (max-width:820px){ #guion aside{display:none} .card{padding:24px} .say{font-size:calc(var(--read) * .8)} }
+@media print{
+  header,.bar,#guion aside,.tabs{display:none!important}
+  body,html{height:auto;background:#fff} main,.panel,.reader,.scroll{display:block!important;overflow:visible!important}
+  #general,#consejos{display:none!important}
+  .card{display:block!important;box-shadow:none;page-break-inside:avoid;border:1px solid #ddd;margin-bottom:12px}
+  .say{font-size:16pt}
+}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<header>
+  <div class="t"><b>Guion de la exposición · Tema 3</b><span>Gestión del conocimiento en propuestas educativas híbridas · 21 diapositivas · 14:40 de 15:00</span></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="guion" id="tab-guion">Guion</button>
+    <button role="tab" aria-selected="false" aria-controls="general" id="tab-general">Vista general</button>
+    <button role="tab" aria-selected="false" aria-controls="consejos" id="tab-consejos">Consejos para leer</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel on" id="guion" role="tabpanel" aria-labelledby="tab-guion">
+    <aside id="list" aria-label="Diapositivas"></aside>
+    <div class="reader">
+      <div class="bar">
+        <button type="button" id="prev">◀ Anterior</button>
+        <button type="button" id="next">Siguiente ▶</button>
+        <button type="button" id="mode" aria-pressed="true">Una a la vez</button>
+        <button type="button" id="smaller" aria-label="Letra más pequeña">A−</button>
+        <button type="button" id="bigger" aria-label="Letra más grande">A+</button>
+        <button type="button" id="readBtn" aria-pressed="false">Modo lectura</button>
+        <span class="sp"></span>
+        <span class="pace" id="pace">Cronómetro detenido</span>
+        <span class="clock" id="clock">0:00 / 15:00</span>
+        <button type="button" id="timer">Iniciar</button>
+      </div>
+      <div class="scroll single" id="scroll"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="general" role="tabpanel" aria-labelledby="tab-general">
+    <div class="wrap">
+      <table>
+        <thead><tr><th>#</th><th>Diapositiva</th><th>Tiempo</th><th>Idea que no puede faltar</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="tot">Haga clic en una fila para abrir su guion. Total previsto: 14:40, con 20 segundos de margen.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="consejos" role="tabpanel" aria-labelledby="tab-consejos">
+    <div class="wrap">
+      <div class="tips">
+        <div class="tip"><h3>Lea las frases, no las palabras</h3><p>Cada oración está escrita para decirse de un solo aliento. Mire la oración completa antes de decirla y levante la vista al terminarla. Así suena a conversación y no a lectura.</p></div>
+        <div class="tip"><h3>Respete las pausas</h3><p>El punto rosado <span class="pz" style="width:12px;height:12px"></span> marca una pausa breve: respire, mire a la cámara y siga. Las pausas dan peso a las ideas y le regalan tiempo para encontrar la siguiente línea.</p></div>
+        <div class="tip"><h3>Las palabras en azul son el ancla</h3><p>Si se pierde, busque la palabra en azul: es la idea central de esa parte. Con decirla en sus propias palabras basta para retomar el hilo.</p></div>
+        <div class="tip"><h3>Las indicaciones verdes no se leen</h3><p>Los recuadros verdes son acciones: pulsar un botón, esperar el video o escuchar al grupo. Hágalas con calma; son momentos que el guion ya tiene contados.</p></div>
+        <div class="tip"><h3>Si va atrasado</h3><p>Acorte la actividad de la diapositiva 11 a 40 segundos y en la 16 nombre solo las cuatro dimensiones de los indicadores. Nunca recorte el cierre ni el video final: es lo que el grupo recordará.</p></div>
+        <div class="tip"><h3>Modo lectura</h3><p>El botón «Modo lectura» oculta todo menos el texto. Use las flechas del teclado para avanzar y A+ para agrandar la letra. Puede tener este guion en una segunda pantalla o impreso (Ctrl + P imprime todas las diapositivas).</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+/* Formato del texto: **palabra** = ancla en azul · " / " = pausa breve · líneas que empiezan con ">" = acción (no se lee) */
+const S=[
+{t:'Portada y propósito',d:20,see:'Portada con el título, el curso DE061 y su nombre.',k:'Presentarse y anunciar el tema.',
+ txt:`Buenas noches. / Soy Marco Vinicio Gutiérrez, del Doctorado en Ciencias de la Educación de la Universidad Católica de Costa Rica.
+Hoy quiero conversar con ustedes sobre la **gestión del conocimiento en propuestas educativas híbridas**, / y sobre algunas estrategias para construir **organizaciones educativas inteligentes**, aplicadas a una institución con enseñanza híbrida.
+Y para entender el problema, / quiero empezar con una historia.`},
+{t:'La historia de Marta',d:160,see:'Video «Lo que se fue con la profesora Marta».',k:'Daniel recibió archivos, pero no la experiencia de Marta.',
+ txt:`Les presento a **Marta** y a **Daniel**. / Les pido que observen qué recibe Daniel... / y qué le hace falta.
+> Pulse Reproducir. El video dura 2:30. No hable mientras corre.
+Daniel recibió todos los archivos del curso. / Pero me quedo con una pregunta: / **¿qué más necesitaba Daniel** para enseñar como Marta?
+> Haga una pausa corta. Si alguien responde, agradézcale y siga.`},
+{t:'El saber que cuesta explicar',d:20,see:'Cita de Polanyi sobre fondo oscuro.',k:'Sabemos más de lo que podemos decir.',
+ txt:`Michael Polanyi lo dijo de una forma muy bella: / «**Podemos saber más de lo que podemos decir**».
+Documentar una experiencia conserva una parte de ese saber. / Pero es el **diálogo** y la **práctica compartida** lo que nos permite seguir aprendiéndolo.`},
+{t:'Conocimiento tácito y explícito',d:40,see:'Dos tarjetas: Tácito y Explícito, cada una con un interruptor.',k:'Las dos dimensiones se complementan.',
+ txt:`Por eso hablamos de **dos dimensiones que se complementan**.
+> Encienda la tarjeta «Tácito».
+El conocimiento **tácito** es personal y situado: / se desarrolla con la experiencia y cuesta expresarlo por completo. / En una clase híbrida, es reconocer cuándo el silencio del grupo indica confusión... / y decidir cómo intervenir.
+> Encienda la tarjeta «Explícito».
+El conocimiento **explícito** se articula y se codifica: / se puede comunicar con textos, diagramas o procedimientos. / Por ejemplo, una guía que explica cómo recoger respuestas del aula y del foro.
+Lo valioso es que la experiencia, / su explicación / y su puesta en práctica / **se enriquecen entre sí**.`},
+{t:'Gestionar para aprender',d:35,see:'Definición y tres niveles: persona, equipo, organización.',k:'El saber pasa de la persona al equipo y a la organización.',
+ txt:`Gestionar el conocimiento, entonces, es **crear condiciones** para generar, compartir, organizar y aplicar lo que una institución sabe.
+Todo empieza en una **persona** que aprende de una experiencia concreta. / Después, el **equipo** la contrasta, la explica y la mejora. / Y finalmente, la **organización** incorpora lo aprendido a sus decisiones y rutinas.
+Cuando ese saber cambia la práctica compartida, / ahí podemos hablar de **aprendizaje organizacional**.`},
+{t:'Conexión con las disciplinas de Senge',d:25,see:'Las cinco disciplinas, numeradas.',k:'Una cultura que hace circular el saber.',
+ txt:`Las cinco disciplinas de Senge nos ayudan a pensar **una cultura que hace circular el saber**.
+El dominio personal, / para reconocer qué sé y qué necesito aprender. / Los modelos mentales, / para revisar cómo creemos que se aprende. / La visión compartida, / para acordar para qué y con quién compartimos. / El aprendizaje en equipo, / para reflexionar juntos sobre la práctica. / Y el pensamiento sistémico, / para **conectar personas, procesos y decisiones**.`},
+{t:'Qué entendemos por educación híbrida',d:40,see:'Secuencia: antes en línea, durante presencial, después en línea.',k:'Lo híbrido conecta espacios con continuidad.',
+ txt:`Ahora bien, / ¿qué entendemos por **educación híbrida**?
+Garrison y Kanuka la describen como una **integración deliberada** de experiencias presenciales y en línea, / con continuidad en los propósitos. / Y Hodges y sus colegas nos recuerdan que no es lo mismo que una respuesta de emergencia ante una crisis.
+Imaginemos una secuencia. / **Antes**, en línea, una pregunta en el foro recoge ideas y dificultades. / **Durante**, en el aula, retomamos esas ideas para discutir y aplicar. / **Después**, de nuevo en línea, el grupo explica sus decisiones y recibe retroalimentación.
+Cada momento retoma lo aprendido en el anterior.`},
+{t:'El riesgo de la dispersión',d:20,see:'Cuatro saberes dispersos que llegan a una memoria institucional.',k:'¿Quién recupera ese saber y para qué?',
+ txt:`Pero aquí aparece el riesgo. / Una decisión tomada en el aula, / una solución que quedó en un chat, / una adaptación frente a la desconexión... / Todo eso se dispersa.
+La idea es convertirlo en una **memoria útil**. / Y la pregunta clave es: / **¿quién recupera ese saber, y para qué decisión lo utiliza?**`},
+{t:'Ba: un contexto compartido',d:30,see:'Diagrama del ba: encuentro, interacción y confianza.',k:'El conocimiento nace en la relación entre personas.',
+ txt:`Para que esa memoria exista, hace falta un lugar de encuentro. / Nonaka y Konno lo llaman **ba**: / un contexto compartido para crear saber.
+El conocimiento se crea en la **relación entre las personas** y su contexto. / Ese contexto puede ser físico, virtual / o una combinación de ambos, / y se sostiene con encuentro, interacción y **confianza**.
+En nuestro caso, sería una comunidad del equipo docente que comparte experiencias, / las contrasta / y acuerda cómo probarlas.`},
+{t:'SECI en una institución híbrida',d:80,see:'Cuatro botones: socialización, externalización, combinación, interiorización.',k:'La espiral conecta experiencia, explicación y práctica.',
+ txt:`En ese contexto se mueve la **espiral SECI** de Nonaka y Takeuchi, / que conecta experiencia, explicación y práctica.
+> Pulse «Socialización».
+Primero, la **socialización**: / de tácito a tácito. / Se aprende al compartir la experiencia. / Por ejemplo, dos docentes acompañan una secuencia entre el aula y el foro, / y luego conversan sobre ella.
+> Pulse «Externalización».
+Luego, la **externalización**: / de tácito a explícito. / La docente explica por qué cambió una consigna / y en qué condiciones le funcionó. / Eso puede quedar en una ficha breve.
+> Pulse «Combinación».
+Después, la **combinación**: / de explícito a explícito. / El equipo compara las fichas y acuerda cómo organizarlas, / en una colección con autoría y responsables.
+> Pulse «Interiorización».
+Y finalmente, la **interiorización**: / de explícito a tácito. / Otro docente adapta una ficha, / la aplica / y reflexiona sobre lo que ocurrió.
+Así, la espiral **se renueva** cada vez que alguien contrasta y transforma lo aprendido.`},
+{t:'Actividad: una guía de prácticas para Daniel',d:90,see:'Pregunta para el grupo, contador de 1:00 y tablero.',k:'Construir juntos una guía para Daniel.',
+ txt:`Ahora quiero que hagamos algo juntos, / pensando en Daniel.
+Les pregunto: / **¿qué hacen ustedes para conectar el aula con el trabajo en línea, / y en qué momento les funciona?**
+Pueden responder en el chat o en voz alta, / con una sola frase. / Tienen un minuto.
+> Pulse «Iniciar». Escriba una o dos respuestas, elija el tema y pulse «Agregar». Si nadie responde, pulse «Usar ejemplo» y luego «Agregar».
+> Lea en voz alta lo que llegue: «Gracias. Aquí tenemos...».
+> En los últimos veinte segundos, pulse «Ordenar en guía».
+Miren lo que acabamos de hacer. / Al **explicar** una práctica, la externalizamos. / Y al **compararla** con las demás, la combinamos.
+Entonces, / ¿cuál de estos consejos podría **probar Daniel** en su próxima clase?`},
+{t:'Estrategias centradas en las personas',d:40,see:'Tres tarjetas, cada una con su producto.',k:'Hacer del intercambio una práctica habitual.',
+ txt:`Para que esto no se quede en una actividad aislada, / propongo **hacer del intercambio una práctica habitual**.
+La primera estrategia es una **comunidad profesional de aprendizaje**: / reunir al equipo para indagar sobre una dificultad compartida, / y llegar a un acuerdo que se prueba y se revisa con evidencias.
+La segunda, la **mentoría y la docencia compartida**: / observar cómo otra persona decide e interviene, / conversar sobre sus razones / y ensayar con acompañamiento.
+Y la tercera, un **cierre reflexivo** de cada ciclo: / una ficha que conserva la experiencia, sus límites y sus preguntas. / Me apoyo en Stoll y sus colegas, y en Hargreaves y Fullan.`},
+{t:'Soporte y responsabilidades institucionales',d:40,see:'Tres columnas: organizar, apoyar y sostener.',k:'Dar soporte, tiempo y responsabilidad.',
+ txt:`Pero las personas necesitan **soporte, tiempo y responsabilidad**.
+Primero, un **repositorio con curaduría**: / cada recurso con contexto, autoría, fecha / y alguien que lo revise / y decida qué se conserva, qué se actualiza y qué se retira.
+Segundo, la **inteligencia artificial**, con revisión docente: / puede apoyar la clasificación y la síntesis de experiencias, / siempre anonimizando los datos, / comprobando el contenido / y conservando la autoría, / como recomienda la UNESCO.
+Y tercero, un **liderazgo que habilita**: / que acuerde tiempo de trabajo, reconocimiento / y confianza para compartir también las dificultades.`},
+{t:'Caso hipotético: una institución educativa',d:50,see:'Marta y Daniel, con la situación, el relevo y la pregunta del caso.',k:'Daniel necesita las razones, no solo los archivos.',
+ txt:`Veamos cómo se aplicaría en **una institución que necesita aprender en equipo**. / Es un caso hipotético.
+El curso combina trabajo en el aula y actividades en línea, / y cada docente conserva sus propios ajustes en chats, carpetas y materiales.
+Marta se jubila / y Daniel asume su curso. / Además de los archivos, / Daniel necesita comprender **las razones de sus decisiones** / y cómo conectaba ambos espacios.
+Entonces, la pregunta es: / **¿cómo conservar y mejorar esa experiencia para que otras personas puedan utilizarla?**
+Mi propuesta es que un equipo docente pruebe un ciclo de **acompañamiento, documentación y revisión**. / Lo construí como situación ficticia, para aplicar estos marcos.`},
+{t:'Propuesta: ciclo de saber docente',d:60,see:'Ciclo de cuatro pasos marcados S, E, C e I.',k:'Observar, explicar, curar y aplicar.',
+ txt:`Este es el **ciclo de saber docente** que propongo, / inspirado en SECI y en las comunidades profesionales de aprendizaje.
+Al inicio, **observar y dialogar**: / dos docentes observan una secuencia híbrida y conversan sobre sus decisiones.
+Durante el semestre, **explicar la experiencia**: / una ficha recoge el contexto, la decisión, la evidencia y sus límites.
+Al cierre del ciclo, **curar y relacionar**: / la persona curadora revisa las fichas con el equipo y organiza la colección.
+Y en el siguiente ciclo, **aplicar y ajustar**: / otro docente prueba una práctica y documenta lo que cambió.
+Para sostenerlo, las responsabilidades se comparten entre la coordinación académica, la mentoría y la revisión de la colección. / Y todo se acuerda con el equipo docente.
+> Si le sobra tiempo, pulse «Ver una ficha de ejemplo».`},
+{t:'Condiciones e indicadores del piloto',d:50,see:'Condiciones a la izquierda y tabla de cuatro indicadores.',k:'Evaluar si el conocimiento llega a utilizarse.',
+ txt:`¿Y cómo sabremos si funciona? / Lo importante es **evaluar si el conocimiento llega a utilizarse**.
+El piloto necesita tres condiciones: / tiempo acordado y una persona curadora; / confianza para hablar de aciertos y dificultades; / y datos protegidos, con revisión humana.
+Para evaluarlo, propongo cuatro indicadores. / **Calidad**: cuántas fichas tienen contexto, evidencia, límites y responsable. / **Reutilización**: cuántas personas prueban y documentan una práctica compartida. / **Aprendizaje**: qué ajustes regresan al siguiente ciclo. / Y **resultado**: el tiempo de inducción y las dificultades de participación, comparados con una línea base.
+Son indicadores propuestos: / todavía no hay resultados, / y sus metas se definirían al iniciar el piloto.`},
+{t:'Conclusiones y pregunta crítica',d:40,see:'Frase final, tres verbos y la pregunta crítica.',k:'Conectar, sostener y comprobar.',
+ txt:`Para cerrar: / **el saber se vuelve institucional cuando otra persona puede usarlo y mejorarlo**.
+Para lograrlo, les dejo tres verbos. / **Conectar**: la experiencia, el diálogo y la documentación. / **Sostener**: con tiempo, confianza y responsabilidades. / Y **comprobar**: que lo aprendido se reutiliza y cambia la práctica.
+Y les dejo una pregunta, / para que la piensen un momento: / **¿qué práctica de su institución documentaría mañana... / y con quién la pondría a prueba?**
+> Espere tres segundos en silencio.
+Y para cerrar, / les comparto un breve video.`},
+{t:'Video de cierre',d:40,see:'Video de 37 segundos: Marta y Daniel se despiden y recorren la espiral SECI.',k:'Cerrar con calidez y abrir las preguntas.',
+ txt:`> Pulse reproducir. El video dura 37 segundos. No hable mientras corre.
+Muchas gracias por su atención. / Con gusto escucho sus **preguntas y comentarios**.`},
+{t:'Referencias 1 de 3',d:0,see:'Primera página de referencias.',k:'Solo para consulta.',
+ txt:`> No se leen. Muéstrelas solo si alguien pregunta por una fuente.
+Aquí quedan las referencias, / para quien quiera consultarlas.`},
+{t:'Referencias 2 de 3',d:0,see:'Segunda página de referencias.',k:'Solo para consulta.',
+ txt:`> No se leen. Avance solo si alguien lo pide.`},
+{t:'Referencias 3 de 3',d:0,see:'Tercera página de referencias.',k:'Solo para consulta.',
+ txt:`> No se leen. Quedan en pantalla mientras responde preguntas.`}
+];
+const START=[]; S.reduce((a,s,i)=>{START[i]=a;return a+s.d;},0);
+const fmt=x=>{x=Math.max(0,Math.round(x));return Math.floor(x/60)+':'+String(x%60).padStart(2,'0');};
+const esc=x=>x.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function rich(line){ return esc(line).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/ \/ /g,' <span class="pz" aria-label="pausa"></span> ').replace(/ \/$/,' <span class="pz" aria-label="pausa"></span>'); }
+const $=id=>document.getElementById(id);
+
+/* Tarjetas del guion */
+$('scroll').innerHTML=S.map((s,i)=>{
+  const body=s.txt.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.startsWith('>')?`<div class="do">${esc(l.slice(1).trim())}</div>`:`<p class="say">${rich(l)}</p>`).join('');
+  const when=s.d?`${fmt(START[i])} a ${fmt(START[i]+s.d)} · ${fmt(s.d)}`:'Para consulta';
+  const nx=S[i+1]?`<div class="next">Sigue: <b>${i+2} · ${esc(S[i+1].t)}</b></div>`:'';
+  return `<article class="card" id="c${i}"><div class="head"><span class="num">${i+1} / ${S.length}</span><h2>${esc(s.t)}</h2><span class="when">${when}</span></div><p class="see">En pantalla: ${esc(s.see)}</p>${body}${nx}</article>`;
+}).join('');
+$('list').innerHTML=S.map((s,i)=>`<button type="button" data-i="${i}"><span class="n">${i+1}</span><span>${esc(s.t)}</span><span class="d">${s.d?fmt(s.d):''}</span></button>`).join('');
+$('rows').innerHTML=S.map((s,i)=>`<tr data-i="${i}"><td>${i+1}</td><td class="k">${esc(s.t)}</td><td class="tm">${s.d?fmt(START[i])+' a '+fmt(START[i]+s.d)+' ('+fmt(s.d)+')':'Consulta'}</td><td>${esc(s.k)}</td></tr>`).join('');
+
+let cur=0, single=true;
+function show(i,scroll=true){
+  cur=Math.max(0,Math.min(S.length-1,i));
+  document.querySelectorAll('.card').forEach((c,k)=>c.classList.toggle('cur',k===cur));
+  document.querySelectorAll('#list button').forEach((b,k)=>b.setAttribute('aria-current',String(k===cur)));
+  const b=document.querySelector(`#list button[data-i="${cur}"]`); if(b) b.scrollIntoView({block:'nearest'});
+  if(scroll){ if(single) $('scroll').scrollTop=0; else $('c'+cur).scrollIntoView({behavior:'smooth',block:'start'}); }
+  try{ localStorage.setItem('guion-t3-cur',cur); }catch(e){}
+  paint();
+}
+$('list').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) show(+b.dataset.i); });
+$('rows').addEventListener('click',e=>{ const r=e.target.closest('tr'); if(r){ tab('guion'); show(+r.dataset.i); } });
+$('prev').addEventListener('click',()=>show(cur-1));
+$('next').addEventListener('click',()=>show(cur+1));
+$('mode').addEventListener('click',e=>{ single=!single; $('scroll').classList.toggle('single',single); e.currentTarget.setAttribute('aria-pressed',single); e.currentTarget.textContent=single?'Una a la vez':'Ver todo'; show(cur); });
+
+/* Tamaño de letra */
+let fs=30; try{ fs=+localStorage.getItem('guion-t3-fs')||30; }catch(e){}
+function setFs(v){ fs=Math.max(20,Math.min(48,v)); document.documentElement.style.setProperty('--read',fs+'px'); try{ localStorage.setItem('guion-t3-fs',fs); }catch(e){} }
+$('smaller').addEventListener('click',()=>setFs(fs-2)); $('bigger').addEventListener('click',()=>setFs(fs+2)); setFs(fs);
+
+/* Modo lectura */
+$('readBtn').addEventListener('click',e=>{ const on=!document.body.classList.contains('reading'); document.body.classList.toggle('reading',on); e.currentTarget.setAttribute('aria-pressed',on); });
+
+/* Pestañas */
+function tab(id){ ['guion','general','consejos'].forEach(t=>{ $(t).classList.toggle('on',t===id); $('tab-'+t).setAttribute('aria-selected',String(t===id)); }); }
+['guion','general','consejos'].forEach(t=>$('tab-'+t).addEventListener('click',()=>tab(t)));
+
+/* Cronómetro con ritmo por diapositiva */
+let run=false,t0=0,acc=0;
+const el=()=>acc+(run?(Date.now()-t0)/1000:0);
+$('timer').addEventListener('click',()=>{ if(run){acc=el();run=false;}else{t0=Date.now();run=true;} paint(); });
+function paint(){
+  const e=el(); $('clock').textContent=fmt(e)+' / 15:00'; $('timer').textContent=run?'Pausar':(e>0?'Seguir':'Iniciar');
+  const p=$('pace'); const a=START[cur], b=a+S[cur].d;
+  if(e===0){ p.className='pace'; p.textContent='Cronómetro detenido'; }
+  else if(!S[cur].d){ p.className='pace ok'; p.textContent='Referencias'; }
+  else if(e>b+15){ p.className='pace late'; p.textContent='Atrasado '+fmt(e-b); }
+  else if(e<a-30){ p.className='pace'; p.textContent='Con margen '+fmt(a-e); }
+  else { p.className='pace ok'; p.textContent='En tiempo'; }
+}
+setInterval(()=>{ if(run) paint(); },500);
+
+/* Teclado */
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea')) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ show(cur+1); e.preventDefault(); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ show(cur-1); e.preventDefault(); }
+  else if(e.key==='t'||e.key==='T') $('timer').click();
+  else if(e.key==='m'||e.key==='M') $('readBtn').click();
+  else if(e.key==='+') setFs(fs+2); else if(e.key==='-') setFs(fs-2);
+});
+
+let start=0; try{ start=+localStorage.getItem('guion-t3-cur')||0; }catch(e){}
+show(start,false);
+})();
+</script>
+</body>
+</html>
